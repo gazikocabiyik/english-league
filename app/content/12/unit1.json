@@ -1,0 +1,34 @@
+{
+  "grade": 12, "unit": 1, "title": "Music",
+  "frames": ["I prefer ___ music.", "I can play the ___.", "This music is very ___.", "My favourite ___ is …", "I like the ___ of this song."],
+  "vocab": [
+    { "word": "classical", "tr": "klasik", "img": "media/12/classical.jpg", "frame": 0, "q": "symphony orchestra concert" },
+    { "word": "rock", "tr": "rock", "img": "media/12/rock.jpg", "frame": 0, "q": "rock band concert electric guitar" },
+    { "word": "pop", "tr": "pop", "img": "media/12/pop.jpg", "frame": 0, "q": "pop concert stage singer" },
+    { "word": "rap", "tr": "rap", "img": "media/12/rap.jpg", "frame": 0, "q": "rapper performing microphone" },
+    { "word": "folk", "tr": "halk müziği", "img": "media/12/folk.jpg", "frame": 0, "q": "baglama saz musician" },
+    { "word": "guitar", "tr": "gitar", "img": "media/12/guitar.jpg", "frame": 1, "q": "acoustic guitar" },
+    { "word": "violin", "tr": "keman", "img": "media/12/violin.jpg", "frame": 1, "q": "violinist playing violin" },
+    { "word": "piano", "tr": "piyano", "img": "media/12/piano.jpg", "frame": 1, "q": "grand piano" },
+    { "word": "drums", "tr": "davul", "img": "media/12/drums.jpg", "frame": 1, "q": "drum kit" },
+    { "word": "loud", "tr": "yüksek sesli", "img": "media/12/loud.jpg", "frame": 2, "q": "stadium crowd cheering" },
+    { "word": "calm", "tr": "sakin", "img": "media/12/calm.jpg", "frame": 2, "q": "calm lake morning" },
+    { "word": "song", "tr": "şarkı", "img": "media/12/song.jpg", "frame": 3, "q": "singer singing microphone" },
+    { "word": "instrument", "tr": "enstrüman", "img": "media/12/instrument.jpg", "frame": 3, "q": "musical instruments collection" },
+    { "word": "lyrics", "tr": "şarkı sözleri", "img": "media/12/lyrics.jpg", "frame": 4, "q": "handwritten song lyrics notebook" }
+  ],
+  "commands": [
+    { "text": "Coach says: play the guitar!", "safe": true },
+    { "text": "Coach says: play the drums!", "safe": true },
+    { "text": "Coach says: dance to pop music!", "safe": true },
+    { "text": "Coach says: be loud! Clap your hands!", "safe": true },
+    { "text": "Coach says: be calm! Close your eyes!", "safe": true },
+    { "text": "Coach says: play the piano!", "safe": true },
+    { "text": "Coach says: sing a song!", "safe": true },
+    { "text": "Coach says: move like a rap star!", "safe": true },
+    { "text": "Play the violin!", "safe": false },
+    { "text": "Dance to rock music!", "safe": false },
+    { "text": "Be loud!", "safe": false },
+    { "text": "Conduct a classical orchestra!", "safe": false }
+  ]
+}

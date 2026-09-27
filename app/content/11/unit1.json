@@ -1,0 +1,36 @@
+{
+  "grade": 11, "unit": 1, "title": "Future Jobs",
+  "frames": ["I'm going to be a/an ___.", "I have a job ___ tomorrow.", "I want a good ___."],
+  "vocab": [
+    { "word": "engineer", "tr": "mühendis", "img": "media/11/engineer.jpg", "frame": 0, "q": "civil engineer helmet construction site" },
+    { "word": "architect", "tr": "mimar", "img": "media/11/architect.jpg", "frame": 0, "q": "architect drawing building plans" },
+    { "word": "accountant", "tr": "muhasebeci", "img": "media/11/accountant.jpg", "frame": 0, "q": "accountant office calculator" },
+    { "word": "surgeon", "tr": "cerrah", "img": "media/11/surgeon.jpg", "frame": 0, "q": "surgeon operating room" },
+    { "word": "dentist", "tr": "diş hekimi", "img": "media/11/dentist.jpg", "frame": 0, "q": "dentist treating patient" },
+    { "word": "vet", "tr": "veteriner", "img": "media/11/vet.jpg", "frame": 0, "q": "veterinarian examining dog" },
+    { "word": "designer", "tr": "tasarımcı", "img": "media/11/designer.jpg", "frame": 0, "q": "graphic designer working computer" },
+    { "word": "teacher", "tr": "öğretmen", "img": "media/11/teacher.jpg", "frame": 0, "q": "teacher classroom students" },
+    { "word": "coach", "tr": "antrenör", "img": "media/11/coach.jpg", "frame": 0, "q": "sports coach training athletes" },
+    { "word": "police officer", "tr": "polis memuru", "img": "media/11/police-officer.jpg", "frame": 0, "q": "police officer uniform street" },
+    { "word": "soldier", "tr": "asker", "img": "media/11/soldier.jpg", "frame": 0, "q": "soldier uniform" },
+    { "word": "firefighter", "tr": "itfaiyeci", "img": "media/11/firefighter.jpg", "frame": 0, "q": "firefighter hose fire" },
+    { "word": "pilot", "tr": "pilot", "img": "media/11/pilot.jpg", "frame": 0, "q": "airline pilot cockpit" },
+    { "word": "interview", "tr": "mülakat", "img": "media/11/interview.jpg", "frame": 1, "q": "job interview" },
+    { "word": "salary", "tr": "maaş", "img": "media/11/salary.jpg", "frame": 2, "q": "banknotes money wallet" },
+    { "word": "degree", "tr": "diploma", "img": "media/11/degree.jpg", "frame": 2, "q": "university graduation diploma" }
+  ],
+  "commands": [
+    { "text": "Coach says: stand like a soldier!", "safe": true },
+    { "text": "Coach says: run like a police officer!", "safe": true },
+    { "text": "Coach says: fly like a pilot!", "safe": true },
+    { "text": "Coach says: blow a whistle like a coach!", "safe": true },
+    { "text": "Coach says: spray water like a firefighter!", "safe": true },
+    { "text": "Coach says: draw a house like an architect!", "safe": true },
+    { "text": "Coach says: count money like an accountant!", "safe": true },
+    { "text": "Coach says: shake hands like in a job interview!", "safe": true },
+    { "text": "Salute like a soldier!", "safe": false },
+    { "text": "Jump like a coach!", "safe": false },
+    { "text": "Write on the board like a teacher!", "safe": false },
+    { "text": "Open your mouth like at the dentist!", "safe": false }
+  ]
+}
