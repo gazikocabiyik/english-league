@@ -7,6 +7,7 @@ import classSelect from './modules/panel/class-select.js';
 import panel from './modules/panel/panel.js';
 import setup from './modules/panel/setup.js';
 import league from './modules/league/league.js';
+import { games } from './modules/registry.js';
 
 const store = createStore();
 const view = document.getElementById('view');
@@ -24,11 +25,22 @@ const ctx = {
 };
 
 // Sonraki görevler bu tabloya satır ekler.
+const gameRoute = {
+  current: null,
+  mount(el, c, [id]) {
+    this.current = games.find(g => g.id === id) ?? null;
+    if (!this.current) { c.go('#/panel'); return; }
+    return this.current.mount(el, c);
+  },
+  unmount() { this.current?.unmount?.(); },
+};
+
 const routes = {
   '': classSelect,
   panel,
   setup,
   league,
+  game: gameRoute,
 };
 
 let active = null;
@@ -48,6 +60,7 @@ function renderTopbar() {
     h('button', { class: 'ghost', onclick: () => ctx.go('#/') }, h('span', { class: 'class-badge' }, cls ?? 'English League')),
     cls ? h('button', { class: 'ghost', onclick: () => ctx.go('#/panel') }, `Unit ${ctx.unit}`) : null,
     h('span', { class: 'spacer' }),
+    document.getElementById('timer-dock'),
     cls ? h('button', { class: 'ghost', onclick: undo }, icon('arrow-counter-clockwise'), ' Geri al') : null,
     h('button', { class: 'ghost', 'aria-label': 'Tam ekran', onclick: toggleFullscreen }, icon('arrows-out')));
 }

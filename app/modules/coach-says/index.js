@@ -1,0 +1,109 @@
+import { h, icon } from '../../core/dom.js';
+import { loadUnit } from '../../core/content.js';
+import { createSession, PHASES } from './session.js';
+import { award } from '../league/award.js';
+
+const PHASE_LABELS = { move: '1 · Hareket', speak: '2 · Konuşma', exit: '3 · Çıkış bileti' };
+
+function frameParts(text) {
+  const [before, after = ''] = text.split('___');
+  return [before, h('span', { class: 'blank' }), after];
+}
+
+export default {
+  id: 'coach-says',
+  title: 'Coach Says',
+  unmount() {},
+  async mount(el, ctx) {
+    const { unit, errors } = await loadUnit(ctx.grade, ctx.unit);
+    if (!unit) {
+      el.append(h('section', { class: 'screen error' },
+        h('h1', { class: 'display' }, 'Ünite açılamadı'),
+        h('ul', {}, errors.map(e => h('li', {}, e))),
+        h('button', { onclick: () => ctx.go('#/panel') }, 'Panele dön')));
+      return;
+    }
+
+    const session = createSession(unit);
+    const cls = ctx.store.getClass(ctx.classId);
+    const answered = new Set(); // çıkış biletinde bu kelimede puan alanlar
+    let showTr = false;
+
+    const onKey = e => {
+      if (e.key === 'ArrowRight') step(1);
+      if (e.key === 'ArrowLeft') step(-1);
+    };
+    document.addEventListener('keydown', onKey);
+    this.unmount = () => {
+      document.removeEventListener('keydown', onKey);
+      globalThis.speechSynthesis?.cancel();
+    };
+
+    function setPhase(p) { session.setPhase(p); answered.clear(); render(true); }
+
+    function step(dir) {
+      const moved = dir > 0 ? session.next() : session.prev();
+      if (moved) { answered.clear(); render(true); return; }
+      if (dir < 0) return;
+      const i = PHASES.indexOf(session.phase);
+      if (i < PHASES.length - 1) setPhase(PHASES[i + 1]);
+      else ctx.go('#/league');
+    }
+
+    function teamButtons() {
+      if (!cls.teams.length) return h('p', { class: 'callout' }, 'Takım yok. ', h('a', { href: '#/setup' }, 'Takımları kur'));
+      return h('div', { class: 'team-buttons' },
+        cls.teams.map(t => h('button', {
+          class: 'team-btn', style: { '--team': `var(--${t.color})` }, 'aria-label': `${t.name} doğru söyledi: +1`,
+          onclick: () => { award(ctx, 'team', t, 1, 'Coach Says'); step(1); },
+        }, t.name)),
+        h('button', { class: 'nobody', onclick: () => step(1) }, 'Kimse bilemedi'));
+    }
+
+    function studentChips() {
+      if (!cls.students.length) return h('p', { class: 'callout' }, 'Öğrenci listesi yok. ', h('a', { href: '#/setup' }, 'Öğrencileri ekle'));
+      return h('div', { class: 'student-chips' }, cls.students.map(s => h('button', {
+        class: `chip${answered.has(s.id) ? ' is-done' : ''}`,
+        disabled: answered.has(s.id),
+        onclick: () => { if (award(ctx, 'student', s, 1, 'Çıkış bileti')) { answered.add(s.id); render(false); } },
+      }, s.name)));
+    }
+
+    function render(announce) {
+      const c = session.current();
+      let stage;
+      if (c.type === 'command') {
+        stage = h('div', { class: 'stage stage-move' },
+          h('p', { class: 'command', lang: 'en' }, c.text.toLocaleUpperCase('en')),
+          h('button', { class: 'ghost', 'aria-label': 'Tekrar oku', onclick: () => ctx.sound.speak(c.text) }, icon('speaker-high')));
+        if (announce) ctx.sound.speak(c.text);
+      } else {
+        const img = h('img', {
+          class: 'word-photo', src: `content/${c.img}`, alt: c.word,
+          onerror: () => { img.replaceWith(h('div', { class: 'photo-missing' }, `Görsel yok: ${c.img}`)); console.warn('Eksik görsel:', c.img); },
+        });
+        stage = h('div', { class: 'stage stage-word' },
+          img,
+          h('div', { class: 'word-side' },
+            h('button', { class: 'word', lang: 'en', onclick: () => ctx.sound.speak(c.word) }, c.word.toLocaleUpperCase('en')),
+            showTr && c.tr ? h('p', { class: 'tr tape' }, c.tr) : null,
+            h('p', { class: 'frame', lang: 'en' }, frameParts(c.frameText)),
+            h('button', { class: 'ghost small', onclick: () => { showTr = !showTr; render(false); } }, showTr ? 'Türkçeyi gizle' : 'Türkçe')),
+          session.phase === 'speak' ? teamButtons() : studentChips());
+        if (announce) ctx.sound.speak(c.word);
+      }
+
+      el.replaceChildren(h('section', { class: `screen coach phase-${session.phase}` },
+        h('header', { class: 'coach-head' },
+          h('nav', { class: 'phase-tabs' }, PHASES.map(p =>
+            h('button', { class: p === session.phase ? 'is-on' : '', onclick: () => setPhase(p) }, PHASE_LABELS[p]))),
+          h('span', { class: 'progress' }, `${session.index + 1} / ${session.total}`)),
+        stage,
+        h('div', { class: 'nav-btns' },
+          h('button', { class: 'nav', 'aria-label': 'Önceki', onclick: () => step(-1) }, icon('caret-left')),
+          h('button', { class: 'nav next', 'aria-label': 'Sonraki', onclick: () => step(1) }, icon('caret-right')))));
+    }
+
+    render(true);
+  },
+};

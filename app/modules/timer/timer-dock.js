@@ -8,10 +8,11 @@ export function mountTimerDock(el, ctx) {
   timer.set(60e3);
   let open = false;
   const digits = h('span', { class: 'timer-digits' });
+  const big = h('span', { class: 'timer-big stencil' });
   const playBtn = h('button', { class: 'timer-play', onclick: () => { timer.running ? timer.pause() : timer.start(); paint(); } });
 
   function paint() {
-    digits.textContent = formatTime(timer.remaining());
+    digits.textContent = big.textContent = formatTime(timer.remaining());
     playBtn.replaceChildren(icon(timer.running ? 'pause' : 'play', timer.running ? 'Duraklat' : 'Başlat'));
     el.classList.toggle('is-open', open);
     el.classList.toggle('is-running', timer.running);
@@ -20,6 +21,7 @@ export function mountTimerDock(el, ctx) {
   el.append(
     h('button', { class: 'timer-toggle', 'aria-label': 'Zamanlayıcı', onclick: () => { open = !open; paint(); } }, icon('timer'), digits),
     h('div', { class: 'timer-panel' },
+      big,
       h('div', { class: 'timer-presets' }, PRESETS.map(([ms, label]) =>
         h('button', { onclick: () => { timer.set(ms); paint(); } }, label))),
       h('div', { class: 'timer-controls' },

@@ -87,13 +87,14 @@ main { flex: 1; min-height: 0; overflow: auto; padding: var(--space-4) var(--spa
 .seg button { background: transparent; min-height: 60px; }
 .seg button.is-on { background: var(--ink); color: var(--bg); }
 
-/* Zamanlayıcı */
-#timer-dock { position: fixed; right: var(--space-3); bottom: var(--space-3); z-index: 10; display: grid; gap: var(--space-1); justify-items: end; }
-.timer-toggle { display: flex; align-items: center; gap: var(--space-2); font: 900 var(--step-1)/1 var(--font-stencil); font-variant-numeric: tabular-nums; background: var(--surface); box-shadow: 0 8px 20px rgb(0 0 0 / .4); }
+/* Zamanlayıcı: üst çubukta; açılınca büyük rakamlı panel */
+#timer-dock { position: relative; }
+.timer-toggle { display: flex; align-items: center; gap: var(--space-1); font: 900 var(--step-1)/1 var(--font-stencil); font-variant-numeric: tabular-nums; }
 #timer-dock.is-running .timer-toggle { background: var(--accent); color: var(--accent-ink); }
-#timer-dock.is-open .timer-toggle { font-size: var(--step-4); padding: var(--space-2) var(--space-4); }
-.timer-panel { display: none; gap: var(--space-1); background: var(--surface); border-radius: var(--radius); padding: var(--space-2); box-shadow: 0 8px 20px rgb(0 0 0 / .4); }
+.timer-panel { display: none; position: absolute; right: 0; top: calc(100% + var(--space-1)); z-index: 25; gap: var(--space-2); background: var(--surface); border-radius: var(--radius); padding: var(--space-3); box-shadow: 0 24px 60px rgb(0 0 0 / .5); }
 #timer-dock.is-open .timer-panel { display: grid; }
+.timer-big { font-size: var(--step-5); line-height: .85; text-align: center; }
+#timer-dock.is-running .timer-big { color: var(--accent); }
 .timer-presets, .timer-controls { display: flex; gap: var(--space-1); }
 .timer-play { flex: 1; background: var(--accent); color: var(--accent-ink); }
 body.time-up { animation: flash .5s steps(2) 6; }
@@ -161,3 +162,39 @@ button.wide { min-width: 320px; }
 .pts-btn.plus { background: var(--accent); color: var(--accent-ink); }
 .pts-btn.plus:hover:not(:disabled) { background: #ffe066; }
 .pts-btn.minus { background: transparent; color: var(--danger); box-shadow: inset 0 0 0 3px var(--danger); }
+
+/* Coach Says: her tur kendi renk alanı */
+.coach { height: 100%; grid-template-rows: auto minmax(0, 1fr) auto; gap: var(--space-3); }
+.coach-head { display: flex; align-items: center; gap: var(--space-3); }
+.phase-tabs { display: flex; gap: var(--space-1); margin-right: auto; }
+.phase-tabs button { min-height: 60px; }
+.phase-tabs .is-on { background: var(--ink); color: var(--bg); }
+.progress { font: 900 var(--step-1)/1 var(--font-stencil); color: var(--ink-muted); }
+.stage { min-height: 0; border-radius: var(--radius); }
+.stage-move { display: grid; place-items: center; align-content: center; gap: var(--space-3); text-align: center; background: var(--accent); color: var(--accent-ink); padding: var(--space-4); }
+.command { font: 900 var(--step-4)/.9 var(--font-display); margin: 0; max-width: 14ch; text-wrap: balance; }
+.stage-move .ghost { font-size: var(--step-2); color: var(--accent-ink); }
+.stage-move .ghost:hover { background: rgb(0 0 0 / .08); }
+.stage-word { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) auto; gap: var(--space-3) var(--space-4); }
+.phase-exit .stage-word { background: var(--tape); color: var(--tape-ink); padding: var(--space-3); }
+.word-photo, .photo-missing { width: 100%; height: 100%; min-height: 0; object-fit: cover; border-radius: var(--radius); }
+.photo-missing { display: grid; place-items: center; padding: var(--space-3); box-shadow: inset 0 0 0 3px var(--danger); color: var(--danger); font-size: 24px; text-align: center; }
+.word-side { display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: var(--space-3); min-width: 0; }
+.word { all: unset; cursor: pointer; font: 900 var(--step-4)/.85 var(--font-display); overflow-wrap: anywhere; }
+.word:focus-visible { outline: 4px solid var(--accent); outline-offset: 6px; }
+.tr { margin: 0; font-size: var(--step-1); }
+.frame { margin: 0; font: 700 var(--step-2)/1.15 var(--font-body); }
+.blank { display: inline-block; width: 3.5ch; margin: 0 .15ch; border-bottom: 8px solid var(--accent); vertical-align: baseline; }
+.phase-exit .blank { border-color: var(--tape-ink); }
+.phase-exit .word-side .ghost { color: var(--tape-ink); }
+.team-buttons, .student-chips { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.team-btn { flex: 1; min-height: 132px; background: var(--team); color: var(--team-ink); font: 900 var(--step-2)/1 var(--font-display); box-shadow: 0 10px 24px rgb(0 0 0 / .35); }
+.team-btn:hover:not(:disabled) { background: var(--team); filter: brightness(1.1); }
+.nobody { min-height: 132px; background: transparent; color: var(--ink-muted); box-shadow: inset 0 0 0 3px var(--line); }
+.chip { min-height: 72px; font-size: 30px; background: #fff; color: var(--tape-ink); box-shadow: 0 2px 6px rgb(0 0 0 / .2); }
+.chip:hover:not(:disabled) { background: #fff8e0; }
+.chip.is-done, .chip.is-done:disabled { background: var(--accent-ink); color: var(--accent); opacity: 1; }
+.nav-btns { display: flex; justify-content: space-between; }
+.nav { min-width: 180px; font-size: var(--step-2); }
+.nav.next { background: var(--accent); color: var(--accent-ink); }
+.error ul { color: var(--danger); font-size: 28px; }
