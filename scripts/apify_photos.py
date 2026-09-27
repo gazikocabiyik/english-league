@@ -18,10 +18,11 @@ ACTOR = 'memo23~pexels-scraper'
 
 
 def token():
-    m = re.search(r'^APIFY_TOKEN=(\S+)', (ROOT / '.env').read_text(), re.M)
-    if not m:
-        sys.exit('.env içinde APIFY_TOKEN yok')
-    return m.group(1)
+    m = re.search(r'^APIFY_TOKEN=(.+)$', (ROOT / '.env').read_text(), re.M)
+    tok = m.group(1).strip().strip('"\'') if m else ''
+    if not tok:
+        sys.exit('.env içinde APIFY_TOKEN yok (APIFY_TOKEN=apify_api_... biçiminde yaz)')
+    return tok
 
 
 def search(query, tok):
@@ -29,7 +30,7 @@ def search(query, tok):
     req = urllib.request.Request(f'https://api.apify.com/v2/acts/{ACTOR}/run-sync-get-dataset-items?timeout=180', data=body,
                                  headers={'Authorization': f'Bearer {tok}', 'Content-Type': 'application/json'})
     with urllib.request.urlopen(req, timeout=240) as r:
-        return [x for x in json.load(r) if x.get('imageOriginal') and x.get('license') == 'Pexels']
+        return [x for x in json.load(r) if x.get('imageOriginal') and x.get('license') == 'Pexels' and x.get('photographer') and x.get('url')]
 
 
 def main():
@@ -55,10 +56,11 @@ def main():
             continue
         hit = hits[skip]
         dest.parent.mkdir(parents=True, exist_ok=True)
-        url = hit['imageOriginal'] + '?auto=compress&cs=tinysrgb&w=1280'
+        url = hit['imageOriginal'].split('?')[0] + '?auto=compress&cs=tinysrgb&w=1280'
         with urllib.request.urlopen(urllib.request.Request(url, headers={'User-Agent': 'okul-sinif-ligi'}), timeout=60) as r:
             dest.write_bytes(r.read())
-        subprocess.run(['sips', '-Z', '1280', str(dest)], capture_output=True)
+        if subprocess.run(['sips', '-Z', '1280', str(dest)], capture_output=True).returncode:
+            print('  uyarı: sips küçültemedi, dosya olduğu gibi kaldı')
         lines = credits.read_text(encoding='utf-8').splitlines() if credits.exists() else ['# Görsel kaynakları', '']
         lines = [l for l in lines if f'`{v["img"]}`' not in l]
         lines.append(f'- `{v["img"]}` — {hit["photographer"]}, Pexels License, {hit["url"]}')

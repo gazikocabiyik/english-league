@@ -42,7 +42,7 @@ export default {
           onclick: () => { ctx.store.setSetting('lastClass', id); ctx.go('#/panel'); },
         },
           h('span', { class: 'num' }, g),
-          lockKey(),
+          editing ? null : lockKey(),
           h('span', { class: 'handle', 'aria-hidden': 'true' }),
           h('span', {}, h('span', { class: 'sec' }, s), h('br'), h('span', { class: 'tape' }, label))),
         editing ? h('button', { class: 'locker-del', 'aria-label': `${id} kaldır`, onclick: () => remove(id) }, icon('trash')) : null);

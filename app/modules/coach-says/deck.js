@@ -22,7 +22,9 @@ export function buildDeck(n, repeats = 3, rng = Math.random) {
 export function buildMixedDeck(newCount, reviewCount, rng = Math.random) {
   const deck = buildDeck(newCount, 3, rng);
   for (let k = newCount; k < newCount + reviewCount; k++) {
-    deck.splice(Math.floor(rng() * (deck.length + 1)), 0, k);
+    // Ders yeni bir kelimeyle başlasın: tekrar kartı ilk sıraya girmez
+    const at = deck.length ? 1 + Math.floor(rng() * deck.length) : 0;
+    deck.splice(at, 0, k);
   }
   return deck;
 }

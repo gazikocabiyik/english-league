@@ -1,14 +1,11 @@
 import { h, icon } from '../../core/dom.js';
 import { loadIndex, loadUnit } from '../../core/content.js';
 import { reviewPlan, pickReview } from '../../core/spiral.js';
+import { fillFrame } from '../../core/speech-map.js';
 import { createSession, PHASES } from './session.js';
 import { award } from '../league/award.js';
 
 const PHASE_LABELS = { move: '1 · Hareket', speak: '2 · Konuşma', exit: '3 · Çıkış bileti' };
-
-export function fillFrame(text, word) {
-  return text.replace('___', word).replace(/\s*…\s*$/, '');
-}
 
 function frameParts(text) {
   const [before, after = ''] = text.split('___');
@@ -20,6 +17,7 @@ export default {
   title: 'Coach Says',
   unmount() {},
   async mount(el, ctx) {
+    el.append(h('p', { class: 'hint' }, 'Yükleniyor…'));
     let alive = true; // yükleme sürerken ekrandan çıkılırsa dinleyici bırakma
     this.unmount = () => { alive = false; };
     const { unit, errors } = await loadUnit(ctx.grade, ctx.unit);

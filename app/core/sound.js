@@ -42,12 +42,14 @@ export function speak(text, opts) {
   if ('speechSynthesis' in window) speechSynthesis.cancel();
   const url = audioFor(manifest, text);
   if (!url) return speakSynth(text, opts);
-  current = new Audio(url);
-  current.play().catch(() => speakSynth(text, opts));
+  const audio = current = new Audio(url);
+  // Yeni kelimeye geçilince eski ses pause ile AbortError verir: o durumda tarayıcı sesine düşme
+  audio.play().catch(e => { if (current === audio && e.name !== 'AbortError') speakSynth(text, opts); });
   return true;
 }
 
 export function stopSpeaking() {
   current?.pause();
+  current = null;
   if ('speechSynthesis' in window) speechSynthesis.cancel();
 }
