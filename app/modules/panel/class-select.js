@@ -1,4 +1,4 @@
-import { h, icon, seg, toast } from '../../core/dom.js';
+import { h, icon, lockKey, seg, toast } from '../../core/dom.js';
 import { makeClassId, sortClassIds } from '../../core/classes.js';
 
 export default {
@@ -42,6 +42,7 @@ export default {
           onclick: () => { ctx.store.setSetting('lastClass', id); ctx.go('#/panel'); },
         },
           h('span', { class: 'num' }, g),
+          lockKey(),
           h('span', { class: 'handle', 'aria-hidden': 'true' }),
           h('span', {}, h('span', { class: 'sec' }, s), h('br'), h('span', { class: 'tape' }, label))),
         editing ? h('button', { class: 'locker-del', 'aria-label': `${id} kaldır`, onclick: () => remove(id) }, icon('trash')) : null);

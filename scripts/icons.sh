@@ -9,4 +9,7 @@ for n in $ICONS; do
   curl -fsSL "https://cdn.jsdelivr.net/npm/@phosphor-icons/core@2/assets/bold/${n}-bold.svg" -o "app/assets/icons/${n}.svg"
   echo ".icon-${n}{--i:url(../assets/icons/${n}.svg)}" >> app/styles/icons.css
 done
-echo "$(echo $ICONS | wc -w) ikon indirildi"
+# Anahtar dolu (fill) çizimle: kontur hâli ampule benziyor
+curl -fsSL "https://cdn.jsdelivr.net/npm/@phosphor-icons/core@2/assets/fill/key-fill.svg" -o app/assets/icons/key.svg
+echo ".icon-key{--i:url(../assets/icons/key.svg)}" >> app/styles/icons.css
+echo "$(( $(echo $ICONS | wc -w) + 1 )) ikon indirildi"

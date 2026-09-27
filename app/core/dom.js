@@ -29,3 +29,8 @@ export function toast(msg) {
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => el.classList.remove('show'), 1800);
 }
+
+// Dolap kilidi: metal göbek ve içinde pirinç anahtar
+export function lockKey() {
+  return h('span', { class: 'lock', 'aria-hidden': 'true' }, icon('key'));
+}

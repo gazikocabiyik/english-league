@@ -1,4 +1,4 @@
-import { h, icon } from '../../core/dom.js';
+import { h, icon, lockKey } from '../../core/dom.js';
 import { loadIndex } from '../../core/content.js';
 import { games } from '../registry.js';
 import { weekStart } from '../../core/store.js';
@@ -33,6 +33,7 @@ export default {
       week.length ? h('button', { class: 'mini-league', 'aria-label': 'Bu haftanın takım ligi', onclick: () => ctx.go('#/league') },
         h('span', { class: 'mini-title' }, 'Bu hafta'),
         week.map(t => h('span', { class: 'mini-door', style: { '--team': `var(--${t.color})` } },
+          lockKey(),
           h('span', { class: 'stencil' }, String(t.points)), h('span', { class: 'mini-name' }, t.name)))) : null));
   },
 };

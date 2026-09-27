@@ -210,3 +210,16 @@ button.wide { min-width: 320px; }
 .mini-door .stencil { font-size: var(--step-4); line-height: .85; }
 .mini-name { font: 900 var(--step-1)/1 var(--font-display); }
 .review-tag { font-size: min(28px, 3.2vh); transform: rotate(-2deg); }
+
+/* Dolap kilidi ve anahtar */
+.lock {
+  position: absolute; top: 24px; right: 20px; width: 46px; height: 46px; border-radius: 50%;
+  display: grid; place-items: center;
+  background: radial-gradient(circle at 35% 30%, #eef1f4, #a3abb4 55%, #5b636c);
+  box-shadow: inset 0 -3px 5px rgb(0 0 0 / .35), 0 3px 8px rgb(0 0 0 / .4);
+}
+.lock::before { content: ''; position: absolute; width: 8px; height: 18px; border-radius: 4px; background: #2b3036; }
+.lock .icon { position: relative; font-size: 44px; color: #d4a84b; transform: rotate(-20deg) translate(14px, 12px); filter: drop-shadow(0 3px 2px rgb(0 0 0 / .5)); }
+.mini-door { position: relative; }
+.mini-door .lock { top: 16px; right: 16px; width: 38px; height: 38px; }
+.mini-door .lock .icon { font-size: 30px; }
