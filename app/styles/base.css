@@ -198,3 +198,9 @@ button.wide { min-width: 320px; }
 .nav { min-width: 180px; font-size: var(--step-2); }
 .nav.next { background: var(--accent); color: var(--accent-ink); }
 .error ul { color: var(--danger); font-size: 28px; }
+.mini-league { display: flex; align-items: stretch; gap: var(--space-2); padding: 0; background: transparent; text-align: left; }
+.mini-league:hover:not(:disabled) { background: transparent; }
+.mini-title { align-self: center; color: var(--ink-muted); font-size: 26px; min-width: 120px; }
+.mini-door { flex: 1; display: grid; gap: var(--space-1); align-content: end; min-height: 200px; padding: var(--space-3); border-radius: var(--radius); background: var(--team); color: var(--team-ink); box-shadow: 0 10px 24px rgb(0 0 0 / .35); }
+.mini-door .stencil { font-size: var(--step-4); line-height: .85; }
+.mini-name { font: 900 var(--step-1)/1 var(--font-display); }

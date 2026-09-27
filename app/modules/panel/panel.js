@@ -1,6 +1,7 @@
 import { h, icon } from '../../core/dom.js';
 import { loadIndex } from '../../core/content.js';
 import { games } from '../registry.js';
+import { weekStart } from '../../core/store.js';
 
 const GAME_ICONS = { 'coach-says': 'person-simple-run' };
 
@@ -11,6 +12,7 @@ export default {
     const available = index[ctx.grade] ?? [];
     const pickUnit = n => { ctx.store.setSetting(`unit:${ctx.classId}`, n); ctx.rerender(); };
 
+    const week = ctx.store.standings(ctx.classId, { since: weekStart(Date.now()) });
     el.append(h('section', { class: 'screen panel' },
       h('div', { class: 'panel-head' },
         h('h1', { class: 'display' }, ctx.classId),
@@ -24,6 +26,10 @@ export default {
       h('div', { class: 'tiles' },
         games.map(g => h('button', { class: 'tile primary', onclick: () => ctx.go(`#/game/${g.id}`) }, icon(GAME_ICONS[g.id] ?? 'play'), g.title)),
         h('button', { class: 'tile', onclick: () => ctx.go('#/league') }, icon('trophy'), 'Lig'),
-        h('button', { class: 'tile', onclick: () => ctx.go('#/setup') }, icon('users-three'), 'Takımlar'))));
+        h('button', { class: 'tile', onclick: () => ctx.go('#/setup') }, icon('users-three'), 'Takımlar')),
+      week.length ? h('button', { class: 'mini-league', 'aria-label': 'Bu haftanın takım ligi', onclick: () => ctx.go('#/league') },
+        h('span', { class: 'mini-title' }, 'Bu hafta'),
+        week.map(t => h('span', { class: 'mini-door', style: { '--team': `var(--${t.color})` } },
+          h('span', { class: 'stencil' }, String(t.points)), h('span', { class: 'mini-name' }, t.name)))) : null));
   },
 };
