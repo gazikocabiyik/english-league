@@ -1,0 +1,10 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Testler</title>
+<pre id="out" style="font:16px/1.4 monospace"></pre>
+<script type="module">
+  import './all.js';
+  import { run } from './t.js';
+  const out = document.getElementById('out');
+  run(line => { out.textContent += line + '\n'; });
+</script>
