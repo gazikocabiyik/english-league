@@ -36,6 +36,9 @@ Rules: team colour always appears as a solid door block with the team name/numbe
 - **Level chip** (`.level-chip`): ink block with the round's CEFR level (A1/A2/B1) beside the progress counter; panel shows a tape badge "Seviye A2 · hedef B1". B1 cards add a tape hint "+ Say why: because …".
 - **Mock Interview**: roles as tape labels with a team-colour door strip (Interviewer / Candidate), job photo with tape job name, question as the display-type hero (tap = voice), answer frame with yellow blank, two score boxes (+1 = yellow action, Bilemedi = outline). Finish: tape-paper field with a red stamped "HIRED!".
 
+- **Lucky student** (exit ticket): tape label "Sıra: <ad>" with team-colour strip, one yellow "Doğru" and one outline "Bilemedi" action, quiet "Başka öğrenci" link. Replaces per-student chips.
+- **School league**: scope switch "Şube / Okul"; class rows use rotating team colours on the rank door and show "öğr. başına" under the stencil score; rows are read-only in school view.
+
 ## Motion
 One signature moment: awarding points stamps the stencil number (scale 1.6 → 1, rotate −4°, 450 ms ease-out) and league rows slide to their new rank (FLIP, 420 ms). Time-up flashes the page red. All disabled under `prefers-reduced-motion`.
 

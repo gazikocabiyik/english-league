@@ -251,7 +251,7 @@ button.wide { min-width: 320px; }
 .hired-stamp { margin: 0; font: 900 min(var(--step-5), 22vh)/.85 var(--font-display); color: var(--team-1); transform: rotate(-6deg); box-shadow: inset 0 0 0 10px var(--team-1); padding: .05em .25em; border-radius: 8px; }
 .hired-line { margin: 0; font: 700 min(var(--step-1), 5vh)/1.2 var(--font-body); }
 .frame.is-long { font-size: min(var(--step-1), 4.6vh); }
-.phase-exit .word { font-size: min(var(--step-3), 9vh); }
+.phase-exit .word { font-size: min(var(--step-3), 7.5vh); }
 .phase-exit .miss { color: var(--tape-ink); box-shadow: inset 0 0 0 3px var(--tape-ink); }
 
 /* Fotoğraf kapsayıcı: Safari'de alt satırın üstüne taşmasın */

@@ -57,3 +57,8 @@ Her ünitenin kelimeleri sonraki ünitelerde bilgi yoklaması olarak geri gelir:
 - Gün değişince şube ilk açıldığında önceki dersin sonuçları değerlendirilir: bir seviyede en az 5 deneme ve %70 başarı = geçildi; yeni seviye geçilen en yüksek seviyedir (mevcut seviyenin altına inmez). Mevcut seviyede %40'ın altı bir alt seviyeye indirir.
 - Öğretmen Takımlar ekranından seviyeyi elle düzeltebilir. Kod: `app/core/levels.js`.
 - İçerik: her kalıbın A1/A2/B1 hâli (`frames`), her seviyede en az 4 hareket komutu, isteğe bağlı `interview` (şimdilik 11/Ü1).
+
+## Sınıf içi akış kuralları
+- **Çıkış bileti — şanslı öğrenci:** her kelimede tahta bir öğrenci seçer (o gün seçilmemişler önce). Öğretmen yalnız **Doğru** (+1) ya da **Bilemedi**'ye basar; "Başka öğrenci" hiçbir şey kaydetmez. 20 kişilik sınıfta kelime başına 1 dokunuş.
+- **Mock Interview:** yalnız aday işaretlenir (Doğru +1 adaya ve takımına / Bilemedi). Mülakatçı mülakat bitince +1 katılım puanı alır (seviye ölçümüne girmez). Sıradaki turda aday mülakatçı olur, yeni aday başka takımdan ve o gün aday olmamışlardan gelir.
+- **Okul ligi:** Lig → Okul. Şubeler öğrenci başına ortalama puanla, takımlar ve öğrenciler okul genelinde sıralanır; 11/12 filtresi ve haftalık/tüm zamanlar seçimi var. Panelde şubenin haftalık okul sırası görünür.
