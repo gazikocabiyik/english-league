@@ -7,3 +7,4 @@ import './classes.test.js';
 import './spiral.test.js';
 import './sound.test.js';
 import './levels.test.js';
+import './interview.test.js';

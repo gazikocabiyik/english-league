@@ -20,7 +20,7 @@ import soundfile as sf
 from kokoro import KPipeline
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
-from text_rules import fill_frame, key  # noqa: E402
+from text_rules import fill_frame, fill_job, key  # noqa: E402
 
 CONTENT = pathlib.Path(__file__).resolve().parent.parent / 'app' / 'content'
 VOICES = [('a', 'af_heart'), ('a', 'am_michael'), ('b', 'bf_emma'), ('b', 'bm_george')]
@@ -28,12 +28,20 @@ SPEED = 0.9  # A1–A2 için biraz yavaş
 
 
 def texts_of(unit):
-    # (metin, ses seçimi için tohum): kelime ve cümlesi aynı sesle okunur
+    # (metin, ses seçimi için tohum): kelime ve bütün seviyelerdeki cümlesi aynı sesle okunur
+    frames = unit['frames'] if isinstance(unit['frames'], dict) else {'A2': unit['frames']}
     out = []
     for v in unit['vocab']:
-        out += [(v['word'], v['word']), (fill_frame(unit['frames'][v['frame']], v['word']), v['word'])]
+        out.append((v['word'], v['word']))
+        out += [(fill_frame(fs[v['frame']], v['word']), v['word']) for fs in frames.values()]
     out += [(c['text'], c['text']) for c in unit['commands']]
-    return out
+    iv = unit.get('interview')
+    if iv:  # mülakat soruları; {job} içerenler her meslek için ayrı
+        for qs in iv['questions'].values():
+            for x in qs:
+                jobs = iv['jobs'] if '{job}' in x['q'] else [iv['jobs'][0]]
+                out += [(fill_job(x['q'], j), x['q']) for j in jobs]
+    return list(dict.fromkeys(out))
 
 
 def main():

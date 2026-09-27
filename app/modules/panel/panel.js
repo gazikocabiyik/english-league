@@ -4,7 +4,7 @@ import { games } from '../registry.js';
 import { weekStart } from '../../core/store.js';
 import { levelUp } from '../../core/levels.js';
 
-const GAME_ICONS = { 'coach-says': 'person-simple-run' };
+const GAME_ICONS = { 'coach-says': 'person-simple-run', 'mock-interview': 'microphone-stage' };
 
 export default {
   async mount(el, ctx) {
@@ -31,7 +31,7 @@ export default {
           }, String(n))))),
       cls.teams.length ? null : h('p', { class: 'tape callout' }, 'Bu sınıfta henüz takım yok. ', h('a', { href: '#/setup' }, 'Takımları kur')),
       h('div', { class: 'tiles' },
-        games.map(g => h('button', { class: 'tile primary', onclick: () => ctx.go(`#/game/${g.id}`) }, icon(GAME_ICONS[g.id] ?? 'play'), g.title)),
+        games.map((g, i) => h('button', { class: `tile game${i === 0 ? ' primary' : ''}`, onclick: () => ctx.go(`#/game/${g.id}`) }, icon(GAME_ICONS[g.id] ?? 'play'), g.title)),
         h('button', { class: 'tile', onclick: () => ctx.go('#/league') }, icon('trophy'), 'Lig'),
         h('button', { class: 'tile', onclick: () => ctx.go('#/setup') }, icon('users-three'), 'Takımlar')),
       week.length ? h('button', { class: 'mini-league', 'aria-label': 'Bu haftanın takım ligi', onclick: () => ctx.go('#/league') },

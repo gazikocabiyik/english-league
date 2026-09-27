@@ -110,7 +110,8 @@ body.time-up { animation: flash .5s steps(2) 6; }
 .unit-row { display: flex; flex-wrap: wrap; gap: var(--space-1); }
 .unit-btn { min-width: 88px; font: 900 var(--step-1)/1 var(--font-stencil); }
 .unit-btn.is-active { background: var(--accent); color: var(--accent-ink); }
-.tiles { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: var(--space-3); }
+.tiles { display: grid; grid-template-columns: 2fr 2fr 1fr 1fr; gap: var(--space-3); }
+.tile.game:not(.primary) { font-size: var(--step-3); }
 .tile {
   min-height: 300px; display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-end; gap: var(--space-2);
   text-align: left; padding: var(--space-4); font: 900 var(--step-2)/.9 var(--font-display); text-transform: uppercase;
@@ -229,3 +230,23 @@ button.wide { min-width: 320px; }
 .miss { min-height: 72px; font-size: 28px; }
 .title-row { display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap; }
 .level-badge { font-size: min(var(--step-0), 4vh); transform: rotate(-1.5deg); }
+
+/* Mock Interview */
+.roles { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-right: auto; }
+.role { display: inline-flex; align-items: center; gap: var(--space-1); font-size: min(30px, 3.6vh); }
+.role-door { width: 18px; height: 1.3em; border-radius: 3px; background: var(--team); }
+.stage-word.interview { grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); }
+.job { position: relative; min-height: 0; }
+.job .word-photo { height: 100%; }
+.job-name { position: absolute; left: var(--space-2); bottom: var(--space-2); font: 900 min(var(--step-2), 6vh)/1 var(--font-display); }
+.q-label { color: var(--ink-muted); font-size: min(24px, 3vh); }
+.question { all: unset; cursor: pointer; font: 900 min(var(--step-3), 8vh)/.95 var(--font-display); text-wrap: balance; }
+.question:focus-visible { outline: 4px solid var(--accent); outline-offset: 6px; }
+.scores { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); }
+.person-score { display: flex; align-items: center; gap: var(--space-2); background: var(--surface); border-radius: var(--radius); padding: var(--space-1) var(--space-2); }
+.person-score .person-label { color: var(--ink-muted); font-size: 24px; min-width: 5.5em; }
+.person-score .go { flex: 1; min-height: min(96px, 10vh); font: 900 min(var(--step-1), 5vh)/1 var(--font-display); }
+.person-score .nobody { min-height: min(96px, 10vh); }
+.hired { display: grid; place-items: center; align-content: center; gap: var(--space-3); text-align: center; background: var(--tape); color: var(--tape-ink); }
+.hired-stamp { margin: 0; font: 900 min(var(--step-5), 22vh)/.85 var(--font-display); color: var(--team-1); transform: rotate(-6deg); box-shadow: inset 0 0 0 10px var(--team-1); padding: .05em .25em; border-radius: 8px; }
+.hired-line { margin: 0; font: 700 min(var(--step-1), 5vh)/1.2 var(--font-body); }
