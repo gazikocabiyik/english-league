@@ -52,3 +52,27 @@ test('session: varsayılan 8 kelime, azsa hepsi', () => {
 test('session: bilinmeyen tur hata verir', () => {
   throws(() => createSession(unit).setPhase('x'));
 });
+
+const leveled = {
+  frames: { A1: ['It is ___.'], A2: ['I like ___.'], B1: ['In my free time, I enjoy ___.'] },
+  vocab: 'abcdefghij'.split('').map(w => ({ word: w, tr: w, img: `m/${w}.jpg`, frame: 0 })),
+  commands: ['A1', 'A2', 'B1'].flatMap(L => [
+    { text: `${L} one`, safe: true, level: L }, { text: `${L} two`, safe: false, level: L },
+  ]),
+};
+
+test('session: seviyeye göre komut ve kalıp; çıkış bileti kendi seviyesinde', () => {
+  const s = createSession(leveled, { level: 'A1', exitLevel: 'B1', rng: seeded(7) });
+  eq([s.level, s.total], ['A1', 2]);
+  ok([s.current().text, (s.next(), s.current().text)].every(t => t.startsWith('A1')));
+  s.setPhase('speak');
+  eq(s.current().frameText, 'It is ___.');
+  s.setPhase('exit');
+  eq(s.current().frameText, 'In my free time, I enjoy ___.');
+  eq(s.levelOf('exit'), 'B1');
+});
+
+test('session: o seviyede komut yoksa tüm komutlara düşer', () => {
+  const u = { ...leveled, commands: leveled.commands.filter(c => c.level !== 'B1') };
+  eq(createSession(u, { level: 'B1' }).total, 4);
+});

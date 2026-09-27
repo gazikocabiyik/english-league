@@ -2,6 +2,7 @@
 // Oranlar yeni kelime sayısının üstüne eklenir: bir önceki ünite %30, iki önceki %10,
 // daha eski ünitelerin her biri %5 (bu küçük paylar toplanıp rastgele farklı ünitelere dağıtılır).
 import { shuffle } from '../modules/coach-says/deck.js';
+import { frameFor } from './content.js';
 
 export const RATES = { prev: 0.3, prev2: 0.1, older: 0.05 };
 
@@ -17,7 +18,7 @@ export function reviewPlan(unitNo, newCount, rng = Math.random) {
   return plan;
 }
 
-export function pickReview(plan, unitsByNo, { rng = Math.random, exclude = [] } = {}) {
+export function pickReview(plan, unitsByNo, { rng = Math.random, exclude = [], level = 'A2' } = {}) {
   const used = new Set(exclude.map(w => w.toLowerCase()));
   const out = [];
   for (const { unit, count } of plan) {
@@ -26,7 +27,7 @@ export function pickReview(plan, unitsByNo, { rng = Math.random, exclude = [] } 
     const fresh = shuffle(u.vocab, rng).filter(w => !used.has(w.word.toLowerCase())).slice(0, count);
     for (const w of fresh) {
       used.add(w.word.toLowerCase());
-      out.push({ ...w, frameText: u.frames[w.frame], reviewOf: unit });
+      out.push({ ...w, frameText: frameFor(u, w.frame, level), reviewOf: unit });
     }
   }
   return out;

@@ -6,10 +6,10 @@ let last = { key: '', t: 0 };
 export function award(ctx, targetType, target, points, source) {
   const key = `${targetType}:${target.id}:${points}`;
   const t = Date.now();
-  if (key === last.key && t - last.t < 500) return false;
+  if (key === last.key && t - last.t < 500) return null;
   last = { key, t };
-  ctx.store.addEvent({ classId: ctx.classId, targetType, targetId: target.id, points, reason: `${target.name} · ${source}` });
+  const e = ctx.store.addEvent({ classId: ctx.classId, targetType, targetId: target.id, points, reason: `${target.name} · ${source}` });
   toast(`${target.name} ${points > 0 ? '+' : ''}${points}`);
   document.dispatchEvent(new CustomEvent('scores-changed', { detail: { targetId: target.id } }));
-  return true;
+  return e; // olay: seviye denemesi buna bağlanır (geri al ikisini birlikte siler)
 }

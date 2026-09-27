@@ -2,11 +2,24 @@
   "grade": 11,
   "unit": 1,
   "title": "Future Jobs",
-  "frames": [
-    "I'm going to be a/an ___.",
-    "I have a job ___ tomorrow.",
-    "I want a good ___."
-  ],
+  "frames": {
+    "A1": [
+      "She is a/an ___.",
+      "I have an ___.",
+      "I want a good ___."
+    ],
+    "A2": [
+      "I'm going to be a/an ___.",
+      "I have a job ___ tomorrow.",
+      "I want a good ___."
+    ],
+    "B1": [
+      "When I finish school, I'm going to be a/an ___.",
+      "I'm nervous because I have a job ___ tomorrow.",
+      "I'm going to study hard to get a good ___."
+    ]
+  },
+  "b1Extend": "+ Say why: because …",
   "vocab": [
     {
       "word": "engineer",
@@ -123,52 +136,213 @@
   ],
   "commands": [
     {
+      "text": "Coach says: jump!",
+      "safe": true,
+      "level": "A1"
+    },
+    {
+      "text": "Coach says: run!",
+      "safe": true,
+      "level": "A1"
+    },
+    {
+      "text": "Coach says: stand up!",
+      "safe": true,
+      "level": "A1"
+    },
+    {
+      "text": "Coach says: salute!",
+      "safe": true,
+      "level": "A1"
+    },
+    {
+      "text": "Sit down!",
+      "safe": false,
+      "level": "A1"
+    },
+    {
+      "text": "Clap!",
+      "safe": false,
+      "level": "A1"
+    },
+    {
       "text": "Coach says: stand like a soldier!",
-      "safe": true
+      "safe": true,
+      "level": "A2"
     },
     {
       "text": "Coach says: run like a police officer!",
-      "safe": true
+      "safe": true,
+      "level": "A2"
     },
     {
       "text": "Coach says: fly like a pilot!",
-      "safe": true
+      "safe": true,
+      "level": "A2"
     },
     {
       "text": "Coach says: blow a whistle like a coach!",
-      "safe": true
+      "safe": true,
+      "level": "A2"
     },
     {
       "text": "Coach says: spray water like a firefighter!",
-      "safe": true
+      "safe": true,
+      "level": "A2"
     },
     {
       "text": "Coach says: draw a house like an architect!",
-      "safe": true
+      "safe": true,
+      "level": "A2"
     },
     {
       "text": "Coach says: count money like an accountant!",
-      "safe": true
+      "safe": true,
+      "level": "A2"
     },
     {
       "text": "Coach says: shake hands like in a job interview!",
-      "safe": true
+      "safe": true,
+      "level": "A2"
     },
     {
       "text": "Salute like a soldier!",
-      "safe": false
+      "safe": false,
+      "level": "A2"
     },
     {
       "text": "Jump like a coach!",
-      "safe": false
+      "safe": false,
+      "level": "A2"
     },
     {
       "text": "Write on the board like a teacher!",
-      "safe": false
+      "safe": false,
+      "level": "A2"
     },
     {
       "text": "Open your mouth like at the dentist!",
-      "safe": false
+      "safe": false,
+      "level": "A2"
+    },
+    {
+      "text": "Coach says: if you want to be a pilot, fly around your desk!",
+      "safe": true,
+      "level": "B1"
+    },
+    {
+      "text": "Coach says: if you are good at sports, do five squats!",
+      "safe": true,
+      "level": "B1"
+    },
+    {
+      "text": "Coach says: show us what a firefighter does in an emergency!",
+      "safe": true,
+      "level": "B1"
+    },
+    {
+      "text": "Coach says: act like a nervous candidate in a job interview!",
+      "safe": true,
+      "level": "B1"
+    },
+    {
+      "text": "If you like maths, count to ten like an accountant!",
+      "safe": false,
+      "level": "B1"
+    },
+    {
+      "text": "Show us how a surgeon washes their hands!",
+      "safe": false,
+      "level": "B1"
     }
-  ]
+  ],
+  "interview": {
+    "jobs": [
+      "engineer",
+      "architect",
+      "accountant",
+      "surgeon",
+      "dentist",
+      "vet",
+      "designer",
+      "teacher",
+      "coach",
+      "police officer",
+      "soldier",
+      "firefighter",
+      "pilot"
+    ],
+    "questions": {
+      "A1": [
+        {
+          "q": "What's your name?",
+          "a": "My name is ___."
+        },
+        {
+          "q": "How old are you?",
+          "a": "I'm ___."
+        },
+        {
+          "q": "Do you want to be {job}?",
+          "a": "Yes, I do."
+        },
+        {
+          "q": "Are you strong?",
+          "a": "Yes, I am. / No, I'm not."
+        },
+        {
+          "q": "Do you like sports?",
+          "a": "Yes, I do. / No, I don't."
+        }
+      ],
+      "A2": [
+        {
+          "q": "What's your name?",
+          "a": "My name is ___."
+        },
+        {
+          "q": "How old are you?",
+          "a": "I'm ___ years old."
+        },
+        {
+          "q": "What job do you want?",
+          "a": "I'm going to be {job}."
+        },
+        {
+          "q": "Why do you want this job?",
+          "a": "Because I like ___."
+        },
+        {
+          "q": "Are you good at sports?",
+          "a": "Yes, I am. / No, I'm not."
+        },
+        {
+          "q": "Can you work in a team?",
+          "a": "Yes, I can."
+        }
+      ],
+      "B1": [
+        {
+          "q": "Can you tell me about yourself?",
+          "a": "My name is ___ and I'm a student at a sports high school."
+        },
+        {
+          "q": "Why do you want to be {job}?",
+          "a": "I want to be {job} because ___."
+        },
+        {
+          "q": "What are you good at?",
+          "a": "I'm good at ___, so I can do this job well."
+        },
+        {
+          "q": "What will you do in five years?",
+          "a": "In five years, I will ___."
+        },
+        {
+          "q": "Can you work under pressure?",
+          "a": "Yes, I can. For example, ___."
+        }
+      ]
+    }
+  }
 }

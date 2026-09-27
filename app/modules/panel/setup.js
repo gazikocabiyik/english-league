@@ -52,10 +52,16 @@ export default {
       }
     } });
 
+    const levelSeg = h('div');
+    const renderLevel = () => levelSeg.replaceChildren(seg([['A1', 'A1'], ['A2', 'A2'], ['B1', 'B1']], ctx.store.classLevel(ctx.classId), v => {
+      ctx.store.setClassLevel(ctx.classId, v); toast(`Seviye ${v} olarak ayarlandı`); renderLevel();
+    }));
+    renderLevel();
     renderTeams();
     el.append(h('section', { class: 'screen setup' },
       h('h1', { class: 'display' }, `${ctx.classId} · Takımlar`),
-      h('div', { class: 'setup-col' }, h('p', {}, 'Takım sayısı'), countSeg, teamInputs),
+      h('div', { class: 'setup-col' }, h('p', {}, 'Takım sayısı'), countSeg, teamInputs,
+        h('p', {}, 'Sınıf seviyesi (dersler sonunda kendiliğinden güncellenir; gerekirse düzelt)'), levelSeg),
       h('div', { class: 'setup-col' }, h('p', {}, 'Öğrenciler (her satıra bir ad; sırayla takımlara dağıtılır)'), names),
       h('div', { class: 'setup-actions' },
         h('button', { class: 'go wide', onclick: save }, icon('check'), ' Kaydet'),

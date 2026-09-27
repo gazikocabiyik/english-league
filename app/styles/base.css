@@ -224,3 +224,8 @@ button.wide { min-width: 320px; }
 .mini-door .lock { top: 16px; right: 16px; width: 38px; height: 38px; }
 .mini-door .lock .icon { font-size: 30px; }
 .frame { cursor: pointer; }
+.level-chip { font: 900 min(var(--step-1), 5vh)/1 var(--font-display); background: var(--ink); color: var(--bg); padding: 4px 12px; border-radius: var(--radius); }
+.hint-chip { font-size: min(28px, 3.2vh); }
+.miss { min-height: 72px; font-size: 28px; }
+.title-row { display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap; }
+.level-badge { font-size: min(var(--step-0), 4vh); transform: rotate(-1.5deg); }

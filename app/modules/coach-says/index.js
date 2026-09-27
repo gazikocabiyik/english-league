@@ -1,7 +1,8 @@
-import { h, icon } from '../../core/dom.js';
+import { h, icon, toast } from '../../core/dom.js';
 import { loadIndex, loadUnit } from '../../core/content.js';
 import { reviewPlan, pickReview } from '../../core/spiral.js';
 import { fillFrame } from '../../core/speech-map.js';
+import { lessonLevels } from '../../core/levels.js';
 import { createSession, PHASES } from './session.js';
 import { award } from '../league/award.js';
 
@@ -36,8 +37,13 @@ export default {
     const loaded = await Promise.all(plan.map(p => loadUnit(ctx.grade, p.unit)));
     if (!alive) return;
     const unitsByNo = Object.fromEntries(loaded.filter(r => r.unit).map(r => [r.unit.unit, r.unit]));
-    const review = pickReview(plan, unitsByNo, { exclude: unit.vocab.map(v => v.word) });
-    const session = createSession(unit, { review });
+    // Uyarlanır seviye: konuşma L, çıkış bileti L+2
+    const lv = lessonLevels(ctx.store.ensureDailyLevel(ctx.classId));
+    const review = pickReview(plan, unitsByNo, { exclude: unit.vocab.map(v => v.word), level: lv.speak });
+    const session = createSession(unit, { review, level: lv.speak, exitLevel: lv.exit });
+    const rec = (ok, eventId) => ctx.store.addAttempt({ classId: ctx.classId, level: session.level, ok, activity: session.phase, eventId });
+    let lastMiss = 0;
+    const miss = () => { if (Date.now() - lastMiss > 500) { lastMiss = Date.now(); rec(false); return true; } return false; };
     const cls = ctx.store.getClass(ctx.classId);
     const answered = new Set(); // çıkış biletinde bu kelimede puan alanlar
     let showTr = false;
@@ -52,7 +58,7 @@ export default {
       if (undone?.targetType === 'student' && answered.delete(undone.targetId)) render(false);
     };
     let lastSkip = 0;
-    const skip = () => { if (Date.now() - lastSkip > 500) { lastSkip = Date.now(); step(1); } };
+    const skip = () => { if (Date.now() - lastSkip > 500) { lastSkip = Date.now(); rec(false); step(1); } };
     document.addEventListener('keydown', onKey);
     document.addEventListener('scores-changed', onScores);
     this.unmount = () => {
@@ -78,7 +84,7 @@ export default {
       return h('div', { class: 'team-buttons' },
         cls.teams.map(t => h('button', {
           class: 'team-btn', style: { '--team': `var(--${t.color})` }, 'aria-label': `${t.name} doğru söyledi: +1`,
-          onclick: () => { award(ctx, 'team', t, 1, 'Coach Says'); step(1); },
+          onclick: () => { const e = award(ctx, 'team', t, 1, 'Coach Says'); if (e) rec(true, e.id); step(1); },
         }, t.name)),
         h('button', { class: 'nobody', onclick: skip }, 'Kimse bilemedi'));
     }
@@ -88,8 +94,9 @@ export default {
       return h('div', { class: 'student-chips' }, cls.students.map(s => h('button', {
         class: `chip${answered.has(s.id) ? ' is-done' : ''}`,
         disabled: answered.has(s.id),
-        onclick: () => { if (award(ctx, 'student', s, 1, 'Çıkış bileti')) { answered.add(s.id); render(false); } },
-      }, s.name)));
+        onclick: () => { const e = award(ctx, 'student', s, 1, 'Çıkış bileti'); if (e) { rec(true, e.id); answered.add(s.id); render(false); } },
+      }, s.name)),
+      h('button', { class: 'nobody miss', onclick: () => { if (miss()) toast('Bilemedi kaydedildi'); } }, 'Bilemedi'));
     }
 
     function render(announce) {
@@ -112,6 +119,7 @@ export default {
             c.reviewOf ? h('span', { class: 'tape review-tag' }, `Tekrar · Ü${c.reviewOf}`) : null,
             h('button', { class: `word${c.word.length > 9 ? ' is-long' : ''}`, lang: 'en', onclick: () => ctx.sound.speak(c.word) }, c.word.toLocaleUpperCase('en')),
             showTr && c.tr ? h('p', { class: 'tr tape' }, c.tr) : null,
+            session.level === 'B1' && unit.b1Extend ? h('span', { class: 'tape hint-chip', lang: 'en' }, unit.b1Extend) : null,
             h('p', { class: 'frame', lang: 'en', onclick: () => ctx.sound.speak(fillFrame(c.frameText, c.word)) }, frameParts(c.frameText)),
             h('button', { class: 'ghost small', onclick: () => { showTr = !showTr; render(false); } }, showTr ? 'Türkçeyi gizle' : 'Türkçe')),
           session.phase === 'speak' ? teamButtons() : studentChips());
@@ -122,6 +130,7 @@ export default {
         h('header', { class: 'coach-head' },
           h('nav', { class: 'phase-tabs' }, PHASES.map(p =>
             h('button', { class: p === session.phase ? 'is-on' : '', onclick: () => setPhase(p) }, PHASE_LABELS[p]))),
+          h('span', { class: 'level-chip', title: 'Bu turun seviyesi' }, session.level),
           h('span', { class: 'progress' }, `${session.index + 1} / ${session.total}`)),
         stage,
         h('div', { class: 'nav-btns' },

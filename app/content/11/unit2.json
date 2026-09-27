@@ -2,13 +2,30 @@
   "grade": 11,
   "unit": 2,
   "title": "Hobbies and Skills",
-  "frames": [
-    "My hobby is ___.",
-    "I'm good at ___.",
-    "I'm interested in ___.",
-    "I have a special ___.",
-    "What is your favourite ___?"
-  ],
+  "frames": {
+    "A1": [
+      "I like ___.",
+      "I like ___.",
+      "I like ___.",
+      "I have a ___.",
+      "It's my ___."
+    ],
+    "A2": [
+      "My hobby is ___.",
+      "I'm good at ___.",
+      "I'm interested in ___.",
+      "I have a special ___.",
+      "What is your favourite ___?"
+    ],
+    "B1": [
+      "In my free time, I enjoy ___.",
+      "I'm really good at ___, and I practise every week.",
+      "I'm very interested in ___ because it's exciting.",
+      "Everyone has a special ___.",
+      "What ___ would you like to try?"
+    ]
+  },
+  "b1Extend": "+ Say why: because …",
   "vocab": [
     {
       "word": "gardening",
@@ -111,52 +128,124 @@
   ],
   "commands": [
     {
+      "text": "Coach says: swim!",
+      "safe": true,
+      "level": "A1"
+    },
+    {
+      "text": "Coach says: dance!",
+      "safe": true,
+      "level": "A1"
+    },
+    {
+      "text": "Coach says: read!",
+      "safe": true,
+      "level": "A1"
+    },
+    {
+      "text": "Coach says: draw!",
+      "safe": true,
+      "level": "A1"
+    },
+    {
+      "text": "Cook!",
+      "safe": false,
+      "level": "A1"
+    },
+    {
+      "text": "Sing!",
+      "safe": false,
+      "level": "A1"
+    },
+    {
       "text": "Coach says: swim like a champion!",
-      "safe": true
+      "safe": true,
+      "level": "A2"
     },
     {
       "text": "Coach says: ride a bike!",
-      "safe": true
+      "safe": true,
+      "level": "A2"
     },
     {
       "text": "Coach says: take a photo!",
-      "safe": true
+      "safe": true,
+      "level": "A2"
     },
     {
       "text": "Coach says: cook a meal!",
-      "safe": true
+      "safe": true,
+      "level": "A2"
     },
     {
       "text": "Coach says: draw a circle in the air!",
-      "safe": true
+      "safe": true,
+      "level": "A2"
     },
     {
       "text": "Coach says: read a book!",
-      "safe": true
+      "safe": true,
+      "level": "A2"
     },
     {
       "text": "Coach says: move like a fencer!",
-      "safe": true
+      "safe": true,
+      "level": "A2"
     },
     {
       "text": "Coach says: plant a tree like a gardener!",
-      "safe": true
+      "safe": true,
+      "level": "A2"
     },
     {
       "text": "Play chess!",
-      "safe": false
+      "safe": false,
+      "level": "A2"
     },
     {
       "text": "Take a selfie!",
-      "safe": false
+      "safe": false,
+      "level": "A2"
     },
     {
       "text": "Swim to the door!",
-      "safe": false
+      "safe": false,
+      "level": "A2"
     },
     {
       "text": "Paint a picture!",
-      "safe": false
+      "safe": false,
+      "level": "A2"
+    },
+    {
+      "text": "Coach says: if your hobby is cycling, ride a bike slowly!",
+      "safe": true,
+      "level": "B1"
+    },
+    {
+      "text": "Coach says: show us a skill you are proud of!",
+      "safe": true,
+      "level": "B1"
+    },
+    {
+      "text": "Coach says: if you are interested in science, mix two things carefully!",
+      "safe": true,
+      "level": "B1"
+    },
+    {
+      "text": "Coach says: pretend to play chess and think very hard!",
+      "safe": true,
+      "level": "B1"
+    },
+    {
+      "text": "If you enjoy cooking, make a pizza!",
+      "safe": false,
+      "level": "B1"
+    },
+    {
+      "text": "Show us your special talent!",
+      "safe": false,
+      "level": "B1"
     }
   ]
 }

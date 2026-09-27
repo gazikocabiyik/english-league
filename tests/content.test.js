@@ -1,14 +1,18 @@
 import { test, eq, ok } from './t.js';
 import { validateUnit, loadUnit } from '../app/core/content.js';
 
+const cmds = L => [
+  { text: `Coach says: jump ${L}!`, safe: true, level: L }, { text: `Coach says: run ${L}!`, safe: true, level: L },
+  { text: `Coach says: stop ${L}!`, safe: true, level: L }, { text: `Sit down ${L}!`, safe: false, level: L },
+];
 const good = () => ({
   grade: 11, unit: 1, title: 'Future Jobs',
-  frames: ["I'm going to be a/an ___."],
+  frames: { A1: ["He is a/an ___."], A2: ["I'm going to be a/an ___."], B1: ["When I finish school, I'm going to be a/an ___."] },
   vocab: [
     { word: 'coach', tr: 'antrenör', img: 'media/11/coach.jpg', frame: 0 },
     { word: 'pilot', tr: 'pilot', img: 'media/11/pilot.jpg', frame: 0 },
   ],
-  commands: [{ text: 'Coach says: jump!', safe: true }, { text: 'Sit down!', safe: false }],
+  commands: [...cmds('A1'), ...cmds('A2'), ...cmds('B1')],
 });
 
 test('content: geçerli ünite hatasız', () => eq(validateUnit(good()), []));
@@ -17,11 +21,11 @@ test('content: eksik alanlar okunur hata verir (RF3)', () => {
   const u = good();
   delete u.title;
   u.vocab[1].frame = 5;
-  u.commands = [{ text: 'Coach says: run!', safe: true }];
+  u.commands = u.commands.map(c => (c.level === 'B1' ? { ...c, safe: true } : c));
   const errs = validateUnit(u);
   ok(errs.some(e => e.includes('title')), 'title hatası yok');
   ok(errs.some(e => e.includes('pilot') && e.includes('frame')), 'frame hatası yok');
-  ok(errs.some(e => e.includes('tuzak')), 'tuzak hatası yok');
+  ok(errs.some(e => e.includes('tuzak') && e.includes('B1')), 'tuzak hatası yok');
 });
 
 test('content: tek kelimelik ünite reddedilir (RF3)', () => {
@@ -33,6 +37,7 @@ test('content: tek kelimelik ünite reddedilir (RF3)', () => {
 test('content: null ve dizi olmayan alanlar çökertmez', () => {
   eq(validateUnit(null).length, 1);
   ok(validateUnit({ ...good(), vocab: 'x', frames: null, commands: {} }).length >= 3);
+  ok(validateUnit({ ...good(), frames: ["I'm ___."] }).some(e => e.includes('frames')), 'eski dizi biçimi reddedilmeli');
 });
 
 test('content: loadUnit bulunamayan dosyada çökmez', async () => {
@@ -48,7 +53,7 @@ test('content: loadUnit bozuk JSON', async () => {
 });
 
 test('content: loadUnit geçersiz üniteyi hatalarla döndürür', async () => {
-  const r = await loadUnit(11, 1, async () => ({ ok: true, json: async () => ({ ...good(), frames: [] }) }));
+  const r = await loadUnit(11, 1, async () => ({ ok: true, json: async () => ({ ...good(), frames: {} }) }));
   eq(r.unit, null);
   ok(r.errors.length > 0);
 });
@@ -73,10 +78,37 @@ test('content: pilot üniteler geçerli, tuzak oranı %20–40, index uyumlu', a
 
 test('content: yazım hatalı komut ve kelime alanları yakalanır (final I3)', () => {
   const u = good();
-  u.commands = [{ txt: 'Coach says: run!', safe: true }, { text: 'Sit!', safe: 'no' }, { text: 'Jump!', safe: false }];
+  u.commands = [{ txt: 'Coach says: run!', safe: true, level: 'A1' }, { text: 'Sit!', safe: 'no', level: 'A1' }, ...u.commands.slice(2)];
   u.vocab[0].word = 5;
   const errs = validateUnit(u);
   ok(errs.some(e => e.includes('commands[0]') && e.includes('text')), 'text hatası yok');
   ok(errs.some(e => e.includes('commands[1]') && e.includes('safe')), 'safe hatası yok');
   ok(errs.some(e => e.includes('vocab[0]') && e.includes('word')), 'word hatası yok');
+});
+
+test('content: seviye kalıpları paralel olmalı ve tek boşluk içermeli', () => {
+  const u = good();
+  u.frames.B1 = ['Two ___ and ___.', 'extra ___'];
+  const errs = validateUnit(u);
+  ok(errs.some(e => e.includes('B1') && e.includes('aynı sayıda')), 'uzunluk hatası yok');
+  ok(errs.some(e => e.includes('B1') && e.includes('tek')), 'tek boşluk hatası yok');
+});
+
+test('content: komutun seviyesi geçerli olmalı, her seviyede en az 4 komut', () => {
+  const u = good();
+  u.commands[0].level = 'C1';
+  const errs = validateUnit(u);
+  ok(errs.some(e => e.includes('commands[0]') && e.includes('level')));
+  ok(errs.some(e => e.includes('A1') && e.includes('en az 4')));
+});
+
+test('content: mülakat bölümü doğrulanır', () => {
+  const u = good();
+  const q = [{ q: "What's your name?", a: 'My name is ___.' }, { q: 'Do you want to be {job}?', a: 'Yes, I do.' }, { q: 'Are you strong?', a: 'Yes, I am.' }];
+  u.interview = { jobs: ['coach', 'pilot'], questions: { A1: q, A2: q, B1: q } };
+  eq(validateUnit(u), []);
+  u.interview = { jobs: ['astronaut'], questions: { A1: q, A2: [{ q: 'x' }], B1: q } };
+  const errs = validateUnit(u);
+  ok(errs.some(e => e.includes('astronaut')), 'kelime listesinde olmayan meslek');
+  ok(errs.some(e => e.includes('A2') && e.includes('en az 3')), 'A2 soru sayısı');
 });

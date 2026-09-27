@@ -2,12 +2,27 @@
   "grade": 12,
   "unit": 2,
   "title": "Friendship",
-  "frames": [
-    "A good friend is ___.",
-    "My best friend is very ___.",
-    "A bad friend is ___.",
-    "Friendship needs ___."
-  ],
+  "frames": {
+    "A1": [
+      "She is ___.",
+      "He is ___.",
+      "He is ___.",
+      "I ___ you."
+    ],
+    "A2": [
+      "A good friend is ___.",
+      "My best friend is very ___.",
+      "A bad friend is ___.",
+      "Friendship needs ___."
+    ],
+    "B1": [
+      "I think a good friend should always be ___.",
+      "My best friend is quite ___, and I like that.",
+      "I don't like people who are ___.",
+      "A strong friendship is built on ___."
+    ]
+  },
+  "b1Extend": "+ Say why: because …",
   "vocab": [
     {
       "word": "loyal",
@@ -110,52 +125,124 @@
   ],
   "commands": [
     {
+      "text": "Coach says: smile!",
+      "safe": true,
+      "level": "A1"
+    },
+    {
+      "text": "Coach says: wave!",
+      "safe": true,
+      "level": "A1"
+    },
+    {
+      "text": "Coach says: high-five!",
+      "safe": true,
+      "level": "A1"
+    },
+    {
+      "text": "Coach says: shake hands!",
+      "safe": true,
+      "level": "A1"
+    },
+    {
+      "text": "Hug!",
+      "safe": false,
+      "level": "A1"
+    },
+    {
+      "text": "Laugh!",
+      "safe": false,
+      "level": "A1"
+    },
+    {
       "text": "Coach says: high-five your teammate!",
-      "safe": true
+      "safe": true,
+      "level": "A2"
     },
     {
       "text": "Coach says: help a friend stand up!",
-      "safe": true
+      "safe": true,
+      "level": "A2"
     },
     {
       "text": "Coach says: shake hands with a classmate!",
-      "safe": true
+      "safe": true,
+      "level": "A2"
     },
     {
       "text": "Coach says: smile like a friendly person!",
-      "safe": true
+      "safe": true,
+      "level": "A2"
     },
     {
       "text": "Coach says: be patient! Count to five!",
-      "safe": true
+      "safe": true,
+      "level": "A2"
     },
     {
       "text": "Coach says: share your water bottle!",
-      "safe": true
+      "safe": true,
+      "level": "A2"
     },
     {
       "text": "Coach says: give a thumbs up to your team!",
-      "safe": true
+      "safe": true,
+      "level": "A2"
     },
     {
       "text": "Coach says: laugh like a funny friend!",
-      "safe": true
+      "safe": true,
+      "level": "A2"
     },
     {
       "text": "Hug your teammate!",
-      "safe": false
+      "safe": false,
+      "level": "A2"
     },
     {
       "text": "Be shy! Hide your face!",
-      "safe": false
+      "safe": false,
+      "level": "A2"
     },
     {
       "text": "Clap for your friend!",
-      "safe": false
+      "safe": false,
+      "level": "A2"
     },
     {
       "text": "Wave to a classmate!",
-      "safe": false
+      "safe": false,
+      "level": "A2"
+    },
+    {
+      "text": "Coach says: if you trust your teammate, close your eyes for three seconds!",
+      "safe": true,
+      "level": "B1"
+    },
+    {
+      "text": "Coach says: show us how a supportive friend helps someone who fell!",
+      "safe": true,
+      "level": "B1"
+    },
+    {
+      "text": "Coach says: act like a shy student meeting new people!",
+      "safe": true,
+      "level": "B1"
+    },
+    {
+      "text": "Coach says: if your best friend is funny, give them a thumbs up!",
+      "safe": true,
+      "level": "B1"
+    },
+    {
+      "text": "If you are generous, share your pen with someone!",
+      "safe": false,
+      "level": "B1"
+    },
+    {
+      "text": "Act like a jealous friend!",
+      "safe": false,
+      "level": "B1"
     }
   ]
 }

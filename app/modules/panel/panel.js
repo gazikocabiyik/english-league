@@ -2,6 +2,7 @@ import { h, icon, lockKey } from '../../core/dom.js';
 import { loadIndex } from '../../core/content.js';
 import { games } from '../registry.js';
 import { weekStart } from '../../core/store.js';
+import { levelUp } from '../../core/levels.js';
 
 const GAME_ICONS = { 'coach-says': 'person-simple-run' };
 
@@ -11,6 +12,7 @@ export default {
     document.addEventListener('scores-changed', onChange);
     this.unmount = () => document.removeEventListener('scores-changed', onChange);
     const cls = ctx.store.getClass(ctx.classId);
+    const level = ctx.store.ensureDailyLevel(ctx.classId);
     const index = await loadIndex();
     const available = index[ctx.grade] ?? [];
     const pickUnit = n => { ctx.store.setSetting(`unit:${ctx.classId}`, n); ctx.rerender(); };
@@ -18,7 +20,9 @@ export default {
     const week = ctx.store.standings(ctx.classId, { since: weekStart(Date.now()) });
     el.append(h('section', { class: 'screen panel' },
       h('div', { class: 'panel-head' },
-        h('h1', { class: 'display' }, ctx.classId),
+        h('div', { class: 'title-row' },
+          h('h1', { class: 'display' }, ctx.classId),
+          h('span', { class: 'tape level-badge' }, `Seviye ${level} · hedef ${levelUp(level)}`)),
         h('div', { class: 'unit-row', role: 'group', 'aria-label': 'Ünite' },
           Array.from({ length: 10 }, (_, i) => i + 1).map(n => h('button', {
             class: `unit-btn${n === ctx.unit ? ' is-active' : ''}`,
