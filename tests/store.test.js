@@ -206,3 +206,39 @@ test('store: tek geri al, aynı gruptaki olayları birlikte siler (inceleme I4)'
   eq(s.attemptsOf('11-A'), []);
   ok(a.id);
 });
+
+test('store: deneme öğrenci bilgisini taşır', () => {
+  const s = setup();
+  s.addAttempt({ classId: '11-A', level: 'B1', ok: true, activity: 'exit', studentId: 's1' });
+  eq(s.attemptsOf('11-A')[0].studentId, 's1');
+});
+
+function school() {
+  const s = createStore(memoryStorage(), () => 5_000_000);
+  s.setSetting('classList', ['11-A', '11-B', '12-A', '12-B']);
+  s.saveClass('11-A', { teams: [{ id: 't1', name: 'Lions', color: 'team-1' }], students: [{ id: 'a1', name: 'Ali', teamId: 't1' }, { id: 'a2', name: 'Berk', teamId: 't1' }] });
+  s.saveClass('11-B', { teams: [{ id: 't1', name: 'Eagles', color: 'team-2' }], students: [{ id: 'b1', name: 'Can', teamId: 't1' }, { id: 'b2', name: 'Deniz', teamId: 't1' }, { id: 'b3', name: 'Ece', teamId: 't1' }, { id: 'b4', name: 'Fatih', teamId: 't1' }] });
+  s.saveClass('12-A', { teams: [{ id: 't1', name: 'Wolves', color: 'team-3' }], students: [{ id: 'c1', name: 'Gizem', teamId: 't1' }] });
+  s.saveClass('12-B', { teams: [], students: [] });
+  const add = (classId, targetType, targetId, points) => s.addEvent({ classId, targetType, targetId, points });
+  add('11-A', 'team', 't1', 4); add('11-A', 'student', 'a1', 2);          // 6 puan / 2 öğrenci = 3.0
+  add('11-B', 'team', 't1', 8); add('11-B', 'student', 'b1', 2);          // 10 / 4 = 2.5
+  add('12-A', 'student', 'c1', 1);                                          // 1 / 1 = 1.0
+  return s;
+}
+
+test('okul ligi: şubeler öğrenci başına ortalamayla sıralanır, boş şube sonda', () => {
+  eq(school().schoolStandings({ type: 'class' }).map(r => [r.name, r.points]), [['11-A', 3], ['11-B', 2.5], ['12-A', 1], ['12-B', 0]]);
+});
+
+test('okul ligi: takım ve öğrenciler şube etiketiyle tek listede', () => {
+  const s = school();
+  eq(s.schoolStandings({ type: 'team' }).map(r => [r.name, r.classId, r.points]), [['Eagles', '11-B', 8], ['Lions', '11-A', 4], ['Wolves', '12-A', 0]]);
+  eq(s.schoolStandings({ type: 'student' }).slice(0, 3).map(r => [r.name, r.classId, r.points]), [['Ali', '11-A', 2], ['Can', '11-B', 2], ['Gizem', '12-A', 1]]);
+});
+
+test('okul ligi: sınıf filtresi ve zaman filtresi', () => {
+  const s = school();
+  eq(s.schoolStandings({ type: 'class', grade: 12 }).map(r => r.name), ['12-A', '12-B']);
+  eq(s.schoolStandings({ type: 'class', since: 9_000_000 }).every(r => r.points === 0), true);
+});

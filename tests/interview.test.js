@@ -82,3 +82,27 @@ test('interview: HIRED ekranından geri dönünce son soru atlanmaz (inceleme)',
   ok(iv.prev());
   eq([iv.done, iv.index], [false, 2]);
 });
+
+test('interview: yeni turda eski aday mülakatçı olur, yeni aday başka takımdan', () => {
+  for (let seed = 1; seed <= 15; seed++) {
+    const iv = createInterview(unit, { level: 'A2', students, teams, rng: seeded(seed) });
+    const oldCandidate = iv.pair.candidate;
+    iv.nextRound();
+    eq(iv.pair.interviewer.id, oldCandidate.id, `seed ${seed}`);
+    ok(iv.pair.candidate.teamId !== oldCandidate.teamId, `seed ${seed} takım`);
+    eq(iv.index, 0);
+  }
+});
+
+test('interview: bugün aday olmamışlar önce aday olur', () => {
+  const iv = createInterview(unit, { level: 'A2', students, teams, candidatesToday: ['s1', 's2', 's3'], rng: seeded(8) });
+  eq(iv.pair.candidate.id, 's4');
+});
+
+test('interview: iki kişilik sınıfta roller yer değiştirir', () => {
+  const two = students.slice(0, 2);
+  const iv = createInterview(unit, { level: 'A2', students: two, teams, rng: seeded(1) });
+  const { interviewer, candidate } = iv.pair;
+  iv.nextRound();
+  eq([iv.pair.interviewer.id, iv.pair.candidate.id], [candidate.id, interviewer.id]);
+});

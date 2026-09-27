@@ -18,6 +18,10 @@ export default {
     const pickUnit = n => { ctx.store.setSetting(`unit:${ctx.classId}`, n); ctx.rerender(); };
 
     const week = ctx.store.standings(ctx.classId, { since: weekStart(Date.now()) });
+    // Şubenin bu haftaki okul sırası (öğrenci başına ortalama)
+    const school = ctx.store.schoolStandings({ type: 'class', since: weekStart(Date.now()) });
+    const mine = school.findIndex(r => r.id === ctx.classId);
+    const schoolRank = school.length > 1 && mine >= 0 ? school.findIndex(r => r.points === school[mine].points) + 1 : null;
     el.append(h('section', { class: 'screen panel' },
       h('div', { class: 'panel-head' },
         h('div', { class: 'title-row' },
@@ -35,7 +39,7 @@ export default {
         h('button', { class: 'tile', onclick: () => ctx.go('#/league') }, icon('trophy'), 'Lig'),
         h('button', { class: 'tile', onclick: () => ctx.go('#/setup') }, icon('users-three'), 'Takımlar')),
       week.length ? h('button', { class: 'mini-league', 'aria-label': 'Bu haftanın takım ligi', onclick: () => ctx.go('#/league') },
-        h('span', { class: 'mini-title' }, 'Bu hafta'),
+        h('span', { class: 'mini-title' }, 'Bu hafta', schoolRank ? h('span', { class: 'tape school-rank' }, `Okulda ${schoolRank}. sıra`) : null),
         week.map(t => h('span', { class: 'mini-door', style: { '--team': `var(--${t.color})` } },
           lockKey(),
           h('span', { class: 'stencil' }, String(t.points)), h('span', { class: 'mini-name' }, t.name)))) : null));

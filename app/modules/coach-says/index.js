@@ -4,6 +4,7 @@ import { reviewPlan, pickReview } from '../../core/spiral.js';
 import { fillFrame } from '../../core/speech-map.js';
 import { lessonLevels } from '../../core/levels.js';
 import { createSession, PHASES } from './session.js';
+import { createPicker } from './picker.js';
 import { award } from '../league/award.js';
 
 const PHASE_LABELS = { move: '1 · Hareket', speak: '2 · Konuşma', exit: '3 · Çıkış bileti' };
@@ -44,10 +45,16 @@ export default {
     const review = pickReview(plan, unitsByNo, { exclude: unit.vocab.map(v => v.word), level: lv.speak });
     const session = createSession(unit, { review, level: lv.speak, exitLevel: lv.exit });
     let marked = false; // bu kartta doğru/yanlış işaretlendi mi
-    const rec = (ok, eventId) => { marked = true; ctx.store.addAttempt({ classId: ctx.classId, level: session.level, ok, activity: session.phase, eventId }); };
+    const rec = (ok, eventId, studentId) => { marked = true; ctx.store.addAttempt({ classId: ctx.classId, level: session.level, ok, activity: session.phase, eventId, studentId }); };
     let lastMiss = 0;
-    const miss = () => { if (Date.now() - lastMiss > 500) { lastMiss = Date.now(); rec(false); return true; } return false; };
+    const miss = studentId => { if (Date.now() - lastMiss > 500) { lastMiss = Date.now(); rec(false, undefined, studentId); return true; } return false; };
     const cls = ctx.store.getClass(ctx.classId);
+    // Bugün çıkış biletinde seçilmiş öğrenciler sona kalır
+    const dayStart = new Date(); dayStart.setHours(0, 0, 0, 0);
+    const pickedToday = ctx.store.attemptsOf(ctx.classId, { since: dayStart.getTime() }).filter(a => a.activity === 'exit' && a.studentId).map(a => a.studentId);
+    const picker = createPicker(cls.students, { excludeIds: pickedToday });
+    let lucky = null;
+    let luckyFor = -1;
     const answered = new Set(); // çıkış biletinde bu kelimede puan alanlar
     let showTr = false;
 
@@ -71,11 +78,11 @@ export default {
       ctx.sound.stopSpeaking();
     };
 
-    function setPhase(p) { session.setPhase(p); answered.clear(); marked = false; render(true); }
+    function setPhase(p) { session.setPhase(p); answered.clear(); marked = false; luckyFor = -1; render(true); }
 
     function step(dir) {
       // Puan ya da "bilemedi" verilmeden geçilen konuşma/çıkış kartı yanlış sayılır (seviye şişmesin)
-      if (dir > 0 && session.phase !== 'move' && !marked) rec(false);
+      if (dir > 0 && session.phase !== 'move' && !marked) rec(false, undefined, session.phase === 'exit' ? lucky?.id : undefined);
       const moved = dir > 0 ? session.next() : session.prev();
       marked = false;
       if (moved) { answered.clear(); render(true); return; }
@@ -95,14 +102,23 @@ export default {
         h('button', { class: 'nobody', onclick: skip }, 'Kimse bilemedi'));
     }
 
-    function studentChips() {
+    // Şanslı öğrenci: her kelimede tahta bir öğrenci seçer, öğretmen tek dokunuşla işaretler
+    function luckyBar() {
       if (!cls.students.length) return h('p', { class: 'callout' }, 'Öğrenci listesi yok. ', h('a', { href: '#/setup' }, 'Öğrencileri ekle'));
-      return h('div', { class: 'student-chips' }, cls.students.map(s => h('button', {
-        class: `chip${answered.has(s.id) ? ' is-done' : ''}`,
-        disabled: answered.has(s.id),
-        onclick: () => { const e = award(ctx, 'student', s, 1, 'Çıkış bileti'); if (e) { rec(true, e.id); answered.add(s.id); render(false); } },
-      }, s.name)),
-      h('button', { class: 'nobody miss', onclick: () => { if (miss()) toast('Bilemedi kaydedildi'); } }, 'Bilemedi'));
+      if (luckyFor !== session.index) { lucky = picker.pick(); luckyFor = session.index; }
+      const team = cls.teams.find(t => t.id === lucky.teamId);
+      return h('div', { class: 'lucky' },
+        h('span', { class: 'tape lucky-name' },
+          h('span', { class: 'role-door', style: { '--team': team ? `var(--${team.color})` : 'var(--surface-2)' } }),
+          'Sıra: ', h('b', {}, lucky.name)),
+        h('button', { class: 'go lucky-ok', onclick: () => {
+          const e = award(ctx, 'student', lucky, 1, 'Çıkış bileti');
+          if (!e) return;
+          rec(true, e.id, lucky.id);
+          step(1);
+        } }, icon('check'), ' Doğru'),
+        h('button', { class: 'nobody lucky-no', onclick: () => { if (miss(lucky.id)) step(1); } }, icon('x'), ' Bilemedi'),
+        h('button', { class: 'ghost small', onclick: () => { lucky = picker.skip(); render(false); } }, 'Başka öğrenci'));
     }
 
     function render(announce) {
@@ -120,7 +136,7 @@ export default {
           onerror: () => { img.replaceWith(h('div', { class: 'photo-missing' }, `Görsel yok: ${c.img}`)); console.warn('Eksik görsel:', c.img); },
         });
         stage = h('div', { class: 'stage stage-word' },
-          img,
+          h('div', { class: 'photo' }, img),
           h('div', { class: 'word-side' },
             c.reviewOf ? h('span', { class: 'tape review-tag' }, `Tekrar · Ü${c.reviewOf}`) : null,
             h('button', { class: `word${c.word.length > 9 ? ' is-long' : ''}`, lang: 'en', onclick: () => ctx.sound.speak(c.word) }, c.word.toLocaleUpperCase('en')),
@@ -128,7 +144,7 @@ export default {
             session.level === 'B1' && unit.b1Extend ? h('span', { class: 'tape hint-chip', lang: 'en' }, unit.b1Extend) : null,
             h('p', { class: `frame${c.frameText.length > 34 ? ' is-long' : ''}`, lang: 'en', onclick: () => ctx.sound.speak(fillFrame(c.frameText, c.word)) }, frameParts(c.frameText, c.word)),
             h('button', { class: 'ghost small', onclick: () => { showTr = !showTr; render(false); } }, showTr ? 'Türkçeyi gizle' : 'Türkçe')),
-          session.phase === 'speak' ? teamButtons() : studentChips());
+          session.phase === 'speak' ? teamButtons() : luckyBar());
         if (announce) ctx.sound.speak(c.word);
       }
 

@@ -206,7 +206,7 @@ button.wide { min-width: 320px; }
 .error ul { color: var(--danger); font-size: 28px; }
 .mini-league { display: flex; align-items: stretch; gap: var(--space-2); padding: 0; background: transparent; text-align: left; }
 .mini-league:hover:not(:disabled) { background: transparent; }
-.mini-title { align-self: center; color: var(--ink-muted); font-size: 26px; min-width: 120px; }
+.mini-title { align-self: center; color: var(--ink-muted); font-size: 26px; min-width: 120px; display: grid; gap: var(--space-1); justify-items: start; }
 .mini-door { flex: 1; display: grid; gap: var(--space-1); align-content: end; min-height: 200px; padding: var(--space-3); border-radius: var(--radius); background: var(--team); color: var(--team-ink); box-shadow: 0 10px 24px rgb(0 0 0 / .35); }
 .mini-door .stencil { font-size: var(--step-4); line-height: .85; }
 .mini-name { font: 900 var(--step-1)/1 var(--font-display); }
@@ -253,3 +253,23 @@ button.wide { min-width: 320px; }
 .frame.is-long { font-size: min(var(--step-1), 4.6vh); }
 .phase-exit .word { font-size: min(var(--step-3), 9vh); }
 .phase-exit .miss { color: var(--tape-ink); box-shadow: inset 0 0 0 3px var(--tape-ink); }
+
+/* Fotoğraf kapsayıcı: Safari'de alt satırın üstüne taşmasın */
+.photo { min-height: 0; overflow: hidden; border-radius: var(--radius); position: relative; }
+.photo > .word-photo, .photo > .photo-missing { width: 100%; height: 100%; max-height: none; object-fit: cover; display: block; }
+
+/* Şanslı öğrenci */
+.lucky, .scores.one { grid-column: 1 / -1; display: flex; align-items: center; gap: var(--space-2); flex-wrap: wrap; }
+.lucky-name { display: inline-flex; align-items: center; gap: var(--space-1); font-size: min(var(--step-1), 5vh); padding: .15em .5em; }
+.lucky .go, .lucky .nobody, .scores.one .go, .scores.one .nobody { flex: 1; min-height: min(96px, 10vh); font: 900 min(var(--step-1), 5vh)/1 var(--font-display); display: inline-flex; align-items: center; justify-content: center; gap: var(--space-1); }
+.phase-exit .lucky-no { color: var(--tape-ink); box-shadow: inset 0 0 0 3px var(--tape-ink); }
+.phase-exit .lucky .ghost { color: var(--tape-ink); }
+.scores.one .person-label { color: var(--ink-muted); font-size: min(26px, 3vh); flex-basis: 100%; }
+
+/* Okul ligi */
+.row-btn.is-static { cursor: default; border-radius: var(--radius); }
+.class-tag { color: var(--ink-muted); font: 700 min(var(--step-0), 3.6vh)/1 var(--font-body); }
+.pts .per { display: block; font: 600 16px/1 var(--font-body); color: var(--ink-muted); text-align: right; }
+.table-class .row-btn, .table-team .row-btn { min-height: 0; }
+.scope-school .table-student .row-btn { grid-template-columns: 88px 1fr auto; }
+.school-rank { font-size: min(26px, 3.2vh); align-self: center; }

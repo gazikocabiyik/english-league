@@ -8,3 +8,4 @@ import './spiral.test.js';
 import './sound.test.js';
 import './levels.test.js';
 import './interview.test.js';
+import './picker.test.js';

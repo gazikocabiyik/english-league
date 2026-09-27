@@ -4,15 +4,32 @@ import { shuffle } from '../coach-says/deck.js';
 const article = word => (/^[aeiou]/i.test(word) ? 'an' : 'a');
 export const fillJob = (text, word) => text.replaceAll('{job}', `${article(word)} ${word}`);
 
-function pickPair(students, rng) {
-  const pool = shuffle(students, rng);
-  if (pool.length < 2) return null;
-  const interviewer = pool[0];
-  const candidate = pool.find(s => s.teamId !== interviewer.teamId) ?? pool[1];
-  return { interviewer, candidate };
-}
 
-export function createInterview(unit, { level = 'A2', students = [], rng = Math.random } = {}) {
+export function createInterview(unit, { level = 'A2', students = [], candidatesToday = [], rng = Math.random } = {}) {
+  // Adaylık sayısı: bugün aday olmamışlar önce aday olur
+  const asCandidate = new Map(students.map(s => [s.id, 0]));
+  for (const id of candidatesToday) if (asCandidate.has(id)) asCandidate.set(id, asCandidate.get(id) + 1);
+  const leastUsed = pool => {
+    const min = Math.min(...pool.map(s => asCandidate.get(s.id)));
+    return shuffle(pool.filter(s => asCandidate.get(s.id) === min), rng)[0];
+  };
+  const chooseCandidate = interviewer => {
+    const others = students.filter(s => s.id !== interviewer?.id);
+    const otherTeam = others.filter(s => !interviewer || s.teamId !== interviewer.teamId);
+    return leastUsed(otherTeam.length ? otherTeam : others);
+  };
+  const pairFrom = (interviewer, candidate) => {
+    asCandidate.set(candidate.id, asCandidate.get(candidate.id) + 1);
+    return { interviewer, candidate };
+  };
+  function pickPair() {
+    if (students.length < 2) return null;
+    const candidate = leastUsed(students);
+    const others = students.filter(s => s.id !== candidate.id);
+    const otherTeam = others.filter(s => s.teamId !== candidate.teamId);
+    return pairFrom(shuffle(otherTeam.length ? otherTeam : others, rng)[0], candidate);
+  }
+
   const iv = unit.interview;
   const questions = iv.questions[level] ?? iv.questions.A2;
   const jobs = iv.jobs.map(w => unit.vocab.find(v => v.word === w)).filter(Boolean);
@@ -27,7 +44,7 @@ export function createInterview(unit, { level = 'A2', students = [], rng = Math.
     return last;
   };
 
-  let pair = pickPair(students, rng);
+  let pair = pickPair();
   let job = nextJob();
   let i = 0;
   let finished = false;
@@ -53,6 +70,14 @@ export function createInterview(unit, { level = 'A2', students = [], rng = Math.
       if (i > 0) { i--; return true; }
       return false;
     },
-    newPair() { pair = pickPair(students, rng); job = nextJob(); i = 0; finished = false; },
+    // Tamamen yeni ikili ("İkiliyi değiştir")
+    newPair() { pair = pickPair(); job = nextJob(); i = 0; finished = false; },
+    // Sıradaki tur: aday mülakatçı olur, yeni aday başka takımdan
+    nextRound() {
+      if (!pair) return this.newPair();
+      const interviewer = pair.candidate;
+      pair = pairFrom(interviewer, chooseCandidate(interviewer));
+      job = nextJob(); i = 0; finished = false;
+    },
   };
 }

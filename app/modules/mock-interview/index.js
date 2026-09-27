@@ -35,7 +35,9 @@ export default {
     const cls = ctx.store.getClass(ctx.classId);
     // Uyarlanır seviye: Mock Interview sınıf seviyesinin bir üstünde oynar
     const level = lessonLevels(ctx.store.ensureDailyLevel(ctx.classId)).interview;
-    const iv = createInterview(unit, { level, students: cls.students });
+    const dayStart = new Date(); dayStart.setHours(0, 0, 0, 0);
+    const candidatesToday = ctx.store.attemptsOf(ctx.classId, { since: dayStart.getTime() }).filter(a => a.activity === 'interview' && a.studentId).map(a => a.studentId);
+    const iv = createInterview(unit, { level, students: cls.students, candidatesToday: [...new Set(candidatesToday)] });
     const teamOf = s => cls.teams.find(t => t.id === s.teamId);
 
     if (!iv.pair) {
@@ -46,34 +48,51 @@ export default {
     }
 
     let marked = false; // bu soruda işaret verildi mi
-    const rec = (ok, eventId) => { marked = true; ctx.store.addAttempt({ classId: ctx.classId, level: iv.level, ok, activity: 'interview', eventId }); };
+    const rec = (ok, eventId) => { marked = true; ctx.store.addAttempt({ classId: ctx.classId, level: iv.level, ok, activity: 'interview', eventId, studentId: iv.pair.candidate.id }); };
+    let thanked = false; // bu turda mülakatçı katılım puanı aldı mı
     let lastMiss = 0;
     const lastPoint = {};
 
+    // Mülakatçı soruları okuduğu için tur bitince +1 katılım puanı alır (seviye ölçümüne girmez)
+    function thankInterviewer() {
+      if (thanked) return;
+      thanked = true;
+      const s = iv.pair.interviewer;
+      const groupId = `ivk-${Date.now()}-${s.id}`;
+      if (!award(ctx, 'student', s, 1, 'Mülakatçı', groupId)) return;
+      const team = teamOf(s);
+      if (team) award(ctx, 'team', team, 1, `Mülakatçı · ${s.name}`, groupId);
+      toast(`${s.name} +1 (mülakatçı)`);
+    }
+
     function point(s) {
       // Çift dokunuş koruması: aynı öğrenciye 500 ms içinde ikinci puan yok
-      if (Date.now() - (lastPoint[s.id] ?? 0) < 500) return;
+      if (Date.now() - (lastPoint[s.id] ?? 0) < 500) return false;
       lastPoint[s.id] = Date.now();
       const groupId = `iv-${Date.now()}-${s.id}`; // öğrenci + takım puanı tek "Geri al" ile birlikte gider
       const se = award(ctx, 'student', s, 1, 'Mock Interview', groupId);
-      if (!se) return;
+      if (!se) return false;
       const team = teamOf(s);
       const te = team ? award(ctx, 'team', team, 1, `Mock Interview · ${s.name}`, groupId) : null;
       rec(true, (te ?? se).id); // "Geri al" önce bu olayı siler, denemeyle birlikte
+      return true;
     }
     function missed(s) {
-      if (Date.now() - lastMiss < 500) return;
+      if (Date.now() - lastMiss < 500) return false;
       lastMiss = Date.now();
       rec(false);
       toast(`${s.name}: bilemedi`);
+      return true;
     }
     function step(dir) {
       if (dir > 0 && !iv.done && !marked) rec(false); // işaretlenmeden geçilen soru = bilemedi
       marked = false;
       if (dir > 0) iv.next(); else iv.prev();
+      if (iv.done) thankInterviewer();
       render(!iv.done);
     }
-    function newPair() { iv.newPair(); marked = false; render(true); }
+    function newPair() { iv.newPair(); marked = false; thanked = false; render(true); }
+    function nextRound() { iv.nextRound(); marked = false; thanked = false; render(true); }
 
     const onKey = e => { if (e.key === 'ArrowRight') step(1); if (e.key === 'ArrowLeft') step(-1); };
     document.addEventListener('keydown', onKey);
@@ -82,11 +101,6 @@ export default {
     const person = (role, s) => h('span', { class: 'role tape' },
       h('span', { class: 'role-door', style: { '--team': teamOf(s) ? `var(--${teamOf(s).color})` : 'var(--surface-2)' } }),
       h('span', { class: 'role-name' }, `${role}: `, h('b', {}, s.name)));
-
-    const scoreBox = (label, s) => h('div', { class: 'person-score' },
-      h('span', { class: 'person-label' }, label),
-      h('button', { class: 'go', onclick: () => point(s) }, `+1 ${s.name}`),
-      h('button', { class: 'nobody', onclick: () => missed(s) }, 'Bilemedi'));
 
     function render(announce) {
       const { interviewer, candidate } = iv.pair;
@@ -100,16 +114,19 @@ export default {
         ? h('div', { class: 'stage hired' },
           h('p', { class: 'hired-stamp stamp', lang: 'en' }, 'HIRED!'),
           h('p', { class: 'hired-line', lang: 'en' }, `${candidate.name} is our new ${iv.job.word}!`),
-          h('button', { class: 'go wide', onclick: newPair }, icon('users-three'), ' Yeni ikili'))
+          h('button', { class: 'go wide', onclick: nextRound }, icon('users-three'), ` Sıradaki: ${candidate.name} soruyor`))
         : h('div', { class: 'stage stage-word interview' },
-          h('div', { class: 'job' }, img, h('span', { class: 'job-name tape', lang: 'en' }, iv.job.word.toLocaleUpperCase('en'))),
+          h('div', { class: 'job photo' }, img, h('span', { class: 'job-name tape', lang: 'en' }, iv.job.word.toLocaleUpperCase('en'))),
           h('div', { class: 'word-side' },
             h('span', { class: 'q-label' }, `${interviewer.name} sorar:`),
             h('button', { class: 'question', lang: 'en', onclick: () => ctx.sound.speak(q) }, q),
             h('span', { class: 'q-label' }, `${candidate.name} cevaplar:`),
             h('p', { class: 'frame', lang: 'en' }, answerParts(a)),
             iv.level === 'B1' && unit.b1Extend ? h('span', { class: 'tape hint-chip', lang: 'en' }, unit.b1Extend) : null),
-          h('div', { class: 'scores' }, scoreBox('Mülakatçı', interviewer), scoreBox('Aday', candidate)));
+          h('div', { class: 'scores one' },
+            h('span', { class: 'person-label' }, `${candidate.name} doğru cevapladı mı?`),
+            h('button', { class: 'go', onclick: () => { if (point(candidate)) step(1); } }, icon('check'), ' Doğru'),
+            h('button', { class: 'nobody', onclick: () => { if (missed(candidate)) step(1); } }, icon('x'), ' Bilemedi')));
 
       el.replaceChildren(h('section', { class: 'screen coach mock' },
         h('header', { class: 'coach-head' },

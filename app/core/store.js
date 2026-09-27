@@ -97,8 +97,21 @@ export function createStore(storage, now = () => Date.now()) {
       return null;
     },
     standings,
-    addAttempt({ classId, level, ok, activity, eventId }) {
-      const a = { id: uid(), classId, level, ok: !!ok, activity, eventId, ts: now() };
+    // Okul ligi: şubeler (öğrenci başına ortalama), bütün takımlar, bütün öğrenciler
+    schoolStandings({ type = 'class', grade = null, since = 0 } = {}) {
+      const byName = (a, b) => b.points - a.points || a.name.localeCompare(b.name, 'tr');
+      const ids = (state.settings.classList ?? []).filter(id => !grade || id.startsWith(`${grade}-`));
+      if (type === 'class') {
+        return ids.map(id => {
+          const n = getClass(id).students.length;
+          const total = [...standings(id, { type: 'team', since }), ...standings(id, { type: 'student', since })].reduce((t, r) => t + r.points, 0);
+          return { id, name: id, classId: id, students: n, points: n ? Math.round((total / n) * 10) / 10 : 0 };
+        }).sort((a, b) => (b.students > 0) - (a.students > 0) || byName(a, b));
+      }
+      return ids.flatMap(id => standings(id, { type, since }).map(r => ({ ...r, classId: id }))).sort(byName);
+    },
+    addAttempt({ classId, level, ok, activity, eventId, studentId }) {
+      const a = { id: uid(), classId, level, ok: !!ok, activity, eventId, studentId, ts: now() };
       state.attempts.push(a);
       save();
       return a;
