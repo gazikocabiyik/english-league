@@ -103,3 +103,34 @@ body.time-up { animation: flash .5s steps(2) 6; }
 .toast { position: fixed; left: 50%; bottom: var(--space-4); transform: translate(-50%, 300%); z-index: 30; transition: transform .25s var(--ease-out), visibility .25s; }
 .toast:not(.show) { visibility: hidden; }
 .toast.show { transform: translate(-50%, 0); }
+
+/* Ders paneli */
+.panel-head { display: grid; gap: var(--space-3); }
+.unit-row { display: flex; flex-wrap: wrap; gap: var(--space-1); }
+.unit-btn { min-width: 88px; font: 900 var(--step-1)/1 var(--font-stencil); }
+.unit-btn.is-active { background: var(--accent); color: var(--accent-ink); }
+.tiles { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: var(--space-3); }
+.tile {
+  min-height: 300px; display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-end; gap: var(--space-2);
+  text-align: left; padding: var(--space-4); font: 900 var(--step-2)/.9 var(--font-display); text-transform: uppercase;
+  box-shadow: 0 10px 24px rgb(0 0 0 / .35);
+}
+.tile .icon { font-size: var(--step-3); color: var(--accent); }
+.tile.primary { background: var(--accent); color: var(--accent-ink); font-size: var(--step-3); }
+.tile.primary:hover:not(:disabled) { background: #ffe066; }
+.tile.primary .icon { color: var(--accent-ink); }
+.callout { justify-self: start; margin: 0; font-size: 28px; }
+.callout a { color: var(--tape-ink); }
+
+/* Takım kurulumu */
+.setup { grid-template-columns: 1fr 1fr; align-items: start; }
+.setup > h1, .setup-actions, .backup { grid-column: 1 / -1; }
+.setup-col { display: grid; gap: var(--space-2); }
+.setup-col p { margin: 0; color: var(--ink-muted); font-size: 26px; }
+.team-inputs { display: grid; gap: var(--space-2); }
+.team-input { display: grid; grid-template-columns: 88px 1fr; align-items: stretch; gap: var(--space-2); }
+.door { display: grid; place-items: center; background: var(--team); color: var(--team-ink); border-radius: var(--radius); font-size: var(--step-2); line-height: 1; }
+.setup-actions { display: flex; gap: var(--space-2); }
+button.wide { min-width: 320px; }
+.backup { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); padding-top: var(--space-3); color: var(--ink-muted); font-size: 26px; }
+.backup button { display: inline-flex; align-items: center; gap: var(--space-1); }

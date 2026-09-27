@@ -4,6 +4,8 @@ import { h, icon, toast } from './core/dom.js';
 import * as sound from './core/sound.js';
 import { mountTimerDock } from './modules/timer/timer-dock.js';
 import classSelect from './modules/panel/class-select.js';
+import panel from './modules/panel/panel.js';
+import setup from './modules/panel/setup.js';
 
 const store = createStore();
 const view = document.getElementById('view');
@@ -23,6 +25,8 @@ const ctx = {
 // Sonraki görevler bu tabloya satır ekler.
 const routes = {
   '': classSelect,
+  panel,
+  setup,
 };
 
 let active = null;
