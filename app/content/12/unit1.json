@@ -2,6 +2,11 @@
   "grade": 12,
   "unit": 1,
   "title": "Music",
+  "goals": [
+    "Görüş bildirme (I think / I believe)",
+    "Katılma ve katılmama (I agree / I disagree)",
+    "Tercih belirtme (I prefer / I'd rather)"
+  ],
   "frames": {
     "A1": [
       "I like ___ music.",
@@ -247,5 +252,63 @@
       "safe": false,
       "level": "B1"
     }
-  ]
+  ],
+  "dj": {
+    "genres": [
+      "rock",
+      "pop",
+      "rap",
+      "classical",
+      "folk"
+    ],
+    "situations": [
+      {
+        "text": "Before a big match",
+        "tr": "Büyük bir maçtan önce"
+      },
+      {
+        "text": "Warm-up in the gym",
+        "tr": "Spor salonunda ısınma"
+      },
+      {
+        "text": "Cool-down after training",
+        "tr": "Antrenman sonrası soğuma"
+      },
+      {
+        "text": "On the bus to an away game",
+        "tr": "Deplasman otobüsünde"
+      },
+      {
+        "text": "After losing a match",
+        "tr": "Kaybedilen bir maçtan sonra"
+      },
+      {
+        "text": "Studying for an exam",
+        "tr": "Sınava çalışırken"
+      }
+    ],
+    "lines": {
+      "A1": {
+        "choose": "I like ___ music.",
+        "reply": [
+          "Me too!",
+          "Not me."
+        ]
+      },
+      "A2": {
+        "choose": "I think ___ music is good for this because it's …",
+        "reply": [
+          "I agree because …",
+          "I disagree because …"
+        ]
+      },
+      "B1": {
+        "choose": "I'd prefer ___ music because it helps me …",
+        "reply": [
+          "I see your point, but I'd rather …",
+          "Exactly! And it also …"
+        ]
+      }
+    }
+  }
 }

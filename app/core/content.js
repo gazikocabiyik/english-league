@@ -66,6 +66,20 @@ export function validateUnit(u) {
       });
     }
   }
+  if (u.goals !== undefined && !(Array.isArray(u.goals) && u.goals.every(g => typeof g === 'string' && g))) {
+    errors.push('goals: ünite kazanımları metin listesi olmalı.');
+  }
+  if (u.dj !== undefined) {
+    const dj = u.dj;
+    const words = new Set((u.vocab ?? []).map(v => v?.word));
+    if (!Array.isArray(dj?.genres) || !dj.genres.length) errors.push('dj.genres en az 1 tür içermeli.');
+    else dj.genres.filter(g => !words.has(g)).forEach(g => errors.push(`dj.genres: "${g}" kelime listesinde yok.`));
+    if (!Array.isArray(dj?.situations) || dj.situations.length < 3 || !dj.situations.every(x => typeof x?.text === 'string' && x.text)) errors.push('dj.situations en az 3 durum (text) içermeli.');
+    for (const L of LEVELS) {
+      const l = dj?.lines?.[L];
+      if (blanks(l?.choose) !== 1 || !Array.isArray(l?.reply) || !l.reply.length) errors.push(`dj.lines.${L}: choose tek ___ içermeli, reply en az 1 cümle olmalı.`);
+    }
+  }
   return errors;
 }
 

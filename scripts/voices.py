@@ -41,6 +41,9 @@ def texts_of(unit):
             for x in qs:
                 jobs = iv['jobs'] if '{job}' in x['q'] else [iv['jobs'][0]]
                 out += [(fill_job(x['q'], j), x['q']) for j in jobs]
+    dj = unit.get('dj')
+    if dj:  # Warm-up DJ durum kartları
+        out += [(x['text'], x['text']) for x in dj['situations']]
     return list(dict.fromkeys(out))
 
 

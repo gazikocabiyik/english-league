@@ -2,6 +2,10 @@
   "grade": 11,
   "unit": 2,
   "title": "Hobbies and Skills",
+  "goals": [
+    "Hobileri, beğenileri ve tercihleri ifade etme (like / love / prefer)",
+    "Yetenekleri anlatma (can / could / good at)"
+  ],
   "frames": {
     "A1": [
       "I like ___.",

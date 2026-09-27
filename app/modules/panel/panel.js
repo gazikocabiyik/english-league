@@ -1,10 +1,12 @@
 import { h, icon, lockKey } from '../../core/dom.js';
-import { loadIndex } from '../../core/content.js';
+import { loadIndex, loadUnit } from '../../core/content.js';
 import { games } from '../registry.js';
 import { weekStart } from '../../core/store.js';
 import { levelUp } from '../../core/levels.js';
 
-const GAME_ICONS = { 'coach-says': 'person-simple-run', 'mock-interview': 'microphone-stage' };
+const GAME_ICONS = { 'coach-says': 'person-simple-run', 'mock-interview': 'microphone-stage', 'warmup-dj': 'music-notes' };
+// Ünitenin görev oyunu yalnız ilgili ünitede görünür
+const UNIT_GAME = { 'mock-interview': 'interview', 'warmup-dj': 'dj' };
 
 export default {
   async mount(el, ctx) {
@@ -14,6 +16,8 @@ export default {
     const cls = ctx.store.getClass(ctx.classId);
     const level = ctx.store.ensureDailyLevel(ctx.classId);
     const index = await loadIndex();
+    const { unit } = await loadUnit(ctx.grade, ctx.unit);
+    const visibleGames = games.filter(g => !UNIT_GAME[g.id] || unit?.[UNIT_GAME[g.id]]);
     const available = index[ctx.grade] ?? [];
     const pickUnit = n => { ctx.store.setSetting(`unit:${ctx.classId}`, n); ctx.rerender(); };
 
@@ -28,6 +32,7 @@ export default {
           h('h1', { class: 'display' }, ctx.classId),
           h('button', { class: 'today-btn', onclick: () => ctx.go('#/today') }, icon('users-three'), ` Bugün ${ctx.store.presentStudents(ctx.classId).length}/${cls.students.length}`),
           h('span', { class: 'tape level-badge' }, level === 'B1' ? 'Seviye B1 · en üst seviye' : `Seviye ${level} · hedef ${levelUp(level)}`)),
+        unit?.goals ? h('p', { class: 'goals' }, h('b', {}, `Unit ${ctx.unit} · ${unit.title} — hedef: `), unit.goals.join(' · ')) : null,
         h('div', { class: 'unit-row', role: 'group', 'aria-label': 'Ünite' },
           Array.from({ length: 10 }, (_, i) => i + 1).map(n => h('button', {
             class: `unit-btn${n === ctx.unit ? ' is-active' : ''}`,
@@ -36,7 +41,7 @@ export default {
           }, String(n))))),
       cls.teams.length ? null : h('p', { class: 'tape callout' }, 'Bu sınıfta henüz takım yok. ', h('a', { href: '#/setup' }, 'Takımları kur')),
       h('div', { class: 'tiles' },
-        games.map((g, i) => h('button', { class: `tile game${i === 0 ? ' primary' : ''}`, onclick: () => ctx.go(`#/game/${g.id}`) }, icon(GAME_ICONS[g.id] ?? 'play'), h('span', { lang: 'en' }, g.title.toLocaleUpperCase('en')))),
+        visibleGames.map((g, i) => h('button', { class: `tile game${i === 0 ? ' primary' : ''}`, onclick: () => ctx.go(`#/game/${g.id}`) }, icon(GAME_ICONS[g.id] ?? 'play'), h('span', { lang: 'en' }, g.title.toLocaleUpperCase('en')))),
         h('button', { class: 'tile', onclick: () => ctx.go('#/league') }, icon('trophy'), 'Lig'),
         h('button', { class: 'tile', onclick: () => ctx.go('#/setup') }, icon('users-three'), 'Takımlar')),
       week.length ? h('button', { class: 'mini-league', 'aria-label': 'Bu haftanın takım ligi', onclick: () => ctx.go('#/league') },

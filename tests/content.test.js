@@ -112,3 +112,25 @@ test('content: mülakat bölümü doğrulanır', () => {
   ok(errs.some(e => e.includes('astronaut')), 'kelime listesinde olmayan meslek');
   ok(errs.some(e => e.includes('A2') && e.includes('en az 3')), 'A2 soru sayısı');
 });
+
+test('content: kazanım hedefleri ve DJ bölümü doğrulanır', () => {
+  const u = good();
+  u.goals = ['Gelecek planları'];
+  u.dj = { genres: ['coach'], situations: [{ text: 'A' }, { text: 'B' }, { text: 'C' }],
+    lines: { A1: { choose: 'I like ___.', reply: ['Me too!'] }, A2: { choose: 'I think ___.', reply: ['I agree.'] }, B1: { choose: 'I prefer ___.', reply: ['I see.'] } } };
+  eq(validateUnit(u), []);
+  u.goals = 'x';
+  u.dj.genres = ['jazz'];
+  u.dj.lines.B1 = { choose: 'no blank', reply: [] };
+  const errs = validateUnit(u);
+  ok(errs.some(e => e.includes('goals')));
+  ok(errs.some(e => e.includes('jazz')));
+  ok(errs.some(e => e.includes('dj.lines.B1')));
+});
+
+test('content: pilot ünitelerin hepsinde kazanım hedefi var', async () => {
+  for (const [g, n] of [[11, 1], [11, 2], [12, 1], [12, 2]]) {
+    const u = await readJson(`content/${g}/unit${n}.json`);
+    ok(Array.isArray(u.goals) && u.goals.length > 0, `${g}/${n}`);
+  }
+});

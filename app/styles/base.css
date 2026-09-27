@@ -110,7 +110,9 @@ body.time-up { animation: flash .5s steps(2) 6; }
 .unit-row { display: flex; flex-wrap: wrap; gap: var(--space-1); }
 .unit-btn { min-width: 88px; font: 900 var(--step-1)/1 var(--font-stencil); }
 .unit-btn.is-active { background: var(--accent); color: var(--accent-ink); }
-.tiles { display: grid; grid-template-columns: 2fr 2fr 1fr 1fr; gap: var(--space-3); }
+.tiles { display: flex; gap: var(--space-3); }
+.tiles > .tile { flex: 1; }
+.tiles > .tile.game { flex: 2; }
 .tile.game:not(.primary) { font-size: var(--step-3); }
 .tile {
   min-height: min(300px, 30vh); display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-end; gap: var(--space-2);
@@ -293,3 +295,28 @@ button.wide { min-width: 320px; }
 .title-row .spacer { flex: 1; }
 .today-actions { display: flex; gap: var(--space-1); flex-wrap: wrap; }
 .today-actions .go { min-width: 240px; }
+.goals { margin: 0; font-size: min(26px, 3.2vh); color: var(--ink-muted); }
+.goals b { color: var(--ink); }
+
+/* Warm-up DJ */
+.dj-stage { display: grid; grid-template-columns: 1fr; grid-template-rows: auto auto minmax(0, 1fr) auto; gap: min(var(--space-3), 2vh); }
+.situation { all: unset; cursor: pointer; font: 900 min(var(--step-3), 8vh)/.95 var(--font-display); display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-2); }
+.situation small { font: 600 min(28px, 3.2vh)/1 var(--font-body); color: var(--ink-muted); }
+.situation:focus-visible { outline: 4px solid var(--accent); outline-offset: 6px; }
+.genres { display: grid; grid-template-columns: repeat(5, 1fr); gap: var(--space-2); }
+.genre { position: relative; padding: 0; min-height: 0; aspect-ratio: 16 / 9; max-height: 18vh; overflow: hidden; border-radius: var(--radius); background: var(--surface); }
+.genre img { width: 100%; height: 100%; object-fit: cover; display: block; opacity: .75; }
+.genre span { position: absolute; left: 8px; bottom: 8px; background: var(--tape); color: var(--tape-ink); font: 900 min(var(--step-0), 3.4vh)/1 var(--font-display); padding: 4px 10px; }
+.genre.is-on { box-shadow: 0 0 0 6px var(--accent); }
+.genre.is-on img { opacity: 1; }
+.genre:disabled { opacity: 1; }
+.genre:disabled:not(.is-on) img { opacity: .3; }
+.replies { display: grid; gap: var(--space-1); }
+.said { margin: 0; color: var(--ink-muted); font-size: min(28px, 3.4vh); }
+.playlist { display: grid; align-content: center; gap: var(--space-3); background: var(--tape); color: var(--tape-ink); padding: var(--space-4); }
+.playlist-title { margin: 0; font: 900 min(var(--step-4), 14vh)/.85 var(--font-display); color: var(--team-2); transform: rotate(-2deg); }
+.playlist-list { margin: 0; padding: 0; list-style: none; display: grid; gap: var(--space-1); counter-reset: track; }
+.playlist-list li { display: grid; grid-template-columns: 3ch 1fr auto auto; gap: var(--space-2); align-items: baseline; font-size: min(var(--step-0), 3.6vh); counter-increment: track; }
+.playlist-list li::before { content: counter(track, decimal-leading-zero); font: 900 1em/1 var(--font-stencil); color: var(--team-1); }
+.pl-genre { font: 900 1.1em/1 var(--font-display); }
+.pl-by { color: #5b636c; }

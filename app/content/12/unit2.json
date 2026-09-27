@@ -2,6 +2,10 @@
   "grade": 12,
   "unit": 2,
   "title": "Friendship",
+  "goals": [
+    "Kişilik özelliklerini tanımlama",
+    "Arkadaşlık hakkında görüş bildirme"
+  ],
   "frames": {
     "A1": [
       "She is ___.",
