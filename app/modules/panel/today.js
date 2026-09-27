@@ -47,8 +47,7 @@ export default {
           return h('div', { class: 'group', style: { '--team': `var(--${t.color})` } },
             h('div', { class: 'group-head' }, h('span', { class: 'group-name' }, t.name), h('span', { class: 'stencil group-count' }, String(present))),
             mine.map(card));
-        })),
-))));
+        }))));
     }
     render();
   },
