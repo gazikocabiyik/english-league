@@ -366,3 +366,4 @@ button.wide { min-width: 320px; }
 .go-link { display: inline-flex; align-items: center; gap: var(--space-1); background: var(--accent); color: var(--accent-ink); text-decoration: none; border-radius: var(--radius); padding: var(--space-2) var(--space-3); min-height: 72px; font-weight: 700; }
 .boss-card .question { font-size: min(var(--step-3), 7vh); }
 .boss-card.type-question { grid-template-columns: 0 1fr; }
+.stage-move .go, .stage-move .go:hover:not(:disabled) { background: var(--accent-ink); color: var(--accent); }
