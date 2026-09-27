@@ -156,6 +156,22 @@ export function createStore(storage, now = () => Date.now()) {
       }
       return this.classLevel(classId);
     },
+    // Günlük yoklama: gelmeyenler yalnız o gün için tutulur
+    setAbsent(classId, ids, day = dayKey(now())) {
+      state.settings[`absent:${classId}`] = { day, ids: [...ids] };
+      save();
+    },
+    absentIds(classId, day = dayKey(now())) {
+      const a = state.settings[`absent:${classId}`];
+      return a?.day === day ? a.ids : [];
+    },
+    isAttendanceDone(classId, day = dayKey(now())) {
+      return state.settings[`absent:${classId}`]?.day === day;
+    },
+    presentStudents(classId, day = dayKey(now())) {
+      const absent = new Set(this.absentIds(classId, day));
+      return getClass(classId).students.filter(s => !absent.has(s.id));
+    },
     getSetting(key, fallback = null) { return key in state.settings ? state.settings[key] : fallback; },
     setSetting(key, value) { state.settings[key] = value; save(); },
     export() { return JSON.stringify(state, null, 2); },

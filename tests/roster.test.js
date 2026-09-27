@@ -38,3 +38,30 @@ test('roster + store: silinen öğrenci bireysel ligden düşer, kalanın puanı
   s.saveClass('12-A', buildRoster('Ali', 2, s.getClass('12-A'), ids()));
   eq(s.standings('12-A', { type: 'student' }).map(r => [r.name, r.points]), [['Ali', 2]]);
 });
+
+import { balanceTeams, moveStudent } from '../app/modules/league/roster.js';
+
+const T = [{ id: 't1' }, { id: 't2' }, { id: 't3' }];
+const S = (spec) => spec.map(([id, teamId]) => ({ id, name: id, teamId }));
+
+test('dengele: gelenler gruplara en fazla 1 fark olacak şekilde, en az taşımayla dağılır', () => {
+  const st = S([['a', 't1'], ['b', 't1'], ['c', 't1'], ['d', 't1'], ['e', 't2'], ['f', 't3']]);
+  const out = balanceTeams(st, T, ['f']);
+  const present = out.filter(s => s.id !== 'f');
+  const sizes = T.map(t => present.filter(s => s.teamId === t.id).length);
+  ok(Math.max(...sizes) - Math.min(...sizes) <= 1, `boyutlar ${sizes}`);
+  eq(out.filter((s, i) => s.teamId !== st[i].teamId).length, 2, 'en az taşıma');
+  eq(out.find(s => s.id === 'f').teamId, 't3', 'gelmeyen öğrenci yerinde kalır');
+});
+
+test('dengele: zaten dengeliyse kimse taşınmaz; takımsız öğrenci en küçük gruba girer', () => {
+  const st = S([['a', 't1'], ['b', 't2'], ['c', 't3']]);
+  eq(balanceTeams(st, T, []), st);
+  eq(balanceTeams([...st, { id: 'x', name: 'x', teamId: null }], T, []).find(s => s.id === 'x').teamId !== null, true);
+});
+
+test('grup değiştir: öğrenci sıradaki gruba geçer, sondan başa döner', () => {
+  const st = S([['a', 't3']]);
+  eq(moveStudent(st, T, 'a')[0].teamId, 't1');
+  eq(moveStudent(S([['a', 't1']]), T, 'a')[0].teamId, 't2');
+});

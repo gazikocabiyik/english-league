@@ -257,3 +257,13 @@ test('okul ligi: sınıf filtresi ve zaman filtresi', () => {
   eq(s.schoolStandings({ type: 'class', grade: 12 }).map(r => r.name), ['12-A', '12-B']);
   eq(s.schoolStandings({ type: 'class', since: 9_000_000 }).every(r => !r.enough), true);
 });
+
+test('yoklama: gelmeyenler o gün için tutulur, ertesi gün herkes var sayılır', () => {
+  let t = new Date(2026, 8, 28, 9).getTime();
+  const s = setup(() => t);
+  eq(s.isAttendanceDone('11-A'), false);
+  s.setAbsent('11-A', ['s2']);
+  eq([s.presentStudents('11-A').map(x => x.id), s.isAttendanceDone('11-A')], [['s1'], true]);
+  t = new Date(2026, 8, 29, 9).getTime();
+  eq([s.presentStudents('11-A').map(x => x.id), s.isAttendanceDone('11-A')], [['s1', 's2'], false]);
+});

@@ -16,7 +16,9 @@ export default {
         if (list().includes(id)) { toast(`${id} zaten var`); return; }
         saveList([...list(), id]);
         adding = false;
-        render();
+        // Yeni şube: önce öğrenciler, sonra gruplar
+        ctx.store.setSetting('lastClass', id);
+        ctx.go('#/setup/students');
       } catch (e) {
         toast(e.message);
       }
@@ -39,7 +41,12 @@ export default {
           class: `locker${id === ctx.classId ? ' is-last' : ''}`,
           'aria-label': `${id} sınıfını aç`,
           disabled: editing,
-          onclick: () => { ctx.store.setSetting('lastClass', id); ctx.go('#/panel'); },
+          onclick: () => {
+            ctx.store.setSetting('lastClass', id);
+            // Öğrencisiz şube kuruluma, dersin ilk açılışı yoklamaya gider
+            if (!cls.students.length) ctx.go('#/setup/students');
+            else ctx.go(ctx.store.isAttendanceDone(id) ? '#/panel' : '#/today');
+          },
         },
           h('span', { class: 'num' }, g),
           editing ? null : lockKey(),

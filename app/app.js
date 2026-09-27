@@ -6,6 +6,7 @@ import { mountTimerDock } from './modules/timer/timer-dock.js';
 import classSelect from './modules/panel/class-select.js';
 import panel from './modules/panel/panel.js';
 import setup from './modules/panel/setup.js';
+import today from './modules/panel/today.js';
 import league from './modules/league/league.js';
 import { games } from './modules/registry.js';
 
@@ -39,6 +40,7 @@ const routes = {
   '': classSelect,
   panel,
   setup,
+  today,
   league,
   game: gameRoute,
 };

@@ -54,7 +54,7 @@ export default {
     // Bugün çıkış biletinde seçilmiş öğrenciler sona kalır
     const dayStart = new Date(); dayStart.setHours(0, 0, 0, 0);
     const pickedToday = ctx.store.attemptsOf(ctx.classId, { since: dayStart.getTime() }).filter(a => a.activity === 'exit' && a.studentId).map(a => a.studentId);
-    const picker = createPicker(cls.students, { excludeIds: pickedToday });
+    const picker = createPicker(ctx.store.presentStudents(ctx.classId), { excludeIds: pickedToday }); // yalnız bugün gelenler
     const luckyByIndex = new Map(); // kelime → seçilen öğrenci (geri dönünce aynı öğrenci)
     let lucky = null;
     let lastLucky = 0; // Doğru/Bilemedi çift dokunuş koruması
@@ -98,7 +98,7 @@ export default {
 
     // Şanslı öğrenci: her kelimede tahta bir öğrenci seçer, öğretmen tek dokunuşla işaretler
     function luckyBar() {
-      if (!cls.students.length) return h('p', { class: 'callout' }, 'Öğrenci listesi yok. ', h('a', { href: '#/setup' }, 'Öğrencileri ekle'));
+      if (!ctx.store.presentStudents(ctx.classId).length) return h('p', { class: 'callout' }, 'Bugün derste öğrenci yok. ', h('a', { href: '#/today' }, 'Yoklamayı aç'));
       if (!luckyByIndex.has(session.index)) luckyByIndex.set(session.index, picker.pick());
       lucky = luckyByIndex.get(session.index);
       const once = () => { if (Date.now() - lastLucky < 500) return false; lastLucky = Date.now(); return true; };

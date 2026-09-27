@@ -37,7 +37,7 @@ export default {
     const level = lessonLevels(ctx.store.ensureDailyLevel(ctx.classId)).interview;
     const dayStart = new Date(); dayStart.setHours(0, 0, 0, 0);
     const candidatesToday = ctx.store.attemptsOf(ctx.classId, { since: dayStart.getTime() }).filter(a => a.activity === 'interview' && a.studentId).map(a => a.studentId);
-    const iv = createInterview(unit, { level, students: cls.students, candidatesToday: [...new Set(candidatesToday)] });
+    const iv = createInterview(unit, { level, students: ctx.store.presentStudents(ctx.classId), candidatesToday: [...new Set(candidatesToday)] }); // yalnız bugün gelenler
     const teamOf = s => cls.teams.find(t => t.id === s.teamId);
 
     if (!iv.pair) {

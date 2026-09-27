@@ -2,7 +2,8 @@ import { h, icon, seg, toast } from '../../core/dom.js';
 import { buildRoster } from '../league/roster.js';
 
 export default {
-  mount(el, ctx) {
+  // step: 'students' (yeni şube 1/2), 'groups' (yeni şube 2/2) ya da boş (tam düzenleme + yedek)
+  mount(el, ctx, [step] = []) {
     const cls = ctx.store.getClass(ctx.classId);
     let count = cls.teams.length || 3;
     const teamNames = cls.teams.map(t => t.name);
@@ -20,13 +21,14 @@ export default {
       }));
     }
 
-    function save() {
+    function save(next = '#/panel') {
       const roster = buildRoster(names.value, count, cls);
       roster.teams.forEach((t, i) => { t.name = teamNames[i]?.trim() || t.name; });
+      if (!roster.students.length) { toast('En az bir öğrenci adı yaz'); return; }
       ctx.store.saveClass(ctx.classId, roster);
       document.dispatchEvent(new CustomEvent('scores-changed'));
-      toast(`${roster.students.length} öğrenci, ${roster.teams.length} takım kaydedildi`);
-      ctx.go('#/panel');
+      toast(`${roster.students.length} öğrenci, ${roster.teams.length} grup kaydedildi`);
+      ctx.go(next);
     }
 
     function download() {
@@ -53,12 +55,33 @@ export default {
     } });
 
     renderTeams();
+    const teamCol = h('div', { class: 'setup-col' }, h('p', {}, 'Grup sayısı'), countSeg, teamInputs);
+    const nameCol = h('div', { class: 'setup-col' }, h('p', {}, 'Öğrenciler (her satıra bir ad)'), names);
+    if (step === 'students') {
+      el.append(h('section', { class: 'screen setup one' },
+        h('h1', { class: 'display' }, `${ctx.classId} · 1/2 Öğrenciler`),
+        h('p', { class: 'hint' }, 'Sınıf listesini buraya yapıştır ya da yaz. Bir sonraki adımda gruplar kurulacak.'),
+        nameCol,
+        h('div', { class: 'setup-actions' }, h('button', { class: 'go wide', onclick: () => save('#/setup/groups') }, 'İleri: Gruplar ', icon('caret-right')))));
+      queueMicrotask(() => names.focus());
+      return;
+    }
+    if (step === 'groups') {
+      el.append(h('section', { class: 'screen setup one' },
+        h('h1', { class: 'display' }, `${ctx.classId} · 2/2 Gruplar`),
+        h('p', { class: 'hint' }, `${cls.students.length} öğrenci gruplara dengeli dağıtılacak. Grup üyelerini her ders başında "Bugünün grupları" ekranından değiştirebilirsin.`),
+        teamCol,
+        h('div', { class: 'setup-actions' },
+          h('button', { class: 'ghost', onclick: () => ctx.go('#/setup/students') }, icon('caret-left'), ' Öğrenciler'),
+          h('button', { class: 'go wide', onclick: () => save('#/today') }, icon('check'), ' Kaydet ve yoklamaya geç'))));
+      return;
+    }
     el.append(h('section', { class: 'screen setup' },
       h('h1', { class: 'display' }, `${ctx.classId} · Takımlar`),
-      h('div', { class: 'setup-col' }, h('p', {}, 'Takım sayısı'), countSeg, teamInputs),
-      h('div', { class: 'setup-col' }, h('p', {}, 'Öğrenciler (her satıra bir ad; sırayla takımlara dağıtılır)'), names),
+      teamCol,
+      nameCol,
       h('div', { class: 'setup-actions' },
-        h('button', { class: 'go wide', onclick: save }, icon('check'), ' Kaydet'),
+        h('button', { class: 'go wide', onclick: () => save() }, icon('check'), ' Kaydet'),
         h('button', { class: 'ghost', onclick: () => ctx.go('#/panel') }, 'Vazgeç')),
       h('div', { class: 'backup' },
         h('span', {}, 'Ayarlar · Yedek'),
