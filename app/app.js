@@ -67,7 +67,9 @@ function renderTopbar() {
 
 function undo() {
   const e = store.undo(ctx.classId);
-  toast(e ? `Geri alındı: ${e.reason} ${e.points > 0 ? '+' : ''}${e.points}` : 'Geri alınacak işlem yok');
+  toast(!e ? 'Geri alınacak işlem yok'
+    : e.groupId ? `Geri alındı: ${e.reason} ve aynı cevaba bağlı puanlar`
+      : `Geri alındı: ${e.reason} ${e.points > 0 ? '+' : ''}${e.points}`);
   document.dispatchEvent(new CustomEvent('scores-changed', { detail: { undone: e } }));
 }
 

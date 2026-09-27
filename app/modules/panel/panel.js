@@ -21,7 +21,7 @@ export default {
     // Şubenin bu haftaki okul sırası (öğrenci başına ortalama)
     const school = ctx.store.schoolStandings({ type: 'class', since: weekStart(Date.now()) });
     const mine = school.findIndex(r => r.id === ctx.classId);
-    const schoolRank = school.length > 1 && mine >= 0 ? school.findIndex(r => r.points === school[mine].points) + 1 : null;
+    const schoolRank = school.length > 1 && mine >= 0 && school[mine].students > 0 ? school.findIndex(r => r.points === school[mine].points) + 1 : null;
     el.append(h('section', { class: 'screen panel' },
       h('div', { class: 'panel-head' },
         h('div', { class: 'title-row' },

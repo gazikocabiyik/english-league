@@ -242,3 +242,10 @@ test('okul ligi: sınıf filtresi ve zaman filtresi', () => {
   eq(s.schoolStandings({ type: 'class', grade: 12 }).map(r => r.name), ['12-A', '12-B']);
   eq(s.schoolStandings({ type: 'class', since: 9_000_000 }).every(r => r.points === 0), true);
 });
+
+test('okul ligi: mülakattaki öğrenci+takım grup puanı şubede iki kez sayılmaz (inceleme I2)', () => {
+  const s = school();
+  s.addEvent({ classId: '12-A', targetType: 'student', targetId: 'c1', points: 1, groupId: 'g' });
+  s.addEvent({ classId: '12-A', targetType: 'team', targetId: 't1', points: 1, groupId: 'g' });
+  eq(s.schoolStandings({ type: 'class' }).find(r => r.id === '12-A').points, 2); // 1 + grup(1) = 2 / 1 öğrenci
+});

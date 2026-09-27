@@ -47,8 +47,9 @@ export default {
       return;
     }
 
-    let marked = false; // bu soruda işaret verildi mi
-    const rec = (ok, eventId) => { marked = true; ctx.store.addAttempt({ classId: ctx.classId, level: iv.level, ok, activity: 'interview', eventId, studentId: iv.pair.candidate.id }); };
+    const answeredQ = new Set(); // bu turda işaretlenmiş soru numaraları (geri dönünce yeniden "bilemedi" sayılmaz)
+    let lastGroup = null; // son sorudaki doğru cevabın puan grubu
+    const rec = (ok, eventId) => { answeredQ.add(iv.index); ctx.store.addAttempt({ classId: ctx.classId, level: iv.level, ok, activity: 'interview', eventId, studentId: iv.pair.candidate.id }); };
     let thanked = false; // bu turda mülakatçı katılım puanı aldı mı
     let lastMiss = 0;
     const lastPoint = {};
@@ -58,7 +59,8 @@ export default {
       if (thanked) return;
       thanked = true;
       const s = iv.pair.interviewer;
-      const groupId = `ivk-${Date.now()}-${s.id}`;
+      // Son soru "Doğru" ile bittiyse katılım puanı onunla aynı grupta: tek "Geri al" ikisini birlikte siler
+      const groupId = lastGroup ?? `ivk-${Date.now()}-${s.id}`;
       if (!award(ctx, 'student', s, 1, 'Mülakatçı', groupId)) return;
       const team = teamOf(s);
       if (team) award(ctx, 'team', team, 1, `Mülakatçı · ${s.name}`, groupId);
@@ -70,6 +72,7 @@ export default {
       if (Date.now() - (lastPoint[s.id] ?? 0) < 500) return false;
       lastPoint[s.id] = Date.now();
       const groupId = `iv-${Date.now()}-${s.id}`; // öğrenci + takım puanı tek "Geri al" ile birlikte gider
+      lastGroup = groupId;
       const se = award(ctx, 'student', s, 1, 'Mock Interview', groupId);
       if (!se) return false;
       const team = teamOf(s);
@@ -81,22 +84,27 @@ export default {
       if (Date.now() - lastMiss < 500) return false;
       lastMiss = Date.now();
       rec(false);
+      lastGroup = null;
       toast(`${s.name}: bilemedi`);
       return true;
     }
     function step(dir) {
-      if (dir > 0 && !iv.done && !marked) rec(false); // işaretlenmeden geçilen soru = bilemedi
-      marked = false;
+      if (dir > 0 && !iv.done && !answeredQ.has(iv.index)) rec(false); // işaretlenmeden geçilen soru = bilemedi
+      if (dir > 0 && !iv.done && iv.index < iv.total - 1) lastGroup = null;
       if (dir > 0) iv.next(); else iv.prev();
       if (iv.done) thankInterviewer();
       render(!iv.done);
     }
-    function newPair() { iv.newPair(); marked = false; thanked = false; render(true); }
-    function nextRound() { iv.nextRound(); marked = false; thanked = false; render(true); }
+    const resetRound = () => { answeredQ.clear(); thanked = false; lastGroup = null; };
+    function newPair() { iv.newPair(); resetRound(); render(true); }
+    function nextRound() { iv.nextRound(); resetRound(); render(true); }
+    // Katılım puanı geri alınırsa tur bitince yeniden verilebilsin
+    const onScores = e => { if (e.detail?.undone?.reason?.includes('Mülakatçı')) thanked = false; };
 
     const onKey = e => { if (e.key === 'ArrowRight') step(1); if (e.key === 'ArrowLeft') step(-1); };
     document.addEventListener('keydown', onKey);
-    this.unmount = () => { alive = false; document.removeEventListener('keydown', onKey); ctx.sound.stopSpeaking(); };
+    document.addEventListener('scores-changed', onScores);
+    this.unmount = () => { alive = false; document.removeEventListener('keydown', onKey); document.removeEventListener('scores-changed', onScores); ctx.sound.stopSpeaking(); };
 
     const person = (role, s) => h('span', { class: 'role tape' },
       h('span', { class: 'role-door', style: { '--team': teamOf(s) ? `var(--${teamOf(s).color})` : 'var(--surface-2)' } }),

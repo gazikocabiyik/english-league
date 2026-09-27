@@ -38,3 +38,12 @@ test('picker: 0 ve 1 öğrencide çökmez', () => {
   const one = createPicker([kids[0]]);
   eq([one.pick().id, one.pick().id, one.skip().id], ['a', 'a', 'a']);
 });
+
+test('picker: atlanan öğrenci hemen bir sonraki kelimede değil, sırası gelince gelir (inceleme)', () => {
+  for (let seed = 1; seed <= 20; seed++) {
+    const p = createPicker(kids, { rng: seeded(seed) });
+    const first = p.pick();
+    p.skip();
+    eq(p.pick().id === first.id, false, `seed ${seed}`);
+  }
+});

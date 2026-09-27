@@ -58,7 +58,7 @@ export default {
               h('span', { class: 'name' }, r.name,
                 scope === 'school' && type !== 'class' ? h('span', { class: 'class-tag' }, ` · ${r.classId}`) : null,
                 scope === 'school' && type === 'class' ? h('span', { class: 'class-tag' }, ` · ${r.students} öğrenci`) : null),
-              h('span', { class: `pts stencil${r.id === stampId ? ' stamp' : ''}` }, String(r.points).replace('.', ','),
+              h('span', { class: `pts stencil${scope === 'class' && r.id === stampId ? ' stamp' : ''}` }, String(r.points).replace('.', ','),
                 scope === 'school' && type === 'class' ? h('small', { class: 'per' }, 'öğr. başına') : null),
             ];
             return h('li', { 'data-id': key(r), class: `row${rankOf(i) <= 3 && r.points > 0 && scope === 'school' ? ' podium' : ''}${rankOf(i) === 1 && r.points > 0 ? ' leader' : ''}` },

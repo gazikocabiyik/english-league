@@ -31,12 +31,12 @@ export function createPicker(students, { excludeIds = [], rng = Math.random } = 
       const prev = current?.student;
       return take(choose(students.length > 1 ? prev?.id : undefined));
     },
-    // "Başka öğrenci": şimdiki seçim sayılmaz, öğrenci sıradaki turda yine gelir
+    // "Başka öğrenci": şimdiki seçim sayılmaz, öğrenci bekleyenlerden sonra yine sıraya girer
     skip() {
       if (!current) return this.pick();
       const s = current.student;
       count.set(s.id, count.get(s.id) - 1);
-      lastSeq.set(s.id, -1);
+      lastSeq.set(s.id, seq++); // en son sıraya: bekleyenlerden sonra gelir
       return take(choose(students.length > 1 ? s.id : undefined));
     },
   };

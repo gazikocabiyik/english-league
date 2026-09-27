@@ -104,7 +104,11 @@ export function createStore(storage, now = () => Date.now()) {
       if (type === 'class') {
         return ids.map(id => {
           const n = getClass(id).students.length;
-          const total = [...standings(id, { type: 'team', since }), ...standings(id, { type: 'student', since })].reduce((t, r) => t + r.points, 0);
+          // Öğrenci puanları + gruplanmamış takım puanları (grup = aynı cevap için öğrenciye de yazılmış puan; iki kez sayılmaz)
+          const teams = new Set(getClass(id).teams.map(t => t.id));
+          const studentPts = standings(id, { type: 'student', since }).reduce((t, r) => t + r.points, 0);
+          const teamPts = state.events.filter(e => e.classId === id && e.targetType === 'team' && !e.groupId && e.ts >= since && teams.has(e.targetId)).reduce((t, e) => t + e.points, 0);
+          const total = studentPts + teamPts;
           return { id, name: id, classId: id, students: n, points: n ? Math.round((total / n) * 10) / 10 : 0 };
         }).sort((a, b) => (b.students > 0) - (a.students > 0) || byName(a, b));
       }

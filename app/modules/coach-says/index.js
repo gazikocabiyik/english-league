@@ -44,8 +44,10 @@ export default {
     const lv = lessonLevels(ctx.store.ensureDailyLevel(ctx.classId));
     const review = pickReview(plan, unitsByNo, { exclude: unit.vocab.map(v => v.word), level: lv.speak });
     const session = createSession(unit, { review, level: lv.speak, exitLevel: lv.exit });
-    let marked = false; // bu kartta doğru/yanlış işaretlendi mi
-    const rec = (ok, eventId, studentId) => { marked = true; ctx.store.addAttempt({ classId: ctx.classId, level: session.level, ok, activity: session.phase, eventId, studentId }); };
+    const markedCards = new Set(); // "tur:index" — işaretlenmiş kartlar
+    const cardKey = () => `${session.phase}:${session.index}`;
+    const isMarked = () => markedCards.has(cardKey());
+    const rec = (ok, eventId, studentId) => { markedCards.add(cardKey()); ctx.store.addAttempt({ classId: ctx.classId, level: session.level, ok, activity: session.phase, eventId, studentId }); };
     let lastMiss = 0;
     const miss = studentId => { if (Date.now() - lastMiss > 500) { lastMiss = Date.now(); rec(false, undefined, studentId); return true; } return false; };
     const cls = ctx.store.getClass(ctx.classId);
@@ -53,39 +55,31 @@ export default {
     const dayStart = new Date(); dayStart.setHours(0, 0, 0, 0);
     const pickedToday = ctx.store.attemptsOf(ctx.classId, { since: dayStart.getTime() }).filter(a => a.activity === 'exit' && a.studentId).map(a => a.studentId);
     const picker = createPicker(cls.students, { excludeIds: pickedToday });
+    const luckyByIndex = new Map(); // kelime → seçilen öğrenci (geri dönünce aynı öğrenci)
     let lucky = null;
-    let luckyFor = -1;
-    const answered = new Set(); // çıkış biletinde bu kelimede puan alanlar
+    let lastLucky = 0; // Doğru/Bilemedi çift dokunuş koruması
     let showTr = false;
 
     const onKey = e => {
       if (e.key === 'ArrowRight') step(1);
       if (e.key === 'ArrowLeft') step(-1);
     };
-    // Geri alınan çıkış bileti puanı, öğrencinin çipini yeniden açar.
-    const onScores = e => {
-      const undone = e.detail?.undone;
-      if (undone?.targetType === 'student' && answered.delete(undone.targetId)) render(false);
-    };
     let lastSkip = 0;
-    const skip = () => { if (Date.now() - lastSkip > 500) { lastSkip = Date.now(); if (!marked) rec(false); step(1); } };
+    const skip = () => { if (Date.now() - lastSkip > 500) { lastSkip = Date.now(); if (!isMarked()) rec(false); step(1); } };
     document.addEventListener('keydown', onKey);
-    document.addEventListener('scores-changed', onScores);
     this.unmount = () => {
       alive = false;
       document.removeEventListener('keydown', onKey);
-      document.removeEventListener('scores-changed', onScores);
       ctx.sound.stopSpeaking();
     };
 
-    function setPhase(p) { session.setPhase(p); answered.clear(); marked = false; luckyFor = -1; render(true); }
+    function setPhase(p) { session.setPhase(p); render(true); }
 
     function step(dir) {
       // Puan ya da "bilemedi" verilmeden geçilen konuşma/çıkış kartı yanlış sayılır (seviye şişmesin)
-      if (dir > 0 && session.phase !== 'move' && !marked) rec(false, undefined, session.phase === 'exit' ? lucky?.id : undefined);
+      if (dir > 0 && session.phase !== 'move' && !isMarked()) rec(false, undefined, session.phase === 'exit' ? lucky?.id : undefined);
       const moved = dir > 0 ? session.next() : session.prev();
-      marked = false;
-      if (moved) { answered.clear(); render(true); return; }
+      if (moved) { render(true); return; }
       if (dir < 0) return;
       const i = PHASES.indexOf(session.phase);
       if (i < PHASES.length - 1) setPhase(PHASES[i + 1]);
@@ -105,20 +99,23 @@ export default {
     // Şanslı öğrenci: her kelimede tahta bir öğrenci seçer, öğretmen tek dokunuşla işaretler
     function luckyBar() {
       if (!cls.students.length) return h('p', { class: 'callout' }, 'Öğrenci listesi yok. ', h('a', { href: '#/setup' }, 'Öğrencileri ekle'));
-      if (luckyFor !== session.index) { lucky = picker.pick(); luckyFor = session.index; }
+      if (!luckyByIndex.has(session.index)) luckyByIndex.set(session.index, picker.pick());
+      lucky = luckyByIndex.get(session.index);
+      const once = () => { if (Date.now() - lastLucky < 500) return false; lastLucky = Date.now(); return true; };
       const team = cls.teams.find(t => t.id === lucky.teamId);
       return h('div', { class: 'lucky' },
         h('span', { class: 'tape lucky-name' },
           h('span', { class: 'role-door', style: { '--team': team ? `var(--${team.color})` : 'var(--surface-2)' } }),
           'Sıra: ', h('b', {}, lucky.name)),
         h('button', { class: 'go lucky-ok', onclick: () => {
+          if (!once()) return;
           const e = award(ctx, 'student', lucky, 1, 'Çıkış bileti');
           if (!e) return;
           rec(true, e.id, lucky.id);
           step(1);
         } }, icon('check'), ' Doğru'),
-        h('button', { class: 'nobody lucky-no', onclick: () => { if (miss(lucky.id)) step(1); } }, icon('x'), ' Bilemedi'),
-        h('button', { class: 'ghost small', onclick: () => { lucky = picker.skip(); render(false); } }, 'Başka öğrenci'));
+        h('button', { class: 'nobody lucky-no', onclick: () => { if (once() && miss(lucky.id)) step(1); } }, icon('x'), ' Bilemedi'),
+        h('button', { class: 'ghost small', onclick: () => { lucky = picker.skip(); luckyByIndex.set(session.index, lucky); render(false); } }, 'Başka öğrenci'));
     }
 
     function render(announce) {
