@@ -50,3 +50,10 @@ Format: 1 ünite ≈ 3-4 hafta × 4 saat. Her ünite = 1 **Mission** (takım) + 
 
 ## Sarmal tekrar (Faz 4)
 Her ünitenin kelimeleri sonraki ünitelerde bilgi yoklaması olarak geri gelir: bir sonraki ünite yeni kelime sayısının **%30**'u, iki sonraki **%10**'u, daha sonrakilerin her biri **%5**'i kadar (yeni kelimelerin üstüne eklenir; küçük %5 payları toplanıp rastgele eski ünitelere dağıtılır). Tekrar kartları Coach Says konuşma turunda bir kez gelir. Kod: `app/core/spiral.js`.
+
+## Uyarlanır seviye (Faz 4)
+- Her şube A1'den başlar. Ders içinde zorluk artar: **Coach Says (hareket + konuşma) = L**, **Mock Interview = L+1**, **çıkış bileti = L+2** (en fazla B1).
+- Doğru/yanlış: puan düğmesi = doğru; "Kimse bilemedi" / "Bilemedi" = yanlış. "Geri al" puana bağlı doğru kaydını da siler.
+- Gün değişince şube ilk açıldığında önceki dersin sonuçları değerlendirilir: bir seviyede en az 5 deneme ve %70 başarı = geçildi; yeni seviye geçilen en yüksek seviyedir (mevcut seviyenin altına inmez). Mevcut seviyede %40'ın altı bir alt seviyeye indirir.
+- Öğretmen Takımlar ekranından seviyeyi elle düzeltebilir. Kod: `app/core/levels.js`.
+- İçerik: her kalıbın A1/A2/B1 hâli (`frames`), her seviyede en az 4 hareket komutu, isteğe bağlı `interview` (şimdilik 11/Ü1).

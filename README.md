@@ -11,6 +11,8 @@ Akıllı tahta için sınıf ligi, zamanlayıcı ve Coach Says oyunu. 11. ve 12.
 - Fotoğraf (Pexels, Apify üzerinden): `.env` içine `APIFY_TOKEN=...` yaz, sonra `python3 scripts/apify_photos.py <ünite dosyası> [--only kelime] [--force] [--skip 1]`. Sonuç başına ~0,003 $.
 - Doğal sesler (Kokoro): bir kez `uv venv -p 3.12 .venv-tts` ve kurulum (ayrıntı `scripts/voices.py` başında), sonra her yeni ünitede `.venv-tts/bin/python scripts/voices.py`. Yalnız eksik sesler üretilir.
 - Sarmal tekrar: bir ünitenin kelimeleri sonraki ünitede %30, ondan sonrakinde %10, daha sonrakilerde %5 oranında (yeni kelimelerin üstüne ek) Coach Says konuşma turuna "Tekrar · Ü<n>" etiketiyle karışır.
+- Ünite JSON biçimi: `frames` = `{ "A1": [...], "A2": [...], "B1": [...] }` (paralel, her kalıpta tek `___`), `commands` her biri `level` alanlı (seviye başına en az 4, en az 1 tuzak), isteğe bağlı `interview` = `{ jobs, questions: { A1, A2, B1 } }` (`{job}` meslekle ve a/an ile dolar). Doğrulama `app/core/content.js`.
+- Uyarlanır seviye: bkz. `docs/mufredat.md` → "Uyarlanır seviye".
 - Yeni oyun: `app/modules/<oyun>/index.js` dosyasını `{ id, title, mount, unmount }` biçiminde yaz, sonra `app/modules/registry.js`'e ekle.
 - Puanlar tahtanın tarayıcısında durur. Her hafta Takımlar → **Yedeği indir**.
 - Tasarım: `PRODUCT.md`, `DESIGN.md`. Görsel kaynakları: `app/content/media/CREDITS.md`.

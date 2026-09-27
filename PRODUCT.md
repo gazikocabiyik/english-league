@@ -35,6 +35,7 @@ Built around this school's reality: sports-career contexts (coach, police office
 - Content per unit lives in JSON (vocab, sentence frames, movement commands); pilot units: 11/Unit 1 Future Jobs, 12/Unit 1 Music.
 - Scores are stored in the board browser's localStorage; a server comes only with home participation (Faz 5).
 - Text-to-speech via the browser (en-US, slowed); no paid APIs.
+- Adaptive level: every class starts at A1; within a lesson difficulty rises (Coach Says L → Mock Interview L+1 → exit ticket L+2, cap B1); the class level is re-measured from right/wrong answers when a new day starts.
 - Undecided: final hosting choice; home participation design.
 
 ## Brand Commitments
