@@ -172,29 +172,34 @@ button.wide { min-width: 320px; }
 .progress { font: 900 var(--step-1)/1 var(--font-stencil); color: var(--ink-muted); }
 .stage { min-height: 0; border-radius: var(--radius); }
 .stage-move { display: grid; place-items: center; align-content: center; gap: var(--space-3); text-align: center; background: var(--accent); color: var(--accent-ink); padding: var(--space-4); }
-.command { font: 900 var(--step-4)/.9 var(--font-display); margin: 0; max-width: 14ch; text-wrap: balance; }
-.stage-move .ghost { font-size: var(--step-2); color: var(--accent-ink); }
-.stage-move .ghost:hover { background: rgb(0 0 0 / .08); }
+.command { font: 900 var(--step-4)/.9 var(--font-display); margin: 0; max-width: 16ch; text-wrap: balance; overflow-wrap: anywhere; }
+.command.is-short { font-size: min(var(--step-4), 15vh); }
+.command.is-mid { font-size: min(124px, 13vh); }
+.command.is-long { font-size: min(104px, 10.5vh); max-width: 20ch; }
+.stage-move { overflow: hidden; }
 .stage-word { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) auto; gap: var(--space-3) var(--space-4); }
 .phase-exit .stage-word { background: var(--tape); color: var(--tape-ink); padding: var(--space-3); }
 .word-photo, .photo-missing { width: 100%; height: 100%; min-height: 0; object-fit: cover; border-radius: var(--radius); }
 .photo-missing { display: grid; place-items: center; padding: var(--space-3); box-shadow: inset 0 0 0 3px var(--danger); color: var(--danger); font-size: 24px; text-align: center; }
-.word-side { display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: var(--space-3); min-width: 0; }
-.word { all: unset; cursor: pointer; font: 900 var(--step-4)/.85 var(--font-display); overflow-wrap: anywhere; }
+.word-side { display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: min(var(--space-3), 2vh); min-width: 0; min-height: 0; }
+.word { all: unset; cursor: pointer; font: 900 min(var(--step-4), 12vh)/.85 var(--font-display); overflow-wrap: break-word; }
+.word.is-long { font-size: min(var(--step-3), 9vh); }
 .word:focus-visible { outline: 4px solid var(--accent); outline-offset: 6px; }
-.tr { margin: 0; font-size: var(--step-1); }
-.frame { margin: 0; font: 700 var(--step-2)/1.15 var(--font-body); }
+.tr { margin: 0; font-size: min(var(--step-1), 4.5vh); }
+.frame { margin: 0; font: 700 min(var(--step-2), 6vh)/1.15 var(--font-body); }
 .blank { display: inline-block; width: 3.5ch; margin: 0 .15ch; border-bottom: 8px solid var(--accent); vertical-align: baseline; }
 .phase-exit .blank { border-color: var(--tape-ink); }
 .phase-exit .word-side .ghost { color: var(--tape-ink); }
 .team-buttons, .student-chips { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: var(--space-2); }
-.team-btn { flex: 1; min-height: 132px; background: var(--team); color: var(--team-ink); font: 900 var(--step-2)/1 var(--font-display); box-shadow: 0 10px 24px rgb(0 0 0 / .35); }
+.team-btn { flex: 1; min-height: min(132px, 13vh); background: var(--team); color: var(--team-ink); font: 900 var(--step-2)/1 var(--font-display); box-shadow: 0 10px 24px rgb(0 0 0 / .35); }
 .team-btn:hover:not(:disabled) { background: var(--team); filter: brightness(1.1); }
-.nobody { min-height: 132px; background: transparent; color: var(--ink-muted); box-shadow: inset 0 0 0 3px var(--line); }
+.nobody { min-height: min(132px, 13vh); background: transparent; color: var(--ink-muted); box-shadow: inset 0 0 0 3px var(--line); }
 .chip { min-height: 72px; font-size: 30px; background: #fff; color: var(--tape-ink); box-shadow: 0 2px 6px rgb(0 0 0 / .2); }
 .chip:hover:not(:disabled) { background: #fff8e0; }
 .chip.is-done, .chip.is-done:disabled { background: var(--accent-ink); color: var(--accent); opacity: 1; }
-.nav-btns { display: flex; justify-content: space-between; }
+.nav-btns { display: flex; justify-content: space-between; align-items: center; gap: var(--space-2); }
+.say-again { display: inline-flex; align-items: center; gap: var(--space-1); background: transparent; color: var(--ink); font-size: var(--step-1); }
+.say-again .icon { font-size: var(--step-2); }
 .nav { min-width: 180px; font-size: var(--step-2); }
 .nav.next { background: var(--accent); color: var(--accent-ink); }
 .error ul { color: var(--danger); font-size: 28px; }

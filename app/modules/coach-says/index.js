@@ -86,9 +86,10 @@ export default {
       const c = session.current();
       let stage;
       if (c.type === 'command') {
+        // Uzun komut sarı alanın dışına taşmasın: harf sayısına göre boyut
+        const size = c.text.length <= 22 ? 'is-short' : c.text.length <= 36 ? 'is-mid' : 'is-long';
         stage = h('div', { class: 'stage stage-move' },
-          h('p', { class: 'command', lang: 'en' }, c.text.toLocaleUpperCase('en')),
-          h('button', { class: 'ghost', 'aria-label': 'Tekrar oku', onclick: () => ctx.sound.speak(c.text) }, icon('speaker-high')));
+          h('p', { class: `command ${size}`, lang: 'en' }, c.text.toLocaleUpperCase('en')));
         if (announce) ctx.sound.speak(c.text);
       } else {
         const img = h('img', {
@@ -98,7 +99,7 @@ export default {
         stage = h('div', { class: 'stage stage-word' },
           img,
           h('div', { class: 'word-side' },
-            h('button', { class: 'word', lang: 'en', onclick: () => ctx.sound.speak(c.word) }, c.word.toLocaleUpperCase('en')),
+            h('button', { class: `word${c.word.length > 9 ? ' is-long' : ''}`, lang: 'en', onclick: () => ctx.sound.speak(c.word) }, c.word.toLocaleUpperCase('en')),
             showTr && c.tr ? h('p', { class: 'tr tape' }, c.tr) : null,
             h('p', { class: 'frame', lang: 'en' }, frameParts(c.frameText)),
             h('button', { class: 'ghost small', onclick: () => { showTr = !showTr; render(false); } }, showTr ? 'Türkçeyi gizle' : 'Türkçe')),
@@ -114,6 +115,7 @@ export default {
         stage,
         h('div', { class: 'nav-btns' },
           h('button', { class: 'nav', 'aria-label': 'Önceki', onclick: () => step(-1) }, icon('caret-left')),
+          c.type === 'command' ? h('button', { class: 'say-again', 'aria-label': 'Tekrar oku', onclick: () => ctx.sound.speak(c.text) }, icon('speaker-high'), ' Tekrar oku') : null,
           h('button', { class: 'nav next', 'aria-label': 'Sonraki', onclick: () => step(1) }, icon('caret-right')))));
     }
 
