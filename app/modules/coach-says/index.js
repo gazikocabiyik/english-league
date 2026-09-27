@@ -15,7 +15,10 @@ export default {
   title: 'Coach Says',
   unmount() {},
   async mount(el, ctx) {
+    let alive = true; // yükleme sürerken ekrandan çıkılırsa dinleyici bırakma
+    this.unmount = () => { alive = false; };
     const { unit, errors } = await loadUnit(ctx.grade, ctx.unit);
+    if (!alive) return;
     if (!unit) {
       el.append(h('section', { class: 'screen error' },
         h('h1', { class: 'display' }, 'Ünite açılamadı'),
@@ -33,9 +36,19 @@ export default {
       if (e.key === 'ArrowRight') step(1);
       if (e.key === 'ArrowLeft') step(-1);
     };
+    // Geri alınan çıkış bileti puanı, öğrencinin çipini yeniden açar.
+    const onScores = e => {
+      const undone = e.detail?.undone;
+      if (undone?.targetType === 'student' && answered.delete(undone.targetId)) render(false);
+    };
+    let lastSkip = 0;
+    const skip = () => { if (Date.now() - lastSkip > 500) { lastSkip = Date.now(); step(1); } };
     document.addEventListener('keydown', onKey);
+    document.addEventListener('scores-changed', onScores);
     this.unmount = () => {
+      alive = false;
       document.removeEventListener('keydown', onKey);
+      document.removeEventListener('scores-changed', onScores);
       globalThis.speechSynthesis?.cancel();
     };
 
@@ -57,7 +70,7 @@ export default {
           class: 'team-btn', style: { '--team': `var(--${t.color})` }, 'aria-label': `${t.name} doğru söyledi: +1`,
           onclick: () => { award(ctx, 'team', t, 1, 'Coach Says'); step(1); },
         }, t.name)),
-        h('button', { class: 'nobody', onclick: () => step(1) }, 'Kimse bilemedi'));
+        h('button', { class: 'nobody', onclick: skip }, 'Kimse bilemedi'));
     }
 
     function studentChips() {

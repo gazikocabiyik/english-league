@@ -11,15 +11,19 @@ export function validateUnit(u) {
   } else {
     u.vocab.forEach((v, i) => {
       const label = `vocab[${i}] (${v?.word ?? '?'})`;
-      if (!v?.word) errors.push(`${label}: word eksik.`);
-      if (!v?.img) errors.push(`${label}: img eksik.`);
+      if (typeof v?.word !== 'string' || !v.word) errors.push(`${label}: word eksik ya da metin değil.`);
+      if (typeof v?.img !== 'string' || !v.img) errors.push(`${label}: img eksik ya da metin değil.`);
       if (!Number.isInteger(v?.frame) || typeof frames[v.frame] !== 'string') errors.push(`${label}: frame numarası geçersiz.`);
     });
   }
   if (!Array.isArray(u.commands) || !u.commands.length) {
     errors.push('commands en az 1 komut içermeli.');
-  } else if (!u.commands.some(c => c?.safe === false)) {
-    errors.push('commands içinde en az 1 tuzak komut (safe: false) olmalı.');
+  } else {
+    u.commands.forEach((c, i) => {
+      if (typeof c?.text !== 'string' || !c.text) errors.push(`commands[${i}]: text eksik ya da metin değil.`);
+      if (typeof c?.safe !== 'boolean') errors.push(`commands[${i}]: safe true ya da false olmalı.`);
+    });
+    if (!u.commands.some(c => c?.safe === false)) errors.push('commands içinde en az 1 tuzak komut (safe: false) olmalı.');
   }
   return errors;
 }

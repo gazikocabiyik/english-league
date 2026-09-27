@@ -48,7 +48,7 @@ const router = createRouter(routes, (screen, args) => {
   active?.unmount?.();
   const host = h('div', { class: 'screen-host' });
   view.replaceChildren(host);
-  if (screen !== classSelect && !ctx.classId) { router.go('#/'); return; }
+  if (screen !== classSelect && !ctx.classId) { active = null; router.go('#/'); return; }
   active = screen;
   screen.mount(host, ctx, args);
   renderTopbar();
@@ -68,7 +68,7 @@ function renderTopbar() {
 function undo() {
   const e = store.undo(ctx.classId);
   toast(e ? `Geri alındı: ${e.reason} ${e.points > 0 ? '+' : ''}${e.points}` : 'Geri alınacak işlem yok');
-  document.dispatchEvent(new CustomEvent('scores-changed'));
+  document.dispatchEvent(new CustomEvent('scores-changed', { detail: { undone: e } }));
 }
 
 function toggleFullscreen() {

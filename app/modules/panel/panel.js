@@ -7,6 +7,9 @@ const GAME_ICONS = { 'coach-says': 'person-simple-run' };
 
 export default {
   async mount(el, ctx) {
+    const onChange = () => ctx.rerender(); // geri al sonrası haftalık şerit güncellensin
+    document.addEventListener('scores-changed', onChange);
+    this.unmount = () => document.removeEventListener('scores-changed', onChange);
     const cls = ctx.store.getClass(ctx.classId);
     const index = await loadIndex();
     const available = index[ctx.grade] ?? [];

@@ -2,7 +2,9 @@ import { h } from '../../core/dom.js';
 import { award } from './award.js';
 
 export function openScoreSheet(ctx, targetType, target) {
-  const close = () => sheet.remove();
+  if (document.querySelector('.sheet-backdrop')) return; // çift dokunuş ikinci pencere açmasın
+  const onKey = e => { if (e.key === 'Escape') close(); };
+  const close = () => { sheet.remove(); document.removeEventListener('keydown', onKey); };
   const btn = (points, cls) => h('button', {
     class: `pts-btn ${cls}`,
     onclick: () => { award(ctx, targetType, target, points, 'Lig'); close(); },
@@ -13,4 +15,6 @@ export function openScoreSheet(ctx, targetType, target) {
       h('div', { class: 'sheet-btns' }, btn(1, 'plus'), btn(3, 'plus'), btn(-1, 'minus')),
       h('button', { class: 'ghost', onclick: close }, 'Vazgeç')));
   document.body.append(sheet);
+  document.addEventListener('keydown', onKey);
+  sheet.querySelector('button').focus();
 }

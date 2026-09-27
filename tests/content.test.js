@@ -70,3 +70,13 @@ test('content: pilot üniteler geçerli, tuzak oranı %20–40, index uyumlu', a
     }
   }
 });
+
+test('content: yazım hatalı komut ve kelime alanları yakalanır (final I3)', () => {
+  const u = good();
+  u.commands = [{ txt: 'Coach says: run!', safe: true }, { text: 'Sit!', safe: 'no' }, { text: 'Jump!', safe: false }];
+  u.vocab[0].word = 5;
+  const errs = validateUnit(u);
+  ok(errs.some(e => e.includes('commands[0]') && e.includes('text')), 'text hatası yok');
+  ok(errs.some(e => e.includes('commands[1]') && e.includes('safe')), 'safe hatası yok');
+  ok(errs.some(e => e.includes('vocab[0]') && e.includes('word')), 'word hatası yok');
+});

@@ -111,3 +111,28 @@ test('store: bozuk kayıtlı veride boş başlar', () => {
   eq(s.getClass('11-A'), { teams: [], students: [] });
   ok(s.persistent);
 });
+
+test('store: localStorage erişimi hata fırlatırsa bellekte çalışır (final C1)', () => {
+  const desc = Object.getOwnPropertyDescriptor(globalThis, 'localStorage');
+  Object.defineProperty(globalThis, 'localStorage', { get() { throw new Error('SecurityError'); }, configurable: true });
+  try {
+    const s = createStore();
+    eq(s.persistent, false);
+    s.setSetting('lastClass', '11-L');
+    eq(s.getSetting('lastClass'), '11-L');
+  } finally {
+    if (desc) Object.defineProperty(globalThis, 'localStorage', desc); else delete globalThis.localStorage;
+  }
+});
+
+test('store: iç yapısı bozuk yedek reddedilir ve kayıttan da yüklenmez (final I1)', () => {
+  const s = setup();
+  throws(() => s.import('{"version":1,"classes":{},"events":[],"settings":null}'));
+  throws(() => s.import('{"version":1,"classes":{"11-L":{}},"events":[],"settings":{}}'));
+  throws(() => s.import('{"version":1,"classes":{},"events":[],"settings":{"classList":"11-L"}}'));
+  eq(s.getClass('11-A').teams.length, 2);
+  const mem = memoryStorage();
+  mem.setItem('okul.v1', '{"version":1,"classes":{"11-L":{}},"events":[],"settings":null}');
+  const b = createStore(mem);
+  eq([b.getClass('11-L'), b.getSetting('x', 1)], [{ teams: [], students: [] }, 1]);
+});

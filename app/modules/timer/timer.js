@@ -9,7 +9,11 @@ export function createTimer(now = () => performance.now()) {
   let elapsedBefore = 0;
   const timer = {
     set(ms) { duration = ms; startedAt = null; elapsedBefore = 0; },
-    start() { if (startedAt === null && timer.remaining() > 0) startedAt = now(); },
+    start() {
+      if (startedAt !== null || duration <= 0) return;
+      if (timer.remaining() === 0) elapsedBefore = 0; // süre bitmişse baştan başla
+      startedAt = now();
+    },
     pause() {
       if (startedAt !== null) { elapsedBefore += now() - startedAt; startedAt = null; }
     },

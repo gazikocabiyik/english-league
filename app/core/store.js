@@ -14,8 +14,12 @@ export function weekStart(ts) {
 
 const emptyState = () => ({ version: 1, classes: {}, events: [], settings: {} });
 
+const isObj = v => !!v && typeof v === 'object' && !Array.isArray(v);
+
 function isValidState(s) {
-  return !!s && s.version === 1 && typeof s.classes === 'object' && s.classes !== null
+  return isObj(s) && s.version === 1 && isObj(s.classes)
+    && Object.values(s.classes).every(c => isObj(c) && Array.isArray(c.teams) && Array.isArray(c.students))
+    && (s.settings === undefined || (isObj(s.settings) && (s.settings.classList === undefined || Array.isArray(s.settings.classList))))
     && Array.isArray(s.events)
     && s.events.every(e => e && typeof e.classId === 'string' && typeof e.targetId === 'string'
       && (e.targetType === 'team' || e.targetType === 'student')
@@ -26,7 +30,9 @@ function canWrite(storage) {
   try { storage.setItem('okul.probe', '1'); return true; } catch { return false; }
 }
 
-export function createStore(storage = globalThis.localStorage, now = () => Date.now()) {
+export function createStore(storage, now = () => Date.now()) {
+  // Site verisi engelliyse localStorage'a erişmek bile hata fırlatır.
+  if (storage === undefined) { try { storage = globalThis.localStorage; } catch { storage = null; } }
   let persistent = !!storage && canWrite(storage);
   const backend = persistent ? storage : memoryStorage();
   let state = emptyState();
