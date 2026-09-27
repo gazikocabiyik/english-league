@@ -323,3 +323,18 @@ button.wide { min-width: 320px; }
 .tiles > .tile { min-width: 0; font-size: min(var(--step-2), 6vh); hyphens: none; overflow-wrap: normal; }
 .tiles > .tile.primary { font-size: min(var(--step-3), 8vh); }
 .tiles > .tile.game:not(.primary) { font-size: min(var(--step-2), 6vh); }
+.word-bank { display: flex; gap: var(--space-1); flex-wrap: wrap; }
+.bank-word { background: var(--surface-2); padding: 6px 14px; border-radius: 999px; font: 700 min(28px, 3.4vh)/1 var(--font-body); }
+.blank.gap { border-bottom-color: var(--accent); }
+
+/* Mülakat: kalabalık başlık ve uzun cevaplar sığsın */
+.coach-head { flex-wrap: wrap; row-gap: var(--space-1); }
+.coach-head .ghost { white-space: nowrap; min-height: 48px; font-size: min(24px, 3vh); display: inline-flex; align-items: center; gap: 6px; }
+.mock .roles { flex: 1 1 100%; order: -1; }
+.interview .question { font-size: min(var(--step-3), 6.5vh); }
+.interview .frame { font-size: min(var(--step-1), 4.6vh); }
+.interview .word-side { gap: min(var(--space-2), 1.4vh); overflow: hidden; }
+.interview .word-side .ghost.small { min-height: 40px; font-size: min(22px, 2.8vh); }
+.interview .q-label { display: none; }
+.interview .word-side { justify-content: flex-start; padding-top: 4px; }
+.interview .question { font-size: min(var(--step-3), 5.6vh); }

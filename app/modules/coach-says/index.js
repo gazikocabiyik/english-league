@@ -20,7 +20,8 @@ export default {
   id: 'coach-says',
   title: 'Coach Says',
   unmount() {},
-  async mount(el, ctx) {
+  // startPhase: 'exit' → doğrudan çıkış bileti (ünite görevi bitince buraya dönülür)
+  async mount(el, ctx, [startPhase] = []) {
     el.append(h('p', { class: 'hint' }, 'Yükleniyor…'));
     let alive = true; // yükleme sürerken ekrandan çıkılırsa dinleyici bırakma
     this.unmount = () => { alive = false; };
@@ -82,7 +83,10 @@ export default {
       if (moved) { render(true); return; }
       if (dir < 0) return;
       const i = PHASES.indexOf(session.phase);
-      if (i < PHASES.length - 1) setPhase(PHASES[i + 1]);
+      // Ders akışı: konuşma turundan sonra ünitenin görev oyunu (L+1), sonra çıkış bileti (L+2)
+      const mission = unit.interview ? 'mock-interview' : unit.dj ? 'warmup-dj' : null;
+      if (session.phase === 'speak' && mission) ctx.go(`#/game/${mission}`);
+      else if (i < PHASES.length - 1) setPhase(PHASES[i + 1]);
       else ctx.go('#/league');
     }
 
@@ -158,6 +162,7 @@ export default {
           h('button', { class: 'nav next', 'aria-label': 'Sonraki', onclick: () => step(1) }, icon('caret-right')))));
     }
 
+    if (PHASES.includes(startPhase)) session.setPhase(startPhase);
     render(true);
   },
 };

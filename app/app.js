@@ -28,10 +28,10 @@ const ctx = {
 // Sonraki görevler bu tabloya satır ekler.
 const gameRoute = {
   current: null,
-  mount(el, c, [id]) {
+  mount(el, c, [id, ...args]) {
     this.current = games.find(g => g.id === id) ?? null;
     if (!this.current) { c.go('#/panel'); return; }
-    return this.current.mount(el, c);
+    return this.current.mount(el, c, args); // ör. #/game/coach-says/exit
   },
   unmount() { this.current?.unmount?.(); },
 };

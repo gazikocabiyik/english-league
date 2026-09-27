@@ -134,3 +134,9 @@ test('content: pilot ünitelerin hepsinde kazanım hedefi var', async () => {
     ok(Array.isArray(u.goals) && u.goals.length > 0, `${g}/${n}`);
   }
 });
+
+test('content: 11/Ü1 mülakat havuzu her seviyede 12 soru, aday başına 3', async () => {
+  const u = await readJson('content/11/unit1.json');
+  eq(['A1', 'A2', 'B1'].map(L => u.interview.questions[L].length), [12, 12, 12]);
+  eq(u.interview.perCandidate, 3);
+});

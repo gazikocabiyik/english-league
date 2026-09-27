@@ -284,19 +284,92 @@
         },
         {
           "q": "How old are you?",
-          "a": "I'm ___."
+          "a": "I'm ___ years old."
         },
         {
           "q": "Do you want to be {job}?",
-          "a": "Yes, I do."
+          "a": "Yes, I [[do]].",
+          "options": [
+            "do",
+            "am",
+            "can"
+          ]
         },
         {
           "q": "Are you strong?",
-          "a": "Yes, I am. / No, I'm not."
+          "a": "Yes, I [[am]].",
+          "options": [
+            "am",
+            "do",
+            "can"
+          ]
+        },
+        {
+          "q": "Can you run fast?",
+          "a": "Yes, I [[can]].",
+          "options": [
+            "can",
+            "am",
+            "do"
+          ]
         },
         {
           "q": "Do you like sports?",
-          "a": "Yes, I do. / No, I don't."
+          "a": "Yes, I [[do]].",
+          "options": [
+            "do",
+            "am",
+            "can"
+          ]
+        },
+        {
+          "q": "What job do you want?",
+          "a": "I want to be {job}."
+        },
+        {
+          "q": "Is {job} a good job?",
+          "a": "Yes, it [[is]].",
+          "options": [
+            "is",
+            "are",
+            "am"
+          ]
+        },
+        {
+          "q": "Are you good at maths?",
+          "a": "Yes, I [[am]].",
+          "options": [
+            "am",
+            "do",
+            "is"
+          ]
+        },
+        {
+          "q": "Do you work hard?",
+          "a": "Yes, I [[do]].",
+          "options": [
+            "do",
+            "am",
+            "is"
+          ]
+        },
+        {
+          "q": "Can you swim?",
+          "a": "Yes, I [[can]].",
+          "options": [
+            "can",
+            "do",
+            "am"
+          ]
+        },
+        {
+          "q": "Do you like teamwork?",
+          "a": "Yes, I [[do]].",
+          "options": [
+            "do",
+            "can",
+            "is"
+          ]
         }
       ],
       "A2": [
@@ -305,12 +378,13 @@
           "a": "My name is ___."
         },
         {
-          "q": "How old are you?",
-          "a": "I'm ___ years old."
-        },
-        {
           "q": "What job do you want?",
-          "a": "I'm going to be {job}."
+          "a": "I'm [[going to]] be {job}.",
+          "options": [
+            "going to",
+            "go to",
+            "will to"
+          ]
         },
         {
           "q": "Why do you want this job?",
@@ -318,11 +392,84 @@
         },
         {
           "q": "Are you good at sports?",
-          "a": "Yes, I am. / No, I'm not."
+          "a": "Yes, I [[am]].",
+          "options": [
+            "am",
+            "do",
+            "can"
+          ]
         },
         {
           "q": "Can you work in a team?",
-          "a": "Yes, I can."
+          "a": "Yes, I [[can]].",
+          "options": [
+            "can",
+            "am",
+            "do"
+          ]
+        },
+        {
+          "q": "What will you do after high school?",
+          "a": "I [[will]] go to university.",
+          "options": [
+            "will",
+            "am",
+            "going"
+          ]
+        },
+        {
+          "q": "Where are you going to work?",
+          "a": "I'm [[going to]] work in a big city.",
+          "options": [
+            "going to",
+            "go",
+            "will to"
+          ]
+        },
+        {
+          "q": "Can you work at night?",
+          "a": "Yes, I [[can]].",
+          "options": [
+            "can",
+            "do",
+            "am"
+          ]
+        },
+        {
+          "q": "Are you going to study hard?",
+          "a": "Yes, I [[am]].",
+          "options": [
+            "am",
+            "do",
+            "will"
+          ]
+        },
+        {
+          "q": "Will you be {job} one day?",
+          "a": "Yes, I [[will]].",
+          "options": [
+            "will",
+            "am",
+            "do"
+          ]
+        },
+        {
+          "q": "What do you need for this job?",
+          "a": "I need a [[degree]].",
+          "options": [
+            "degree",
+            "salary",
+            "interview"
+          ]
+        },
+        {
+          "q": "Do you want a good salary?",
+          "a": "Yes, I want a good [[salary]].",
+          "options": [
+            "salary",
+            "degree",
+            "interview"
+          ]
         }
       ],
       "B1": [
@@ -336,17 +483,46 @@
         },
         {
           "q": "What are you good at?",
-          "a": "I'm good at ___, so I can do this job well."
+          "a": "I'm [[good at]] sports, so I can do this job well."
         },
         {
           "q": "What will you do in five years?",
-          "a": "In five years, I will ___."
+          "a": "In five years, I [[will]] be {job}."
         },
         {
           "q": "Can you work under pressure?",
           "a": "Yes, I can. For example, ___."
+        },
+        {
+          "q": "What is the most difficult part of being {job}?",
+          "a": "I think the most difficult part is ___."
+        },
+        {
+          "q": "Why should we hire you?",
+          "a": "You should hire me [[because]] I am hard-working."
+        },
+        {
+          "q": "How are you going to prepare for this job?",
+          "a": "I'm [[going to]] study hard and get a [[degree]]."
+        },
+        {
+          "q": "Have you got any experience?",
+          "a": "Yes, I [[have]]. I worked as a volunteer."
+        },
+        {
+          "q": "What will your salary be?",
+          "a": "I think my [[salary]] will be good."
+        },
+        {
+          "q": "Do you prefer working alone or in a team?",
+          "a": "I [[prefer]] working in a team because it is fun."
+        },
+        {
+          "q": "Where do you see yourself in ten years?",
+          "a": "In ten years, I will be {job} in a big city."
         }
       ]
-    }
+    },
+    "perCandidate": 3
   }
 }

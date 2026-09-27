@@ -44,8 +44,14 @@ test('interview: seviye soruları, meslekle doldurulmuş soru/cevap, ilerleme', 
   const iv = createInterview(unit, { level: 'B1', students, teams, rng: seeded(5) });
   eq(iv.total, 3);
   const job = iv.job.word;
-  ok(iv.question().q.endsWith(`${job}?`));
-  eq(iv.question().a, `I want to be ${/^[aeiou]/.test(job) ? 'an' : 'a'} ${job} because ___.`);
+  // soru sırası rastgele: meslekli soruyu bul
+  const seen = [];
+  for (let k = 0; k < 3; k++) { seen.push(iv.question()); iv.next(); }
+  const withJob = seen.find(x => x.q.startsWith('Why'));
+  ok(withJob.q.endsWith(`${job}?`));
+  eq(withJob.a, `I want to be ${/^[aeiou]/.test(job) ? 'an' : 'a'} ${job} because ___.`);
+  while (iv.index > 0) iv.prev();
+  iv.prev(); // HIRED'dan dönüş olmayan durumda etkisiz
   ok(!iv.done);
   ok(iv.next()); ok(iv.next()); eq(iv.next(), false);
   ok(iv.done);
@@ -64,7 +70,9 @@ test('interview: meslekler hepsi bitmeden tekrar etmez, yeni ikili baştan başl
 });
 
 test('interview: bilinmeyen seviyede A2 sorularına düşer', () => {
-  eq(createInterview(unit, { level: 'C1', students, teams }).question().q, 'What job do you want?'.replace('{job}', ''));
+  const iv = createInterview(unit, { level: 'C1', students, teams });
+  eq(iv.level, 'A2');
+  ok(unit.interview.questions.A2.some(x => x.q === iv.question().q));
 });
 
 test('interview: Python seslendirme betiği soruları aynı doldurur (parite)', async () => {
@@ -105,4 +113,54 @@ test('interview: iki kişilik sınıfta roller yer değiştirir', () => {
   const { interviewer, candidate } = iv.pair;
   iv.nextRound();
   eq([iv.pair.interviewer.id, iv.pair.candidate.id], [candidate.id, interviewer.id]);
+});
+
+import { gapAnswer } from '../app/modules/mock-interview/interview.js';
+
+const jobs = ['engineer', 'pilot', 'coach', 'teacher'];
+
+test('boşluk: meslek boşluğu, A2 baş harf ipucu, cevap metni', () => {
+  const g = gapAnswer({ q: 'What job?', a: "I'm [[going to]] be {job}." }, 'teacher', { level: 'A2', index: 0, jobs });
+  eq(g.parts.map(p => (typeof p === 'string' ? p : '___')).join(''), "I'm going to be a ___.");
+  eq(g.answer, "I'm going to be a teacher.");
+  eq(g.hint, 't _ _ _ _ _ _');
+});
+
+test('boşluk: sorudan soruya yapı boşluğuna döner', () => {
+  const g = gapAnswer({ q: 'What job?', a: "I'm [[going to]] be {job}." }, 'teacher', { level: 'B1', index: 1, jobs });
+  eq(g.parts.map(p => (typeof p === 'string' ? p : '___')).join(''), "I'm ___ be a teacher.");
+  eq(g.hint, null);
+});
+
+test('boşluk: A1 üç seçenekli kelime bankası (doğru + 2 çeldirici)', () => {
+  const g = gapAnswer({ q: 'Job?', a: 'I want to be {job}.' }, 'coach', { level: 'A1', index: 0, jobs, rng: seeded(3) });
+  eq(g.options.length, 3);
+  ok(g.options.includes('coach'));
+  eq(new Set(g.options).size, 3);
+  const c = gapAnswer({ q: 'Team?', a: 'Yes, I [[can]].', options: ['can', 'am', 'do'] }, 'coach', { level: 'A1', index: 0, jobs, rng: seeded(4) });
+  eq([...c.options].sort(), ['am', 'can', 'do']);
+});
+
+const pool = Array.from({ length: 12 }, (_, i) => ({ q: `Q${i}?`, a: `Answer [[${i}]].` }));
+const bigUnit = { ...unit, interview: { ...unit.interview, perCandidate: 3, questions: { A1: pool, A2: pool, B1: pool } } };
+
+test('mülakat: aday başına 3 soru, 12 soruluk havuz bitene kadar tekrar yok', () => {
+  const iv = createInterview(bigUnit, { level: 'A2', students, teams, rng: seeded(6) });
+  const seen = [];
+  for (let r = 0; r < 4; r++) {
+    eq(iv.total, 3);
+    for (let i = 0; i < 3; i++) { seen.push(iv.question().q); iv.next(); }
+    iv.nextRound();
+  }
+  eq(new Set(seen).size, 12);
+});
+
+test('mülakat: bugün gelen herkes bir kez aday olunca bitti sayılır; kaldığı yerden devam eder', () => {
+  const iv = createInterview(bigUnit, { level: 'A2', students, teams, rng: seeded(7) });
+  const cands = new Set([iv.pair.candidate.id]);
+  while (!iv.allCandidatesDone) { iv.nextRound(); cands.add(iv.pair.candidate.id); }
+  eq(cands.size, students.length);
+  const again = createInterview(bigUnit, { level: 'A2', students, teams, candidatesToday: ['s1', 's2', 's3'], rng: seeded(8) });
+  eq([again.pair.candidate.id, again.allCandidatesDone], ['s4', true]);
+  eq(createInterview(bigUnit, { level: 'A2', students, teams, candidatesToday: ['s1', 's2', 's3', 's4'] }).allCandidatesDone, true);
 });

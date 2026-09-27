@@ -4,6 +4,38 @@ import { shuffle } from '../coach-says/deck.js';
 const article = word => (/^[aeiou]/i.test(word) ? 'an' : 'a');
 export const fillJob = (text, word) => text.replaceAll('{job}', `${article(word)} ${word}`);
 
+// Boşluk doldurma: cevaptaki boşluk adaylarından ({job} = meslek, [[…]] = dil yapısı) biri boş gösterilir.
+// A1: 3 seçenekli kelime bankası · A2: baş harf ipucu · B1: ipucu yok.
+export function gapAnswer(question, job, { level = 'A2', index = 0, rng = Math.random, jobs = [] } = {}) {
+  const tokens = [];
+  const re = /\{job\}|\[\[(.+?)\]\]/g;
+  let last = 0;
+  let m;
+  while ((m = re.exec(question.a))) {
+    tokens.push(question.a.slice(last, m.index));
+    tokens.push(m[0] === '{job}' ? { kind: 'job', text: job, prefix: `${article(job)} ` } : { kind: 'chunk', text: m[1] });
+    last = re.lastIndex;
+  }
+  tokens.push(question.a.slice(last));
+  const gaps = tokens.filter(t => typeof t === 'object').sort((x, y) => (x.kind === 'job' ? 0 : 1) - (y.kind === 'job' ? 0 : 1)); // önce meslek
+  const gap = gaps.length ? gaps[index % gaps.length] : null;
+  const parts = [];
+  for (const t of tokens) {
+    if (typeof t === 'string') parts.push(t);
+    else if (t !== gap) parts.push(t.prefix ? t.prefix + t.text : t.text);
+    else { if (t.prefix) parts.push(t.prefix); parts.push({ gap: true }); }
+  }
+  const answer = tokens.map(t => (typeof t === 'string' ? t : (t.prefix ?? '') + t.text)).join('');
+  if (!gap) return { parts, answer, hint: null, options: null };
+  const hint = level === 'A2' ? [...gap.text].map((ch, k) => (k === 0 ? ch : ch === ' ' ? ' ' : '_')).join(' ').replace(/\s{3}/g, '   ') : null;
+  let options = null;
+  if (level === 'A1') {
+    const pool = gap.kind === 'job' ? jobs.filter(j => j !== gap.text) : (question.options ?? []).filter(o => o !== gap.text);
+    options = shuffle([gap.text, ...shuffle(pool, rng).slice(0, 2)], rng);
+  }
+  return { parts, answer, hint, options };
+}
+
 
 export function createInterview(unit, { level = 'A2', students = [], candidatesToday = [], rng = Math.random } = {}) {
   // Adaylık sayısı: bugün aday olmamışlar önce aday olur
@@ -31,7 +63,21 @@ export function createInterview(unit, { level = 'A2', students = [], candidatesT
   }
 
   const iv = unit.interview;
-  const questions = iv.questions[level] ?? iv.questions.A2;
+  const pool = iv.questions[level] ?? iv.questions.A2;
+  const perCandidate = Math.min(iv.perCandidate ?? 3, pool.length);
+  // Soru havuzu: bitene kadar tekrar etmez, sonra karışık baştan
+  let qQueue = [];
+  const takeQuestions = () => {
+    const out = [];
+    while (out.length < perCandidate) {
+      if (!qQueue.length) qQueue = shuffle(pool, rng).filter(x => !out.includes(x));
+      out.push(qQueue.shift());
+    }
+    return out;
+  };
+  let questions = takeQuestions();
+  let asked = 0; // boşluk türünü sorudan soruya değiştirmek için sayaç
+  const jobWords = iv.jobs;
   const jobs = iv.jobs.map(w => unit.vocab.find(v => v.word === w)).filter(Boolean);
   let queue = [];
   let last = null;
@@ -54,11 +100,14 @@ export function createInterview(unit, { level = 'A2', students = [], candidatesT
     get job() { return job; },
     get index() { return i; },
     get total() { return questions.length; },
+    // Bugün gelen herkes en az bir kez aday oldu mu
+    get allCandidatesDone() { return students.length > 0 && students.every(s => asCandidate.get(s.id) >= 1); },
     get done() { return finished; },
     get level() { return iv.questions[level] ? level : 'A2'; },
     question() {
-      const { q, a } = questions[i];
-      return { q: fillJob(q, job.word), a: fillJob(a, job.word) };
+      const item = questions[i];
+      const gap = gapAnswer(item, job.word, { level: this.level, index: asked + i, rng, jobs: jobWords });
+      return { q: fillJob(item.q, job.word), a: gap.answer, gap };
     },
     next() {
       if (i < questions.length - 1) { i++; return true; }
@@ -71,13 +120,13 @@ export function createInterview(unit, { level = 'A2', students = [], candidatesT
       return false;
     },
     // Tamamen yeni ikili ("İkiliyi değiştir")
-    newPair() { pair = pickPair(); job = nextJob(); i = 0; finished = false; },
+    newPair() { pair = pickPair(); job = nextJob(); asked += i + 1; questions = takeQuestions(); i = 0; finished = false; },
     // Sıradaki tur: aday mülakatçı olur, yeni aday başka takımdan
     nextRound() {
       if (!pair) return this.newPair();
       const interviewer = pair.candidate;
       pair = pairFrom(interviewer, chooseCandidate(interviewer));
-      job = nextJob(); i = 0; finished = false;
+      job = nextJob(); asked += i + 1; questions = takeQuestions(); i = 0; finished = false;
     },
   };
 }

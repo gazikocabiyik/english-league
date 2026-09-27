@@ -4,9 +4,11 @@ import { lessonLevels } from '../../core/levels.js';
 import { award } from '../league/award.js';
 import { createInterview } from './interview.js';
 
-function answerParts(text) {
-  const [before, after = ''] = text.split('___');
-  return text.includes('___') ? [before, h('span', { class: 'blank' }), after] : [text];
+// Cevap: işaretli boşluk ve öğrencinin kendi dolduracağı "___" sarı çizgi olarak gösterilir
+function answerParts(parts) {
+  return parts.flatMap(p => (typeof p === 'string'
+    ? p.split('___').flatMap((t, k) => (k ? [h('span', { class: 'blank' }), t] : [t]))
+    : [h('span', { class: 'blank gap' })]));
 }
 
 export default {
@@ -89,13 +91,14 @@ export default {
       return true;
     }
     function step(dir) {
+      reveal = false;
       if (dir > 0 && !iv.done && !answeredQ.has(iv.index)) rec(false); // işaretlenmeden geçilen soru = bilemedi
       if (dir > 0 && !iv.done && iv.index < iv.total - 1) lastGroup = null;
       if (dir > 0) iv.next(); else iv.prev();
       if (iv.done) thankInterviewer();
       render(!iv.done);
     }
-    const resetRound = () => { answeredQ.clear(); thanked = false; lastGroup = null; };
+    const resetRound = () => { answeredQ.clear(); thanked = false; lastGroup = null; reveal = false; };
     function newPair() { iv.newPair(); resetRound(); render(true); }
     function nextRound() { iv.nextRound(); resetRound(); render(true); }
     // Katılım puanı geri alınırsa tur bitince yeniden verilebilsin
@@ -110,26 +113,47 @@ export default {
       h('span', { class: 'role-door', style: { '--team': teamOf(s) ? `var(--${teamOf(s).color})` : 'var(--surface-2)' } }),
       h('span', { class: 'role-name' }, `${role}: `, h('b', {}, s.name)));
 
+    let reveal = false; // öğretmen "Cevabı göster" dedi mi
+    let summary = iv.allCandidatesDone && candidatesToday.length > 0; // bugün herkes zaten aday olduysa özetle başla
+    const nextActivity = () => ctx.go('#/game/coach-says/exit'); // ders akışı: ünite görevi → çıkış bileti
+
+    function finishedScreen() {
+      const todays = ctx.store.attemptsOf(ctx.classId, { since: dayStart.getTime() }).filter(a => a.activity === 'interview');
+      const cands = new Set(todays.map(a => a.studentId)).size;
+      const rate = todays.length ? Math.round((todays.filter(a => a.ok).length / todays.length) * 100) : 0;
+      return h('div', { class: 'stage hired' },
+        h('p', { class: 'hired-stamp', lang: 'en' }, 'ALL HIRED!'),
+        h('p', { class: 'hired-line' }, `Şube mülakatları bitti: ${cands} aday · doğru oranı %${rate}`),
+        h('div', { class: 'today-actions' },
+          h('button', { class: 'ghost', onclick: () => { summary = false; nextRound(); } }, 'Bir tur daha'),
+          h('button', { class: 'go wide', onclick: nextActivity }, 'Sıradaki etkinlik: Çıkış bileti ', icon('caret-right'))));
+    }
+
     function render(announce) {
       const { interviewer, candidate } = iv.pair;
-      const { q, a } = iv.question();
+      const { q, gap } = iv.question();
       const img = h('img', {
         class: 'word-photo', src: `content/${iv.job.img}`, alt: iv.job.word,
         onerror: () => img.replaceWith(h('div', { class: 'photo-missing' }, `Görsel yok: ${iv.job.img}`)),
       });
 
-      const body = iv.done
+      const body = summary ? finishedScreen() : iv.done
         ? h('div', { class: 'stage hired' },
           h('p', { class: 'hired-stamp stamp', lang: 'en' }, 'HIRED!'),
           h('p', { class: 'hired-line', lang: 'en' }, `${candidate.name} is our new ${iv.job.word}!`),
-          h('button', { class: 'go wide', onclick: nextRound }, icon('users-three'), ` Sıradaki: ${candidate.name} soruyor`))
+          iv.allCandidatesDone
+            ? h('button', { class: 'go wide', onclick: () => { summary = true; render(false); } }, icon('check'), ' Mülakatlar bitti: özet')
+            : h('button', { class: 'go wide', onclick: nextRound }, icon('users-three'), ` Sıradaki: ${candidate.name} soruyor`))
         : h('div', { class: 'stage stage-word interview' },
           h('div', { class: 'job photo' }, img, h('span', { class: 'job-name tape', lang: 'en' }, iv.job.word.toLocaleUpperCase('en'))),
           h('div', { class: 'word-side' },
             h('span', { class: 'q-label' }, `${interviewer.name} sorar:`),
             h('button', { class: 'question', lang: 'en', onclick: () => ctx.sound.speak(q) }, q),
             h('span', { class: 'q-label' }, `${candidate.name} cevaplar:`),
-            h('p', { class: 'frame', lang: 'en' }, answerParts(a)),
+            h('p', { class: 'frame', lang: 'en' }, reveal ? gap.answer : answerParts(gap.parts)),
+            !reveal && gap.hint ? h('span', { class: 'tape hint-chip', lang: 'en' }, `İpucu: ${gap.hint}`) : null,
+            !reveal && gap.options ? h('div', { class: 'word-bank', lang: 'en' }, gap.options.map(o => h('span', { class: 'bank-word' }, o))) : null,
+            h('button', { class: 'ghost small', onclick: () => { reveal = !reveal; render(false); } }, reveal ? 'Cevabı gizle' : 'Cevabı göster'),
             iv.level === 'B1' && unit.b1Extend ? h('span', { class: 'tape hint-chip', lang: 'en' }, unit.b1Extend) : null),
           h('div', { class: 'scores one' },
             h('span', { class: 'person-label' }, `${candidate.name} doğru cevapladı mı?`),
@@ -139,7 +163,8 @@ export default {
       el.replaceChildren(h('section', { class: 'screen coach mock' },
         h('header', { class: 'coach-head' },
           h('div', { class: 'roles' }, person('Interviewer', interviewer), person('Candidate', candidate)),
-          h('button', { class: 'ghost', onclick: newPair }, icon('users-three'), ' İkiliyi değiştir'),
+          summary ? null : h('button', { class: 'ghost', onclick: newPair }, icon('users-three'), ' İkiliyi değiştir'),
+          h('button', { class: 'ghost', onclick: nextActivity }, 'Etkinliği bitir'),
           h('span', { class: 'level-chip', title: 'Mülakat seviyesi' }, iv.level),
           h('span', { class: 'progress' }, `${Math.min(iv.index + 1, iv.total)} / ${iv.total}`)),
         body,

@@ -85,7 +85,7 @@ export default {
         h('p', { class: 'playlist-title', lang: 'en' }, 'WARM-UP PLAYLIST'),
         h('ol', { class: 'playlist-list' }, dj.playlist.map(p => h('li', { lang: 'en' },
           h('span', { class: 'pl-situation' }, p.situation), h('span', { class: 'pl-genre' }, p.genre.toLocaleUpperCase('en')), h('span', { class: 'pl-by' }, p.by)))),
-        h('button', { class: 'go wide', onclick: () => ctx.go('#/panel') }, icon('check'), ' Bitti'));
+        h('button', { class: 'go wide', onclick: () => ctx.go('#/game/coach-says/exit') }, 'Sıradaki etkinlik: Çıkış bileti ', icon('caret-right')));
     }
 
     function render(announce) {
