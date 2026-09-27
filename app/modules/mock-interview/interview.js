@@ -27,7 +27,8 @@ export function gapAnswer(question, job, { level = 'A2', index = 0, rng = Math.r
   }
   const answer = tokens.map(t => (typeof t === 'string' ? t : (t.prefix ?? '') + t.text)).join('');
   if (!gap) return { parts, answer, hint: null, options: null };
-  const hint = level === 'A2' ? [...gap.text].map((ch, k) => (k === 0 ? ch : ch === ' ' ? ' ' : '_')).join(' ').replace(/\s{3}/g, '   ') : null;
+  // A2 ipucu kelime kelime: "going to" → "g _ _ _ _ / t _"
+  const hint = level === 'A2' ? gap.text.split(' ').map(w => [...w].map((ch, k) => (k === 0 ? ch : '_')).join(' ')).join(' / ') : null;
   let options = null;
   if (level === 'A1') {
     const pool = gap.kind === 'job' ? jobs.filter(j => j !== gap.text) : (question.options ?? []).filter(o => o !== gap.text);
@@ -69,13 +70,15 @@ export function createInterview(unit, { level = 'A2', students = [], candidatesT
   let qQueue = [];
   const takeQuestions = () => {
     const out = [];
-    while (out.length < perCandidate) {
+    while (out.length < perCandidate && pool.length) {
       if (!qQueue.length) qQueue = shuffle(pool, rng).filter(x => !out.includes(x));
       out.push(qQueue.shift());
     }
     return out;
   };
-  let questions = takeQuestions();
+  let questions = pool.length ? takeQuestions() : [];
+  // Mülakatı gerçekten biten adaylar (bugün cevap kaydı olanlar dahil); seçilmek "bitti" saymaz
+  const completed = new Set(candidatesToday.filter(id => students.some(s => s.id === id)));
   let asked = 0; // boşluk türünü sorudan soruya değiştirmek için sayaç
   const jobWords = iv.jobs;
   const jobs = iv.jobs.map(w => unit.vocab.find(v => v.word === w)).filter(Boolean);
@@ -101,17 +104,19 @@ export function createInterview(unit, { level = 'A2', students = [], candidatesT
     get index() { return i; },
     get total() { return questions.length; },
     // Bugün gelen herkes en az bir kez aday oldu mu
-    get allCandidatesDone() { return students.length > 0 && students.every(s => asCandidate.get(s.id) >= 1); },
+    get allCandidatesDone() { return students.length > 0 && students.every(s => completed.has(s.id)); },
     get done() { return finished; },
     get level() { return iv.questions[level] ? level : 'A2'; },
     question() {
       const item = questions[i];
+      if (!item) return null;
       const gap = gapAnswer(item, job.word, { level: this.level, index: asked + i, rng, jobs: jobWords });
       return { q: fillJob(item.q, job.word), a: gap.answer, gap };
     },
     next() {
       if (i < questions.length - 1) { i++; return true; }
       finished = true;
+      if (pair) completed.add(pair.candidate.id);
       return false;
     },
     prev() {
@@ -120,13 +125,13 @@ export function createInterview(unit, { level = 'A2', students = [], candidatesT
       return false;
     },
     // Tamamen yeni ikili ("İkiliyi değiştir")
-    newPair() { pair = pickPair(); job = nextJob(); asked += i + 1; questions = takeQuestions(); i = 0; finished = false; },
+    newPair() { pair = pickPair(); job = nextJob(); asked += i + 1; questions = pool.length ? takeQuestions() : []; i = 0; finished = false; },
     // Sıradaki tur: aday mülakatçı olur, yeni aday başka takımdan
     nextRound() {
       if (!pair) return this.newPair();
       const interviewer = pair.candidate;
       pair = pairFrom(interviewer, chooseCandidate(interviewer));
-      job = nextJob(); asked += i + 1; questions = takeQuestions(); i = 0; finished = false;
+      job = nextJob(); asked += i + 1; questions = pool.length ? takeQuestions() : []; i = 0; finished = false;
     },
   };
 }

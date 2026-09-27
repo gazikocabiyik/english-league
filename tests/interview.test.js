@@ -157,10 +157,31 @@ test('mülakat: aday başına 3 soru, 12 soruluk havuz bitene kadar tekrar yok',
 
 test('mülakat: bugün gelen herkes bir kez aday olunca bitti sayılır; kaldığı yerden devam eder', () => {
   const iv = createInterview(bigUnit, { level: 'A2', students, teams, rng: seeded(7) });
-  const cands = new Set([iv.pair.candidate.id]);
-  while (!iv.allCandidatesDone) { iv.nextRound(); cands.add(iv.pair.candidate.id); }
+  const cands = new Set();
+  const finishRound = () => { cands.add(iv.pair.candidate.id); while (iv.next()); };
+  finishRound();
+  while (!iv.allCandidatesDone) { iv.nextRound(); finishRound(); }
   eq(cands.size, students.length);
+  // Sayfaya dönüş: son öğrenci seçilir ama mülakatı bitmeden "bitti" sayılmaz (inceleme C1)
   const again = createInterview(bigUnit, { level: 'A2', students, teams, candidatesToday: ['s1', 's2', 's3'], rng: seeded(8) });
-  eq([again.pair.candidate.id, again.allCandidatesDone], ['s4', true]);
+  eq([again.pair.candidate.id, again.allCandidatesDone], ['s4', false]);
+  while (again.next());
+  eq(again.allCandidatesDone, true);
+  // İkiliyi değiştirmek atlanan adayı "bitti" saymaz
+  const sw = createInterview(bigUnit, { level: 'A2', students, teams, candidatesToday: ['s1', 's2', 's3'], rng: seeded(9) });
+  sw.newPair();
+  eq(sw.allCandidatesDone, false);
   eq(createInterview(bigUnit, { level: 'A2', students, teams, candidatesToday: ['s1', 's2', 's3', 's4'] }).allCandidatesDone, true);
+});
+
+test('boşluk: çok kelimeli yapıda ipucu kelime kelime (inceleme)', () => {
+  const g = gapAnswer({ q: 'What job?', a: "I'm [[going to]] be {job}." }, 'teacher', { level: 'A2', index: 1, jobs });
+  eq(g.hint, 'g _ _ _ _ / t _');
+});
+
+test('mülakat: boş havuzda çökmez (inceleme)', () => {
+  const empty = { ...unit, interview: { ...unit.interview, questions: { A1: [], A2: [], B1: [] } } };
+  const iv = createInterview(empty, { level: 'A2', students, teams });
+  eq(iv.total, 0);
+  eq(iv.question(), null);
 });

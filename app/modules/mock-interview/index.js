@@ -22,7 +22,9 @@ export default {
     const { unit, errors } = await loadUnit(ctx.grade, ctx.unit);
     if (!alive) return;
 
-    const back = h('button', { onclick: () => ctx.go('#/panel') }, 'Panele dön');
+    const back = h('div', { class: 'today-actions' },
+      h('button', { onclick: () => ctx.go('#/panel') }, 'Panele dön'),
+      h('button', { class: 'go', onclick: () => ctx.go('#/game/coach-says/exit') }, 'Çıkış biletine geç ', icon('caret-right')));
     if (!unit) {
       el.replaceChildren(h('section', { class: 'screen error' }, h('h1', { class: 'display' }, 'Ünite açılamadı'), h('ul', {}, errors.map(e => h('li', {}, e))), back));
       return;
@@ -104,7 +106,7 @@ export default {
     // Katılım puanı geri alınırsa tur bitince yeniden verilebilsin
     const onScores = e => { if (e.detail?.undone?.reason?.includes('Mülakatçı')) thanked = false; };
 
-    const onKey = e => { if (e.key === 'ArrowRight') step(1); if (e.key === 'ArrowLeft') step(-1); };
+    const onKey = e => { if (summary) return; if (e.key === 'ArrowRight') step(1); if (e.key === 'ArrowLeft') step(-1); }; // özetteyken görünmeyen adaya kayıt düşmesin
     document.addEventListener('keydown', onKey);
     document.addEventListener('scores-changed', onScores);
     this.unmount = () => { alive = false; document.removeEventListener('keydown', onKey); document.removeEventListener('scores-changed', onScores); ctx.sound.stopSpeaking(); };
@@ -114,6 +116,7 @@ export default {
       h('span', { class: 'role-name' }, `${role}: `, h('b', {}, s.name)));
 
     let reveal = false; // öğretmen "Cevabı göster" dedi mi
+    const gapCache = new Map();
     let summary = iv.allCandidatesDone && candidatesToday.length > 0; // bugün herkes zaten aday olduysa özetle başla
     const nextActivity = () => ctx.go('#/game/coach-says/exit'); // ders akışı: ünite görevi → çıkış bileti
 
@@ -131,7 +134,11 @@ export default {
 
     function render(announce) {
       const { interviewer, candidate } = iv.pair;
-      const { q, gap } = iv.question();
+      // Aynı soruda boşluk ve kelime bankası sabit kalsın (cevabı göster/gizle karıştırmasın)
+      const key = `${iv.pair.candidate.id}:${iv.job.word}:${iv.index}`;
+      if (!gapCache.has(key)) gapCache.set(key, iv.question());
+      const { q, gap } = gapCache.get(key);
+      const hasGap = gap.parts.some(p => typeof p !== 'string');
       const img = h('img', {
         class: 'word-photo', src: `content/${iv.job.img}`, alt: iv.job.word,
         onerror: () => img.replaceWith(h('div', { class: 'photo-missing' }, `Görsel yok: ${iv.job.img}`)),
@@ -153,7 +160,7 @@ export default {
             h('p', { class: 'frame', lang: 'en' }, reveal ? gap.answer : answerParts(gap.parts)),
             !reveal && gap.hint ? h('span', { class: 'tape hint-chip', lang: 'en' }, `İpucu: ${gap.hint}`) : null,
             !reveal && gap.options ? h('div', { class: 'word-bank', lang: 'en' }, gap.options.map(o => h('span', { class: 'bank-word' }, o))) : null,
-            h('button', { class: 'ghost small', onclick: () => { reveal = !reveal; render(false); } }, reveal ? 'Cevabı gizle' : 'Cevabı göster'),
+            hasGap ? h('button', { class: 'ghost small', onclick: () => { reveal = !reveal; render(false); } }, reveal ? 'Cevabı gizle' : 'Cevabı göster') : null,
             iv.level === 'B1' && unit.b1Extend ? h('span', { class: 'tape hint-chip', lang: 'en' }, unit.b1Extend) : null),
           h('div', { class: 'scores one' },
             h('span', { class: 'person-label' }, `${candidate.name} doğru cevapladı mı?`),
@@ -168,11 +175,11 @@ export default {
           h('span', { class: 'level-chip', title: 'Mülakat seviyesi' }, iv.level),
           h('span', { class: 'progress' }, `${Math.min(iv.index + 1, iv.total)} / ${iv.total}`)),
         body,
-        h('div', { class: 'nav-btns' },
+        summary ? null : h('div', { class: 'nav-btns' },
           h('button', { class: 'nav', 'aria-label': 'Önceki soru', onclick: () => step(-1) }, icon('caret-left')),
           iv.done ? null : h('button', { class: 'say-again', 'aria-label': 'Soruyu oku', onclick: () => ctx.sound.speak(q) }, icon('speaker-high'), ' Soruyu oku'),
           iv.done ? h('span') : h('button', { class: 'nav next', 'aria-label': 'Sonraki soru', onclick: () => step(1) }, icon('caret-right')))));
-      if (announce && !iv.done) ctx.sound.speak(q);
+      if (announce && !iv.done && !summary) ctx.sound.speak(q);
     }
 
     render(true);

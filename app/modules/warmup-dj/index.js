@@ -21,7 +21,9 @@ export default {
     const { unit, errors } = await loadUnit(ctx.grade, ctx.unit);
     if (!alive) return;
 
-    const back = h('button', { onclick: () => ctx.go('#/panel') }, 'Panele dön');
+    const back = h('div', { class: 'today-actions' },
+      h('button', { onclick: () => ctx.go('#/panel') }, 'Panele dön'),
+      h('button', { class: 'go', onclick: () => ctx.go('#/game/coach-says/exit') }, 'Çıkış biletine geç ', icon('caret-right')));
     if (!unit) {
       el.replaceChildren(h('section', { class: 'screen error' }, h('h1', { class: 'display' }, 'Ünite açılamadı'), h('ul', {}, errors.map(e => h('li', {}, e))), back));
       return;
