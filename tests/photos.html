@@ -1,0 +1,22 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Fotoğraf incelemesi</title>
+<style>
+  body { font: 18px system-ui; margin: 24px; background: #111; color: #eee; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+  figure { margin: 0; } img { width: 100%; aspect-ratio: 4/3; object-fit: cover; background: #400; }
+  figcaption { padding: 4px 0; } h2 { margin-top: 32px; }
+</style>
+<div id="out"></div>
+<script type="module">
+  const out = document.getElementById('out');
+  const index = await (await fetch('../app/content/index.json')).json();
+  for (const [grade, units] of Object.entries(index)) {
+    for (const n of units) {
+      const u = await (await fetch(`../app/content/${grade}/unit${n}.json`)).json();
+      out.insertAdjacentHTML('beforeend', `<h2>${grade} · Unit ${n} · ${u.title}</h2><div class="grid">${
+        u.vocab.map(v => `<figure><img src="../app/content/${v.img}" alt=""><figcaption><b>${v.word}</b> — ${v.img}</figcaption></figure>`).join('')
+      }</div>`);
+    }
+  }
+</script>

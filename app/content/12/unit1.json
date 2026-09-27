@@ -15,7 +15,7 @@
     { "word": "calm", "tr": "sakin", "img": "media/12/calm.jpg", "frame": 2, "q": "calm lake morning" },
     { "word": "song", "tr": "şarkı", "img": "media/12/song.jpg", "frame": 3, "q": "singer singing microphone" },
     { "word": "instrument", "tr": "enstrüman", "img": "media/12/instrument.jpg", "frame": 3, "q": "musical instruments collection" },
-    { "word": "lyrics", "tr": "şarkı sözleri", "img": "media/12/lyrics.jpg", "frame": 4, "q": "handwritten song lyrics notebook" }
+    { "word": "lyrics", "tr": "şarkı sözleri", "img": "media/12/lyrics.jpg", "frame": 4, "q": "lyrics sheet" }
   ],
   "commands": [
     { "text": "Coach says: play the guitar!", "safe": true },
