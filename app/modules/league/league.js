@@ -28,6 +28,9 @@ export default {
       return cls.teams.find(t => t.id === r.teamId)?.color;
     }
 
+    // Okulda şubeler ve öğrenciler başarı oranıyla gösterilir
+    const rated = r => scope === 'school' && type !== 'team' && 'enough' in r;
+
     function title() {
       if (scope === 'class') return type === 'team' ? 'Takım ligi' : 'Bireysel lig';
       return { class: 'Okul · Şubeler', team: 'Okul · Takımlar', student: 'Okul · Öğrenciler' }[type];
@@ -37,7 +40,7 @@ export default {
       // FLIP: satırların eski yerini ölç, yeni sıraya kaydır
       const before = new Map([...el.querySelectorAll('[data-id]')].map(n => [n.dataset.id, n.getBoundingClientRect().top]));
       const list = rows();
-      const rankOf = i => list.findIndex(r => r.points === list[i].points) + 1; // eşit puan = eşit sıra
+      const rankOf = i => list.findIndex(r => r.points === list[i].points && r.enough === list[i].enough) + 1; // eşit puan = eşit sıra
       const key = r => `${r.classId ?? ''}:${r.id}`;
       const interactive = scope === 'class';
 
@@ -58,10 +61,11 @@ export default {
               h('span', { class: 'name' }, r.name,
                 scope === 'school' && type !== 'class' ? h('span', { class: 'class-tag' }, ` · ${r.classId}`) : null,
                 scope === 'school' && type === 'class' ? h('span', { class: 'class-tag' }, ` · ${r.students} öğrenci`) : null),
-              h('span', { class: `pts stencil${scope === 'class' && r.id === stampId ? ' stamp' : ''}` }, String(r.points).replace('.', ','),
-                scope === 'school' && type === 'class' ? h('small', { class: 'per' }, 'öğr. başına') : null),
+              rated(r)
+                ? h('span', { class: `pts stencil${r.enough ? '' : ' is-thin'}` }, r.enough ? `${r.points}%` : '–', h('small', { class: 'per' }, r.enough ? `${r.tries} cevap` : 'veri az'))
+                : h('span', { class: `pts stencil${scope === 'class' && r.id === stampId ? ' stamp' : ''}` }, String(r.points)),
             ];
-            return h('li', { 'data-id': key(r), class: `row${rankOf(i) <= 3 && r.points > 0 && scope === 'school' ? ' podium' : ''}${rankOf(i) === 1 && r.points > 0 ? ' leader' : ''}` },
+            return h('li', { 'data-id': key(r), class: `row${rankOf(i) === 1 && r.points > 0 && r.enough !== false ? ' leader' : ''}` },
               interactive
                 ? h('button', { class: 'row-btn', 'aria-label': `${r.name}, ${r.points} puan. Puan ver`, onclick: () => openScoreSheet(ctx, type, r) }, inner)
                 : h('div', { class: 'row-btn is-static' }, inner));

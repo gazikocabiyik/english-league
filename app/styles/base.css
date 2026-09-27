@@ -273,3 +273,4 @@ button.wide { min-width: 320px; }
 .table-class .row-btn, .table-team .row-btn { min-height: 0; }
 .scope-school .table-student .row-btn { grid-template-columns: 88px 1fr auto; }
 .school-rank { font-size: min(26px, 3.2vh); align-self: center; }
+.pts.is-thin { color: var(--ink-muted); }

@@ -97,20 +97,27 @@ export function createStore(storage, now = () => Date.now()) {
       return null;
     },
     standings,
-    // Okul ligi: şubeler (öğrenci başına ortalama), bütün takımlar, bütün öğrenciler
+    // Okul ligi (adil karşılaştırma): şubeler ve öğrenciler başarı oranıyla (doğru ÷ cevap, %), takımlar puanla
     schoolStandings({ type = 'class', grade = null, since = 0 } = {}) {
       const byName = (a, b) => b.points - a.points || a.name.localeCompare(b.name, 'tr');
+      const byRate = (a, b) => (b.enough - a.enough) || byName(a, b);
       const ids = (state.settings.classList ?? []).filter(id => !grade || id.startsWith(`${grade}-`));
+      const rate = list => ({ tries: list.length, points: list.length ? Math.round((list.filter(a => a.ok).length / list.length) * 100) : 0 });
+      const tried = id => state.attempts.filter(a => a.classId === id && a.ts >= since);
       if (type === 'class') {
         return ids.map(id => {
-          const n = getClass(id).students.length;
-          // Öğrenci puanları + gruplanmamış takım puanları (grup = aynı cevap için öğrenciye de yazılmış puan; iki kez sayılmaz)
-          const teams = new Set(getClass(id).teams.map(t => t.id));
-          const studentPts = standings(id, { type: 'student', since }).reduce((t, r) => t + r.points, 0);
-          const teamPts = state.events.filter(e => e.classId === id && e.targetType === 'team' && !e.groupId && e.ts >= since && teams.has(e.targetId)).reduce((t, e) => t + e.points, 0);
-          const total = studentPts + teamPts;
-          return { id, name: id, classId: id, students: n, points: n ? Math.round((total / n) * 10) / 10 : 0 };
-        }).sort((a, b) => (b.students > 0) - (a.students > 0) || byName(a, b));
+          const r = rate(tried(id));
+          return { id, name: id, classId: id, students: getClass(id).students.length, ...r, enough: r.tries >= 10 };
+        }).sort(byRate);
+      }
+      if (type === 'student') {
+        return ids.flatMap(id => {
+          const mine = tried(id);
+          return getClass(id).students.map(st => {
+            const r = rate(mine.filter(a => a.studentId === st.id));
+            return { ...st, classId: id, ...r, enough: r.tries >= 5 };
+          });
+        }).sort(byRate);
       }
       return ids.flatMap(id => standings(id, { type, since }).map(r => ({ ...r, classId: id }))).sort(byName);
     },

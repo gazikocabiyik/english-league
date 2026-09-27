@@ -227,25 +227,33 @@ function school() {
   return s;
 }
 
-test('okul ligi: şubeler öğrenci başına ortalamayla sıralanır, boş şube sonda', () => {
-  eq(school().schoolStandings({ type: 'class' }).map(r => [r.name, r.points]), [['11-A', 3], ['11-B', 2.5], ['12-A', 1], ['12-B', 0]]);
+const tries = (s, classId, n, ok, studentId) => { for (let i = 0; i < n; i++) s.addAttempt({ classId, level: 'A2', ok: i < ok, activity: 'exit', studentId }); };
+
+test('okul ligi: şubeler başarı oranıyla sıralanır, 10 cevaptan azı "veri az" ile sonda', () => {
+  const s = school();
+  tries(s, '11-A', 10, 6);   // %60
+  tries(s, '11-B', 20, 15);  // %75
+  tries(s, '12-A', 4, 4);    // az veri
+  eq(s.schoolStandings({ type: 'class' }).map(r => [r.name, r.points, r.enough]), [['11-B', 75, true], ['11-A', 60, true], ['12-A', 100, false], ['12-B', 0, false]]);
 });
 
-test('okul ligi: takım ve öğrenciler şube etiketiyle tek listede', () => {
+test('okul ligi: öğrenciler kendi doğru oranıyla (en az 5 cevap)', () => {
   const s = school();
-  eq(s.schoolStandings({ type: 'team' }).map(r => [r.name, r.classId, r.points]), [['Eagles', '11-B', 8], ['Lions', '11-A', 4], ['Wolves', '12-A', 0]]);
-  eq(s.schoolStandings({ type: 'student' }).slice(0, 3).map(r => [r.name, r.classId, r.points]), [['Ali', '11-A', 2], ['Can', '11-B', 2], ['Gizem', '12-A', 1]]);
+  tries(s, '11-A', 5, 5, 'a1');
+  tries(s, '11-B', 10, 7, 'b1');
+  tries(s, '11-B', 2, 2, 'b2');
+  const rows = s.schoolStandings({ type: 'student' });
+  eq(rows.slice(0, 2).map(r => [r.name, r.classId, r.points]), [['Ali', '11-A', 100], ['Can', '11-B', 70]]);
+  eq(rows.find(r => r.name === 'Deniz').enough, false);
+});
+
+test('okul ligi: takımlar puanla, tek listede şube etiketiyle', () => {
+  eq(school().schoolStandings({ type: 'team' }).map(r => [r.name, r.classId, r.points]), [['Eagles', '11-B', 8], ['Lions', '11-A', 4], ['Wolves', '12-A', 0]]);
 });
 
 test('okul ligi: sınıf filtresi ve zaman filtresi', () => {
   const s = school();
+  tries(s, '12-A', 10, 5);
   eq(s.schoolStandings({ type: 'class', grade: 12 }).map(r => r.name), ['12-A', '12-B']);
-  eq(s.schoolStandings({ type: 'class', since: 9_000_000 }).every(r => r.points === 0), true);
-});
-
-test('okul ligi: mülakattaki öğrenci+takım grup puanı şubede iki kez sayılmaz (inceleme I2)', () => {
-  const s = school();
-  s.addEvent({ classId: '12-A', targetType: 'student', targetId: 'c1', points: 1, groupId: 'g' });
-  s.addEvent({ classId: '12-A', targetType: 'team', targetId: 't1', points: 1, groupId: 'g' });
-  eq(s.schoolStandings({ type: 'class' }).find(r => r.id === '12-A').points, 2); // 1 + grup(1) = 2 / 1 öğrenci
+  eq(s.schoolStandings({ type: 'class', since: 9_000_000 }).every(r => !r.enough), true);
 });
