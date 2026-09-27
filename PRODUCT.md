@@ -31,10 +31,10 @@ Built around this school's reality: sports-career contexts (coach, police office
 
 ## Capabilities and Constraints
 
-- Current scope (Faz 3 prototype): class-section selection/creation, team + student roster, team and individual league (this week / all time), undo, timer with whistle, Coach Says (3 rounds), backup download/upload.
-- Content per unit lives in JSON (vocab, sentence frames, movement commands); pilot units: 11/Unit 1 Future Jobs, 12/Unit 1 Music.
+- Current scope (Faz 4): class-section selection/creation, team + student roster, team and individual league (this week / all time), undo, timer with whistle, Coach Says (3 rounds), Mock Interview (pair interview), spiral review across units, backup download/upload.
+- Content per unit lives in JSON (vocab, sentence frames, movement commands); units 1–2 of both grades are built (11: Future Jobs, Hobbies and Skills; 12: Music, Friendship).
 - Scores are stored in the board browser's localStorage; a server comes only with home participation (Faz 5).
-- Text-to-speech via the browser (en-US, slowed); no paid APIs.
+- Voice: pre-rendered natural Kokoro voices (female/male, US/UK) generated locally, browser TTS only as fallback; photos from Wikimedia Commons and Pexels (via Apify, ~0.003 $/photo).
 - Adaptive level: every class starts at A1; within a lesson difficulty rises (Coach Says L → Mock Interview L+1 → exit ticket L+2, cap B1); the class level is re-measured from right/wrong answers when a new day starts.
 - Undecided: final hosting choice; home participation design.
 
