@@ -3,14 +3,11 @@
 Tüm görseller serbest lisanslıdır.
 
 - `media/11/engineer.jpg` — Habib M'henni, CC BY 4.0, https://commons.wikimedia.org/wiki/File:Chantier_de_construction,_Monastir,_Tunisie_-_25.jpg
-- `media/11/architect.jpg` — Christian Kussmaul, CC0, https://commons.wikimedia.org/wiki/File:Architectural_drawing_mmbw_spotswood_sewerage_pumping_station.jpg
 - `media/11/surgeon.jpg` — Richard Balikian MD, CC BY 4.0, https://commons.wikimedia.org/wiki/File:Facial_Plastic_Surgeon_in_Operating_Room.jpg
-- `media/11/dentist.jpg` — Marjory Collins, Public domain, https://commons.wikimedia.org/wiki/File:Greenbelt,_Maryland._Dr._McCarl,_Greenbelt_dentist,_treating_a_young_patient.jpg
 - `media/11/vet.jpg` — Nenad Stojkovic, CC BY 2.0, https://commons.wikimedia.org/wiki/File:Close-up_of_a_veterinarian_examining_a_maltese_dog_with_a_stethoscope._(51687314898).jpg
 - `media/11/teacher.jpg` — Harrison Keely, CC BY 4.0, https://commons.wikimedia.org/wiki/File:Students_and_teacher_in_a_high_school_classroom_in_North_Carolina_07.jpg
 - `media/11/coach.jpg` — chester902, Public domain, https://commons.wikimedia.org/wiki/File:Acadia_performance_training_-_Coach_Josh_Nowlan_(51417216775).jpg
 - `media/11/police-officer.jpg` — Cofrades 2020 sevilla, CC BY-SA 4.0, https://commons.wikimedia.org/wiki/File:Police_Officer_with_Full_dress_Uniform_in_Seville,_Spain.jpg
-- `media/11/soldier.jpg` — unattributed, Public domain, https://commons.wikimedia.org/wiki/File:Sgt._Samuel_Smith,_African_American_soldier_in_Union_uniform_with_wife_and_two_daughters.jpg
 - `media/11/firefighter.jpg` — Authors of the study: Yu Yamauchi, Yukihiro Maezawa, Yuichi Ambe, Masashi Konyo, Kenjiro Tadakuma, Satoshi Tadokoro, CC BY 4.0, https://commons.wikimedia.org/wiki/File:Aerial_firefighting_hose_robot_known_as_a_Dragon_Firefighter_(DFF).jpg
 - `media/11/pilot.jpg` — San Diego Air & Space Museum Archives, Public domain, https://commons.wikimedia.org/wiki/File:23_0067987_Convair_Negative_Image_-_Pilot_in_cockpit_window_of_Convair_990_American_Airlines_01-12-1962_(54182196992).jpg
 - `media/11/salary.jpg` — Santeri Viinamäki, CC BY-SA 4.0, https://commons.wikimedia.org/wiki/File:Wallet_and_money_20170827.jpg
@@ -32,6 +29,37 @@ Tüm görseller serbest lisanslıdır.
 Khatri Caste Surnames  book
 ]], CC BY-SA 4.0, https://commons.wikimedia.org/wiki/File:Best_Book_about_Khatri_Caste.jpg
 - `media/12/lyrics.jpg` — dana robinson from los angeles, ca, usa, CC BY-SA 2.0, https://commons.wikimedia.org/wiki/File:String_section_-_mandolin,_lyrics_sheet,_chord_progression_sheet,_resonator_guitar,_electric_guitar,_and_12_string_guitar_(2007-08-18_07.58.04_by_dana_robinson).jpg
-- `media/11/designer.jpg` — Federico Zuccari, CC0, https://commons.wikimedia.org/wiki/File:Drawing_for_a_Memorial_Tablet-_Two_Winged_Children_Holding_an_Empty_Oval_in_a_Frame_with_Gryphons_MET_DP812305.jpg
-- `media/11/accountant.jpg` — Narziss Renner, Public domain, https://commons.wikimedia.org/wiki/File:Fuggerkontor.jpg
 - `media/11/interview.jpg` — President (1981-1989 : Reagan). White House Photographic Office. 1981-1989, Public domain, https://commons.wikimedia.org/wiki/File:President_Ronald_Reagan_in_the_Oval_Office_during_an_Interview_with_George_Will_-_DPLA_-_ef1cc18ace9d2d2787f729001e9d9b80.jpg
+- `media/11/architect.jpg` — Ron Lach , Pexels License, https://www.pexels.com/photo/adult-man-sitting-on-chair-by-deck-and-drawing-9617369/
+- `media/11/accountant.jpg` — MART  PRODUCTION, Pexels License, https://www.pexels.com/photo/a-woman-counting-coins-8872614/
+- `media/11/dentist.jpg` — SHVETS production, Pexels License, https://www.pexels.com/photo/female-dentist-doing-an-examination-on-her-elderly-patient-8413334/
+- `media/11/designer.jpg` — Kawê  Rodrigues, Pexels License, https://www.pexels.com/photo/woman-writing-on-tablet-16313516/
+- `media/11/soldier.jpg` — Wilson Rodriguez, Pexels License, https://www.pexels.com/photo/soldiers-on-plaza-10449786/
+- `media/11/gardening.jpg` — Greta Hoffman , Pexels License, https://www.pexels.com/photo/person-planting-a-green-plant-on-the-soil-7728921/
+- `media/11/calligraphy.jpg` — olia danilevich, Pexels License, https://www.pexels.com/photo/greeting-card-in-close-up-shot-6149064/
+- `media/11/photography.jpg` — Harry Xie, Pexels License, https://www.pexels.com/photo/photographer-in-yellow-jacket-capturing-urban-scene-38690144/
+- `media/11/reading.jpg` —    https://kaboompics.com/, Pexels License, https://www.pexels.com/photo/student-wearing-hood-and-books-in-foreground-6958547/
+- `media/11/cycling.jpg` — João Godoy, Pexels License, https://www.pexels.com/photo/cyclists-racing-in-outdoor-competition-30550026/
+- `media/11/chess.jpg` — William  Fortunato , Pexels License, https://www.pexels.com/photo/unrecognizable-multiracial-men-playing-chess-at-lumber-table-6140933/
+- `media/11/fencing.jpg` — Ron Lach , Pexels License, https://www.pexels.com/photo/two-paralympic-athletes-wearing-fencing-mask-while-sitting-on-wheelchairs-9643399/
+- `media/11/cooking.jpg` — cottonbro studio, Pexels License, https://www.pexels.com/photo/person-in-white-long-sleeve-shirt-slicing-meat-on-brown-wooden-chopping-board-4252138/
+- `media/11/drawing.jpg` — Pavel Danilyuk, Pexels License, https://www.pexels.com/photo/drawings-and-pencils-on-table-6593563/
+- `media/11/swimming.jpg` — Erika  Reyes , Pexels License, https://www.pexels.com/photo/man-swimming-in-pool-18353095/
+- `media/11/science.jpg` — Artem Podrez, Pexels License, https://www.pexels.com/photo/vials-with-liquids-in-holder-8533087/
+- `media/11/skill.jpg` — Los Muertos Crew, Pexels License, https://www.pexels.com/photo/man-in-black-t-shirt-and-blue-denim-jeans-jumping-8895400/
+- `media/11/talent.jpg` — Lukász  Szabó, Pexels License, https://www.pexels.com/photo/young-violinist-performing-in-outdoor-orchestra-32543373/
+- `media/11/hobby.jpg` — Vitaly Gariev, Pexels License, https://www.pexels.com/photo/creative-arts-and-crafts-activity-from-above-36714262/
+- `media/12/loyal.jpg` — Helena Lopes, Pexels License, https://www.pexels.com/photo/girl-and-golden-retriever-enjoying-summer-in-nature-7932720/
+- `media/12/honest.jpg` — Ketut Subiyanto, Pexels License, https://www.pexels.com/photo/man-in-blue-denim-long-sleeve-shirt-drinking-beer-of-clear-drinking-glass-5054696/
+- `media/12/trustworthy.jpg` — William  Fortunato , Pexels License, https://www.pexels.com/photo/smiling-multiracial-friends-greeting-each-other-in-hallway-6140477/
+- `media/12/supportive.jpg` — RDNE Stock project, Pexels License, https://www.pexels.com/photo/people-giving-each-other-a-hug-7551185/
+- `media/12/helpful.jpg` — Allan Mas, Pexels License, https://www.pexels.com/photo/asian-man-helping-friend-to-get-up-from-ground-5368943/
+- `media/12/patient.jpg` — Max Fischer, Pexels License, https://www.pexels.com/photo/teacher-talking-to-the-class-5212340/
+- `media/12/generous.jpg` — cottonbro studio, Pexels License, https://www.pexels.com/photo/people-holding-pizza-slices-6805151/
+- `media/12/kind.jpg` — DRIFTCLICK, Pexels License, https://www.pexels.com/photo/hands-reaching-out-in-dramatic-light-31726301/
+- `media/12/respectful.jpg` — Victor Chijioke, Pexels License, https://www.pexels.com/photo/two-men-shaking-hands-by-the-athletics-track-21418570/
+- `media/12/funny.jpg` — Andrea Piacquadio, Pexels License, https://www.pexels.com/photo/photo-of-women-laughing-while-sitting-near-water-fountain-3768884/
+- `media/12/outgoing.jpg` — Ivan S, Pexels License, https://www.pexels.com/photo/people-talking-to-each-other-while-holding-paper-cups-6968861/
+- `media/12/shy.jpg` — Dwi Woro, Pexels License, https://www.pexels.com/photo/woman-wearing-hijab-covering-her-mouth-4676437/
+- `media/12/jealous.jpg` — Gustavo Fring, Pexels License, https://www.pexels.com/photo/a-woman-throwing-fruits-at-a-man-6870553/
+- `media/12/trust.jpg` — PNW Production, Pexels License, https://www.pexels.com/photo/friends-supporting-each-other-7625036/
