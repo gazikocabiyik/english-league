@@ -6,6 +6,10 @@ import { award } from '../league/award.js';
 
 const PHASE_LABELS = { move: '1 · Hareket', speak: '2 · Konuşma', exit: '3 · Çıkış bileti' };
 
+export function fillFrame(text, word) {
+  return text.replace('___', word).replace(/\s*…\s*$/, '');
+}
+
 function frameParts(text) {
   const [before, after = ''] = text.split('___');
   return [before, h('span', { class: 'blank' }), after];
@@ -57,7 +61,7 @@ export default {
       alive = false;
       document.removeEventListener('keydown', onKey);
       document.removeEventListener('scores-changed', onScores);
-      globalThis.speechSynthesis?.cancel();
+      ctx.sound.stopSpeaking();
     };
 
     function setPhase(p) { session.setPhase(p); answered.clear(); render(true); }
@@ -110,7 +114,7 @@ export default {
             c.reviewOf ? h('span', { class: 'tape review-tag' }, `Tekrar · Ü${c.reviewOf}`) : null,
             h('button', { class: `word${c.word.length > 9 ? ' is-long' : ''}`, lang: 'en', onclick: () => ctx.sound.speak(c.word) }, c.word.toLocaleUpperCase('en')),
             showTr && c.tr ? h('p', { class: 'tr tape' }, c.tr) : null,
-            h('p', { class: 'frame', lang: 'en' }, frameParts(c.frameText)),
+            h('p', { class: 'frame', lang: 'en', onclick: () => ctx.sound.speak(fillFrame(c.frameText, c.word)) }, frameParts(c.frameText)),
             h('button', { class: 'ghost small', onclick: () => { showTr = !showTr; render(false); } }, showTr ? 'Türkçeyi gizle' : 'Türkçe')),
           session.phase === 'speak' ? teamButtons() : studentChips());
         if (announce) ctx.sound.speak(c.word);

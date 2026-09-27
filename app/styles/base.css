@@ -223,3 +223,4 @@ button.wide { min-width: 320px; }
 .mini-door { position: relative; }
 .mini-door .lock { top: 16px; right: 16px; width: 38px; height: 38px; }
 .mini-door .lock .icon { font-size: 30px; }
+.frame { cursor: pointer; }

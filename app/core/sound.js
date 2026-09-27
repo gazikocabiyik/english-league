@@ -1,3 +1,5 @@
+import { audioFor } from './speech-map.js';
+
 let ac;
 
 export function whistle() {
@@ -18,7 +20,7 @@ export function whistle() {
   osc.stop(t + 1.05); lfo.stop(t + 1.05);
 }
 
-export function speak(text, { rate = 0.85 } = {}) {
+function speakSynth(text, { rate = 0.85 } = {}) {
   if (!('speechSynthesis' in window)) return false;
   speechSynthesis.cancel();
   const u = new SpeechSynthesisUtterance(text);
@@ -28,4 +30,24 @@ export function speak(text, { rate = 0.85 } = {}) {
   if (voice) u.voice = voice;
   speechSynthesis.speak(u);
   return true;
+}
+
+// Doğal sesler: manifest'te varsa MP3 çal, yoksa ya da çalamazsa tarayıcı sesine düş.
+let manifest = null;
+fetch('content/audio/manifest.json').then(r => (r.ok ? r.json() : null)).then(m => { manifest = m; }).catch(() => {});
+let current = null;
+
+export function speak(text, opts) {
+  current?.pause();
+  if ('speechSynthesis' in window) speechSynthesis.cancel();
+  const url = audioFor(manifest, text);
+  if (!url) return speakSynth(text, opts);
+  current = new Audio(url);
+  current.play().catch(() => speakSynth(text, opts));
+  return true;
+}
+
+export function stopSpeaking() {
+  current?.pause();
+  if ('speechSynthesis' in window) speechSynthesis.cancel();
 }
