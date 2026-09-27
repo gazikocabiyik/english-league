@@ -1,0 +1,33 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Deneme verisi</title>
+<script>
+  // Görsel kontrol için deneme verisi: ?route=game/mock-interview&level=A1&unit=1&phase=1
+  const p = new URLSearchParams(location.search);
+  const cls = p.get('cls') || '11-L';
+  const state = {
+    version: 1, events: [], attempts: [],
+    classes: { [cls]: {
+      teams: [{ id: 't1', name: 'Lions', color: 'team-1' }, { id: 't2', name: 'Eagles', color: 'team-2' }, { id: 't3', name: 'Wolves', color: 'team-3' }],
+      students: ['Ali', 'Berk', 'Can', 'Deniz', 'Ece', 'Fatih', 'Gizem', 'Hakan', 'İrem'].map((n, i) => ({ id: 's' + i, name: n, teamId: 't' + (i % 3 + 1) })),
+    } },
+    settings: { classList: [cls, '11-S', '12-L'], lastClass: cls, [`unit:${cls}`]: +(p.get('unit') || 1),
+      [`level:${cls}`]: p.get('level') || 'A1', [`levelDay:${cls}`]: new Date().toLocaleDateString('sv-SE'), [`levelSince:${cls}`]: Date.now() },
+  };
+  localStorage.setItem('okul.v1', JSON.stringify(state));
+  // click=".phase-tabs button:nth-child(2)|.nav.next" → uygulama iframe içinde açılır, sırayla tıklanır
+  const clicks = (p.get('click') || '').split('|').filter(Boolean);
+  if (!clicks.length) location.replace('../app/#/' + (p.get('route') || ''));
+  else addEventListener('DOMContentLoaded', () => {
+    const f = document.createElement('iframe');
+    f.style.cssText = 'position:fixed;inset:0;width:100%;height:100%;border:0';
+    f.src = '../app/#/' + (p.get('route') || '');
+    document.body.append(f);
+    f.onload = async () => {
+      const wait = ms => new Promise(r => setTimeout(r, ms));
+      await wait(800);
+      for (const sel of clicks) { f.contentDocument.querySelector(sel)?.click(); await wait(300); }
+    };
+  });
+</script>
+<body style="margin:0">

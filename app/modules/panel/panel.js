@@ -31,7 +31,7 @@ export default {
           }, String(n))))),
       cls.teams.length ? null : h('p', { class: 'tape callout' }, 'Bu sınıfta henüz takım yok. ', h('a', { href: '#/setup' }, 'Takımları kur')),
       h('div', { class: 'tiles' },
-        games.map((g, i) => h('button', { class: `tile game${i === 0 ? ' primary' : ''}`, onclick: () => ctx.go(`#/game/${g.id}`) }, icon(GAME_ICONS[g.id] ?? 'play'), g.title)),
+        games.map((g, i) => h('button', { class: `tile game${i === 0 ? ' primary' : ''}`, onclick: () => ctx.go(`#/game/${g.id}`) }, icon(GAME_ICONS[g.id] ?? 'play'), h('span', { lang: 'en' }, g.title.toLocaleUpperCase('en')))),
         h('button', { class: 'tile', onclick: () => ctx.go('#/league') }, icon('trophy'), 'Lig'),
         h('button', { class: 'tile', onclick: () => ctx.go('#/setup') }, icon('users-three'), 'Takımlar')),
       week.length ? h('button', { class: 'mini-league', 'aria-label': 'Bu haftanın takım ligi', onclick: () => ctx.go('#/league') },

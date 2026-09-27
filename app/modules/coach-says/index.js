@@ -8,7 +8,9 @@ import { award } from '../league/award.js';
 
 const PHASE_LABELS = { move: '1 · Hareket', speak: '2 · Konuşma', exit: '3 · Çıkış bileti' };
 
-function frameParts(text) {
+// Ekranda kelime görünür, bu yüzden a/an doğru artikelle gösterilir
+function frameParts(text, word = '') {
+  text = text.replace('a/an ___', `${/^[aeiou]/i.test(word) ? 'an' : 'a'} ___`);
   const [before, after = ''] = text.split('___');
   return [before, h('span', { class: 'blank' }), after];
 }
@@ -124,7 +126,7 @@ export default {
             h('button', { class: `word${c.word.length > 9 ? ' is-long' : ''}`, lang: 'en', onclick: () => ctx.sound.speak(c.word) }, c.word.toLocaleUpperCase('en')),
             showTr && c.tr ? h('p', { class: 'tr tape' }, c.tr) : null,
             session.level === 'B1' && unit.b1Extend ? h('span', { class: 'tape hint-chip', lang: 'en' }, unit.b1Extend) : null,
-            h('p', { class: 'frame', lang: 'en', onclick: () => ctx.sound.speak(fillFrame(c.frameText, c.word)) }, frameParts(c.frameText)),
+            h('p', { class: `frame${c.frameText.length > 34 ? ' is-long' : ''}`, lang: 'en', onclick: () => ctx.sound.speak(fillFrame(c.frameText, c.word)) }, frameParts(c.frameText, c.word)),
             h('button', { class: 'ghost small', onclick: () => { showTr = !showTr; render(false); } }, showTr ? 'Türkçeyi gizle' : 'Türkçe')),
           session.phase === 'speak' ? teamButtons() : studentChips());
         if (announce) ctx.sound.speak(c.word);
