@@ -17,3 +17,12 @@ export function buildDeck(n, repeats = 3, rng = Math.random) {
   }
   return out;
 }
+
+// Yeni kelimeler (0..n-1) 3'er kez, tekrar kelimeleri (n..n+r-1) birer kez araya serpiştirilir.
+export function buildMixedDeck(newCount, reviewCount, rng = Math.random) {
+  const deck = buildDeck(newCount, 3, rng);
+  for (let k = newCount; k < newCount + reviewCount; k++) {
+    deck.splice(Math.floor(rng() * (deck.length + 1)), 0, k);
+  }
+  return deck;
+}

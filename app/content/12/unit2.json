@@ -1,0 +1,161 @@
+{
+  "grade": 12,
+  "unit": 2,
+  "title": "Friendship",
+  "frames": [
+    "A good friend is ___.",
+    "My best friend is very ___.",
+    "A bad friend is ___.",
+    "Friendship needs ___."
+  ],
+  "vocab": [
+    {
+      "word": "loyal",
+      "tr": "sadık",
+      "img": "media/12/loyal.jpg",
+      "frame": 0,
+      "q": "loyal friends together"
+    },
+    {
+      "word": "honest",
+      "tr": "dürüst",
+      "img": "media/12/honest.jpg",
+      "frame": 0,
+      "q": "honest conversation friends"
+    },
+    {
+      "word": "trustworthy",
+      "tr": "güvenilir",
+      "img": "media/12/trustworthy.jpg",
+      "frame": 0,
+      "q": "friends trust handshake"
+    },
+    {
+      "word": "supportive",
+      "tr": "destekleyici",
+      "img": "media/12/supportive.jpg",
+      "frame": 0,
+      "q": "teammates supporting each other"
+    },
+    {
+      "word": "helpful",
+      "tr": "yardımsever",
+      "img": "media/12/helpful.jpg",
+      "frame": 0,
+      "q": "helping friend up"
+    },
+    {
+      "word": "patient",
+      "tr": "sabırlı",
+      "img": "media/12/patient.jpg",
+      "frame": 0,
+      "q": "patient teacher explaining"
+    },
+    {
+      "word": "generous",
+      "tr": "cömert",
+      "img": "media/12/generous.jpg",
+      "frame": 0,
+      "q": "sharing food friends"
+    },
+    {
+      "word": "kind",
+      "tr": "nazik",
+      "img": "media/12/kind.jpg",
+      "frame": 0,
+      "q": "kind gesture helping"
+    },
+    {
+      "word": "respectful",
+      "tr": "saygılı",
+      "img": "media/12/respectful.jpg",
+      "frame": 0,
+      "q": "respect handshake athletes"
+    },
+    {
+      "word": "funny",
+      "tr": "komik",
+      "img": "media/12/funny.jpg",
+      "frame": 1,
+      "q": "friends laughing together"
+    },
+    {
+      "word": "outgoing",
+      "tr": "dışa dönük",
+      "img": "media/12/outgoing.jpg",
+      "frame": 1,
+      "q": "outgoing teenagers party"
+    },
+    {
+      "word": "shy",
+      "tr": "utangaç",
+      "img": "media/12/shy.jpg",
+      "frame": 1,
+      "q": "shy teenager"
+    },
+    {
+      "word": "jealous",
+      "tr": "kıskanç",
+      "img": "media/12/jealous.jpg",
+      "frame": 2,
+      "q": "jealous person"
+    },
+    {
+      "word": "trust",
+      "tr": "güven",
+      "img": "media/12/trust.jpg",
+      "frame": 3,
+      "q": "trust fall teamwork"
+    }
+  ],
+  "commands": [
+    {
+      "text": "Coach says: high-five your teammate!",
+      "safe": true
+    },
+    {
+      "text": "Coach says: help a friend stand up!",
+      "safe": true
+    },
+    {
+      "text": "Coach says: shake hands with a classmate!",
+      "safe": true
+    },
+    {
+      "text": "Coach says: smile like a friendly person!",
+      "safe": true
+    },
+    {
+      "text": "Coach says: be patient! Count to five!",
+      "safe": true
+    },
+    {
+      "text": "Coach says: share your water bottle!",
+      "safe": true
+    },
+    {
+      "text": "Coach says: give a thumbs up to your team!",
+      "safe": true
+    },
+    {
+      "text": "Coach says: laugh like a funny friend!",
+      "safe": true
+    },
+    {
+      "text": "Hug your teammate!",
+      "safe": false
+    },
+    {
+      "text": "Be shy! Hide your face!",
+      "safe": false
+    },
+    {
+      "text": "Clap for your friend!",
+      "safe": false
+    },
+    {
+      "text": "Wave to a classmate!",
+      "safe": false
+    }
+  ]
+}

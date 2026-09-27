@@ -1,5 +1,6 @@
 import { h, icon } from '../../core/dom.js';
-import { loadUnit } from '../../core/content.js';
+import { loadIndex, loadUnit } from '../../core/content.js';
+import { reviewPlan, pickReview } from '../../core/spiral.js';
 import { createSession, PHASES } from './session.js';
 import { award } from '../league/award.js';
 
@@ -27,7 +28,14 @@ export default {
       return;
     }
 
-    const session = createSession(unit);
+    // Sarmal tekrar: önceki ünitelerden kelimeler konuşma turuna karışır
+    const available = (await loadIndex())[ctx.grade] ?? [];
+    const plan = reviewPlan(ctx.unit, 8).filter(p => available.includes(p.unit));
+    const loaded = await Promise.all(plan.map(p => loadUnit(ctx.grade, p.unit)));
+    if (!alive) return;
+    const unitsByNo = Object.fromEntries(loaded.filter(r => r.unit).map(r => [r.unit.unit, r.unit]));
+    const review = pickReview(plan, unitsByNo, { exclude: unit.vocab.map(v => v.word) });
+    const session = createSession(unit, { review });
     const cls = ctx.store.getClass(ctx.classId);
     const answered = new Set(); // çıkış biletinde bu kelimede puan alanlar
     let showTr = false;
@@ -99,6 +107,7 @@ export default {
         stage = h('div', { class: 'stage stage-word' },
           img,
           h('div', { class: 'word-side' },
+            c.reviewOf ? h('span', { class: 'tape review-tag' }, `Tekrar · Ü${c.reviewOf}`) : null,
             h('button', { class: `word${c.word.length > 9 ? ' is-long' : ''}`, lang: 'en', onclick: () => ctx.sound.speak(c.word) }, c.word.toLocaleUpperCase('en')),
             showTr && c.tr ? h('p', { class: 'tr tape' }, c.tr) : null,
             h('p', { class: 'frame', lang: 'en' }, frameParts(c.frameText)),

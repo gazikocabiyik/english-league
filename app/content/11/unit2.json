@@ -1,0 +1,162 @@
+{
+  "grade": 11,
+  "unit": 2,
+  "title": "Hobbies and Skills",
+  "frames": [
+    "My hobby is ___.",
+    "I'm good at ___.",
+    "I'm interested in ___.",
+    "I have a special ___.",
+    "What is your favourite ___?"
+  ],
+  "vocab": [
+    {
+      "word": "gardening",
+      "tr": "bahçıvanlık",
+      "img": "media/11/gardening.jpg",
+      "frame": 0,
+      "q": "person gardening planting"
+    },
+    {
+      "word": "calligraphy",
+      "tr": "hat sanatı",
+      "img": "media/11/calligraphy.jpg",
+      "frame": 0,
+      "q": "calligraphy pen writing"
+    },
+    {
+      "word": "photography",
+      "tr": "fotoğrafçılık",
+      "img": "media/11/photography.jpg",
+      "frame": 0,
+      "q": "photographer camera outdoors"
+    },
+    {
+      "word": "reading",
+      "tr": "okuma",
+      "img": "media/11/reading.jpg",
+      "frame": 0,
+      "q": "teenager reading book"
+    },
+    {
+      "word": "cycling",
+      "tr": "bisiklet sürme",
+      "img": "media/11/cycling.jpg",
+      "frame": 0,
+      "q": "cyclist road bike"
+    },
+    {
+      "word": "chess",
+      "tr": "satranç",
+      "img": "media/11/chess.jpg",
+      "frame": 0,
+      "q": "chess game players"
+    },
+    {
+      "word": "fencing",
+      "tr": "eskrim",
+      "img": "media/11/fencing.jpg",
+      "frame": 1,
+      "q": "fencing sport athletes"
+    },
+    {
+      "word": "cooking",
+      "tr": "yemek yapma",
+      "img": "media/11/cooking.jpg",
+      "frame": 1,
+      "q": "cooking kitchen"
+    },
+    {
+      "word": "drawing",
+      "tr": "resim çizme",
+      "img": "media/11/drawing.jpg",
+      "frame": 1,
+      "q": "drawing sketch pencil"
+    },
+    {
+      "word": "swimming",
+      "tr": "yüzme",
+      "img": "media/11/swimming.jpg",
+      "frame": 1,
+      "q": "swimmer pool"
+    },
+    {
+      "word": "science",
+      "tr": "bilim",
+      "img": "media/11/science.jpg",
+      "frame": 2,
+      "q": "science laboratory experiment"
+    },
+    {
+      "word": "skill",
+      "tr": "beceri",
+      "img": "media/11/skill.jpg",
+      "frame": 3,
+      "q": "juggling skill"
+    },
+    {
+      "word": "talent",
+      "tr": "yetenek",
+      "img": "media/11/talent.jpg",
+      "frame": 3,
+      "q": "talented young musician"
+    },
+    {
+      "word": "hobby",
+      "tr": "hobi",
+      "img": "media/11/hobby.jpg",
+      "frame": 4,
+      "q": "hobbies crafts"
+    }
+  ],
+  "commands": [
+    {
+      "text": "Coach says: swim like a champion!",
+      "safe": true
+    },
+    {
+      "text": "Coach says: ride a bike!",
+      "safe": true
+    },
+    {
+      "text": "Coach says: take a photo!",
+      "safe": true
+    },
+    {
+      "text": "Coach says: cook a meal!",
+      "safe": true
+    },
+    {
+      "text": "Coach says: draw a circle in the air!",
+      "safe": true
+    },
+    {
+      "text": "Coach says: read a book!",
+      "safe": true
+    },
+    {
+      "text": "Coach says: move like a fencer!",
+      "safe": true
+    },
+    {
+      "text": "Coach says: plant a tree like a gardener!",
+      "safe": true
+    },
+    {
+      "text": "Play chess!",
+      "safe": false
+    },
+    {
+      "text": "Take a selfie!",
+      "safe": false
+    },
+    {
+      "text": "Swim to the door!",
+      "safe": false
+    },
+    {
+      "text": "Paint a picture!",
+      "safe": false
+    }
+  ]
+}
