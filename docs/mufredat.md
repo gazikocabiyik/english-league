@@ -47,3 +47,6 @@ Format: 1 ünite ≈ 3-4 hafta × 4 saat. Her ünite = 1 **Mission** (takım) + 
 ## Faz 4'e devreden
 - Her ünite JSON paketi: `vocab[]`, `prompts[]` (konuşma soruları), `mission` (kurallar ve puanlama), `solo[]`.
 - Önce **11/Ü1 ve 12/Ü1** paketleri hazırlanacak (pilot).
+
+## Sarmal tekrar (Faz 4)
+Her ünitenin kelimeleri sonraki ünitelerde bilgi yoklaması olarak geri gelir: bir sonraki ünite yeni kelime sayısının **%30**'u, iki sonraki **%10**'u, daha sonrakilerin her biri **%5**'i kadar (yeni kelimelerin üstüne eklenir; küçük %5 payları toplanıp rastgele eski ünitelere dağıtılır). Tekrar kartları Coach Says konuşma turunda bir kez gelir. Kod: `app/core/spiral.js`.

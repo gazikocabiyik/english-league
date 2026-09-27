@@ -27,6 +27,7 @@ Rules: team colour always appears as a solid door block with the team name/numbe
 
 ## Components
 - **Locker** (class select): tall door, stencil grade number, display section letter, handle, tape label with counts; last-used door is yellow.
+- **Lock & key** (`lockKey()` in `app/core/dom.js`): brushed-metal cylinder (radial gradient as material) with a brass Phosphor *key-fill* at the top corner of every locker and team door. Not on small league-row blocks.
 - **Door block** (`.door`): team colour square with stencil number, used in league rows, setup, mini-league.
 - **Tape** (`.tape`): paper label with soft shadow; toasts, Turkish meaning, counts, callouts.
 - **Phase fields** (Coach Says): move = full yellow field, speak = steel + real photo, exit = tape-paper field.
@@ -35,5 +36,5 @@ Rules: team colour always appears as a solid door block with the team name/numbe
 ## Motion
 One signature moment: awarding points stamps the stencil number (scale 1.6 → 1, rotate −4°, 450 ms ease-out) and league rows slide to their new rank (FLIP, 420 ms). Time-up flashes the page red. All disabled under `prefers-reduced-motion`.
 
-## Imagery & icons
-Real, freely licensed photos only (`app/content/media/`, credits in `CREDITS.md`); no AI imagery. Icons: Phosphor Bold via CSS mask (`app/styles/icons.css`), no emoji.
+## Imagery, icons & voice
+Real, freely licensed photos only (`app/content/media/`, credits in `CREDITS.md`): Wikimedia Commons and Pexels (via Apify); no AI imagery. Review cards carry a tape badge "Tekrar · Ü<n>". Voice: pre-rendered Kokoro MP3s alternating af_heart / am_michael / bf_emma / bm_george at 0.9 speed; browser TTS only as fallback. Icons: Phosphor Bold via CSS mask (`app/styles/icons.css`), no emoji.
