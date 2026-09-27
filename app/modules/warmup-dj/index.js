@@ -4,6 +4,12 @@ import { lessonLevels } from '../../core/levels.js';
 import { award } from '../league/award.js';
 import { createDJ } from './dj.js';
 
+// "___" boşluğu sarı çizgi olarak gösterilir
+function withBlank(text) {
+  const [a, b] = text.split('___');
+  return b === undefined ? [text] : [a, h('span', { class: 'blank' }), b];
+}
+
 export default {
   id: 'warmup-dj',
   title: 'Warm-up DJ',
@@ -97,7 +103,7 @@ export default {
       }, h('img', { src: `content/${g.img}`, alt: '' }), h('span', {}, g.word.toLocaleUpperCase('en')))));
 
       const lines = choosing
-        ? h('p', { class: 'frame', lang: 'en' }, dj.line())
+        ? h('p', { class: 'frame', lang: 'en' }, ...withBlank(dj.line()))
         : h('div', { class: 'replies' },
           h('p', { class: 'said', lang: 'en' }, `${dj.chooser.name}: ${unit.dj.lines[dj.level].choose.replace('___', dj.genre)}`),
           dj.line().map(r => h('p', { class: 'frame', lang: 'en' }, r)));

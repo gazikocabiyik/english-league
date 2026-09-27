@@ -320,3 +320,6 @@ button.wide { min-width: 320px; }
 .playlist-list li::before { content: counter(track, decimal-leading-zero); font: 900 1em/1 var(--font-stencil); color: var(--team-1); }
 .pl-genre { font: 900 1.1em/1 var(--font-display); }
 .pl-by { color: #5b636c; }
+.tiles > .tile { min-width: 0; font-size: min(var(--step-2), 6vh); hyphens: none; overflow-wrap: normal; }
+.tiles > .tile.primary { font-size: min(var(--step-3), 8vh); }
+.tiles > .tile.game:not(.primary) { font-size: min(var(--step-2), 6vh); }
