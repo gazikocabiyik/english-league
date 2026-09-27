@@ -118,7 +118,7 @@ export default {
     let reveal = false; // öğretmen "Cevabı göster" dedi mi
     const gapCache = new Map();
     let summary = iv.allCandidatesDone && candidatesToday.length > 0; // bugün herkes zaten aday olduysa özetle başla
-    const nextActivity = () => ctx.go('#/game/coach-says/exit'); // ders akışı: ünite görevi → çıkış bileti
+    const nextActivity = () => ctx.finishActivity('#/game/coach-says/exit'); // ders planı ya da serbest akış: çıkış bileti
 
     function finishedScreen() {
       const todays = ctx.store.attemptsOf(ctx.classId, { since: dayStart.getTime() }).filter(a => a.activity === 'interview');
@@ -129,7 +129,7 @@ export default {
         h('p', { class: 'hired-line' }, `Şube mülakatları bitti: ${cands} aday · doğru oranı %${rate}`),
         h('div', { class: 'today-actions' },
           h('button', { class: 'ghost', onclick: () => { summary = false; nextRound(); } }, 'Bir tur daha'),
-          h('button', { class: 'go wide', onclick: nextActivity }, 'Sıradaki etkinlik: Çıkış bileti ', icon('caret-right'))));
+          h('button', { class: 'go wide', onclick: nextActivity }, 'Sıradaki etkinlik ', icon('caret-right'))));
     }
 
     function render(announce) {

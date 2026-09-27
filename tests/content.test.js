@@ -140,3 +140,27 @@ test('content: 11/Ü1 mülakat havuzu her seviyede 12 soru, aday başına 3', as
   eq(['A1', 'A2', 'B1'].map(L => u.interview.questions[L].length), [12, 12, 12]);
   eq(u.interview.perCandidate, 3);
 });
+
+test('content: ders planı, video, kitap ve şarkı referansları doğrulanır', () => {
+  const u = good();
+  const qs = { A1: [{ q: 'Q?', a: 'A.' }], A2: [{ q: 'Q?', a: 'A.' }], B1: [{ q: 'Q?', a: 'A.' }] };
+  u.media = { videos: [{ id: 'v1', youtubeId: 'abc123DEF45', title: 'T', predict: 'P?', questions: qs }] };
+  u.book = [{ id: 'b1', page: 13, title: 'T', instruction: 'I', items: [{ text: 'X.', answer: true }, { q: 'Y?', a: 'Z.' }] }];
+  u.songs = [{ id: 's1', title: 'S', artist: 'A', lyricsTrainingUrl: 'https://lyricstraining.com/play/x', why: 'W' }];
+  u.lessons = [{ title: 'Ders 1', steps: [{ type: 'attendance' }, { type: 'coach', phase: 'move' }, { type: 'video', id: 'v1' }, { type: 'book', id: 'b1' }, { type: 'song', id: 's1' }, { type: 'boss' }, { type: 'exit' }] }];
+  eq(validateUnit(u), []);
+  u.lessons[0].steps.push({ type: 'video', id: 'yok' }, { type: 'dance' }, { type: 'coach', phase: 'jump' });
+  u.songs[0].lyricsTrainingUrl = 'http://evil.example';
+  const errs = validateUnit(u);
+  ok(errs.some(e => e.includes('yok')), 'olmayan video');
+  ok(errs.some(e => e.includes('dance')), 'bilinmeyen adım');
+  ok(errs.some(e => e.includes('jump')), 'bilinmeyen tur');
+  ok(errs.some(e => e.includes('lyricstraining')), 'şarkı bağlantısı');
+});
+
+test('content: pilot 1. ünitelerde 4 derslik plan var', async () => {
+  for (const g of [11, 12]) {
+    const u = await readJson(`content/${g}/unit1.json`);
+    eq(u.lessons?.length, 4, `${g}/1`);
+  }
+});

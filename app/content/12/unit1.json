@@ -310,5 +310,294 @@
         ]
       }
     }
-  }
+  },
+  "media": {
+    "videos": [
+      {
+        "id": "v1",
+        "youtubeId": "y9Cb0Qd3JIQ",
+        "start": 0,
+        "end": 240,
+        "title": "Music genres + guess the genre",
+        "source": "Caribou English",
+        "predict": "What kind of music do you listen to before a match?",
+        "questions": {
+          "A1": [
+            {
+              "q": "Name one music genre from the video.",
+              "a": "Rock / pop / jazz …"
+            },
+            {
+              "q": "Do you like rock music?",
+              "a": "Yes, I do. / No, I don't."
+            },
+            {
+              "q": "Is classical music loud or calm?",
+              "a": "It's calm."
+            }
+          ],
+          "A2": [
+            {
+              "q": "Which genre do you prefer? Why?",
+              "a": "I prefer … because it's …"
+            },
+            {
+              "q": "Which genre is good for a warm-up?",
+              "a": "I think … is good for a warm-up."
+            },
+            {
+              "q": "Which genre is not good for studying?",
+              "a": "I think … is not good for studying."
+            }
+          ],
+          "B1": [
+            {
+              "q": "Which genre in the video would you never listen to? Why?",
+              "a": "I'd never listen to … because …"
+            },
+            {
+              "q": "Does music help athletes? Why?",
+              "a": "I believe music helps athletes because …"
+            },
+            {
+              "q": "Compare two genres from the video.",
+              "a": "… is more … than …"
+            }
+          ]
+        }
+      },
+      {
+        "id": "v2",
+        "youtubeId": "eqdq1L84osU",
+        "start": 0,
+        "end": 180,
+        "title": "Agreeing and disagreeing",
+        "source": "7ESL Learning English",
+        "predict": "How do you say 'Katılıyorum' in English?",
+        "questions": {
+          "A1": [
+            {
+              "q": "How do you say 'Katılıyorum'?",
+              "a": "I agree."
+            },
+            {
+              "q": "How do you say 'Katılmıyorum'?",
+              "a": "I disagree."
+            },
+            {
+              "q": "Rap is the best music. Do you agree?",
+              "a": "I agree. / I disagree."
+            }
+          ],
+          "A2": [
+            {
+              "q": "Say it politely: I disagree.",
+              "a": "I'm afraid I disagree."
+            },
+            {
+              "q": "Rock is good for a match. Do you agree? Why?",
+              "a": "I agree because …"
+            },
+            {
+              "q": "Classical music is boring. Do you agree?",
+              "a": "I disagree because …"
+            }
+          ],
+          "B1": [
+            {
+              "q": "Give a polite way to disagree.",
+              "a": "I see your point, but …"
+            },
+            {
+              "q": "Music is important for athletes. Do you agree? Why?",
+              "a": "Absolutely, because …"
+            },
+            {
+              "q": "Loud music is bad for studying. Agree or disagree?",
+              "a": "I partly agree, because …"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "book": [
+    {
+      "id": "b1",
+      "page": 17,
+      "title": "Three high school students",
+      "instruction": "Kitabın Theme 1 okuma sayfasını açın: 9. etkinlik (üç lise öğrencisi ve müzik). Öğretmen kitabında s.17 — öğrenci kitabındaki sayfayı kontrol edin. Okuyun, sonra takımlar yarışsın.",
+      "items": [
+        {
+          "text": "Moaz listens to rap and hip hop.",
+          "answer": true
+        },
+        {
+          "text": "Moaz thinks all rap songs have bad words.",
+          "answer": false
+        },
+        {
+          "text": "Yasemin listens to ethnic music because it makes her calm.",
+          "answer": true
+        },
+        {
+          "text": "One student plays the electric guitar.",
+          "answer": true
+        },
+        {
+          "text": "The violin player loves loud music.",
+          "answer": false
+        },
+        {
+          "q": "Which student are you most like? Why?",
+          "a": "I'm like … because I also …"
+        }
+      ]
+    },
+    {
+      "id": "b2",
+      "page": 12,
+      "title": "Music survey",
+      "instruction": "Kitabın Theme 1 başındaki müzik anketini açın (2. etkinlik). Öğretmen kitabında s.12 — öğrenci kitabındaki sayfayı kontrol edin. Soruları takımlar cevaplasın.",
+      "items": [
+        {
+          "q": "How many hours a day do you listen to music?",
+          "a": "I listen to music for about … hours."
+        },
+        {
+          "q": "What kind of music do you prefer?",
+          "a": "I prefer … music."
+        },
+        {
+          "q": "Can you play an instrument?",
+          "a": "Yes, I can play the … / No, I can't."
+        },
+        {
+          "text": "Most students listen to music while they study.",
+          "answer": true
+        },
+        {
+          "q": "What music do you listen to before a match?",
+          "a": "Before a match, I listen to …"
+        },
+        {
+          "q": "Do you agree: 'Music makes us better athletes'?",
+          "a": "I agree / I disagree because …"
+        }
+      ]
+    }
+  ],
+  "songs": [
+    {
+      "id": "s1",
+      "title": "We Will Rock You",
+      "artist": "Queen",
+      "lyricsTrainingUrl": "https://lyricstraining.com/play/queen/we-will-rock-you/UzhbW8nMCz",
+      "why": "Stadyum şarkısı: kolay sözler, ritim ve takım ruhu. Music ünitesinde tür ve görüş konuşmasına geçiş.",
+      "minutes": 4
+    },
+    {
+      "id": "s2",
+      "title": "Eye of the Tiger",
+      "artist": "Survivor",
+      "lyricsTrainingUrl": "https://lyricstraining.com/play/survivor/eye-of-the-tiger/HK5ofqYUQK",
+      "why": "Rocky filmi, motivasyon ve antrenman müziği.",
+      "minutes": 4
+    }
+  ],
+  "lessons": [
+    {
+      "title": "Ders 1 · Meet the words",
+      "steps": [
+        {
+          "type": "attendance"
+        },
+        {
+          "type": "coach",
+          "phase": "move"
+        },
+        {
+          "type": "coach",
+          "phase": "speak"
+        },
+        {
+          "type": "book",
+          "id": "b1"
+        },
+        {
+          "type": "exit"
+        }
+      ]
+    },
+    {
+      "title": "Ders 2 · Watch & talk",
+      "steps": [
+        {
+          "type": "attendance"
+        },
+        {
+          "type": "coach",
+          "phase": "move"
+        },
+        {
+          "type": "video",
+          "id": "v1"
+        },
+        {
+          "type": "mission"
+        },
+        {
+          "type": "exit"
+        }
+      ]
+    },
+    {
+      "title": "Ders 3 · Read, watch, sing",
+      "steps": [
+        {
+          "type": "attendance"
+        },
+        {
+          "type": "book",
+          "id": "b2"
+        },
+        {
+          "type": "video",
+          "id": "v2"
+        },
+        {
+          "type": "mission"
+        },
+        {
+          "type": "song",
+          "id": "s1"
+        },
+        {
+          "type": "exit"
+        }
+      ]
+    },
+    {
+      "title": "Ders 4 · Boss day",
+      "steps": [
+        {
+          "type": "attendance"
+        },
+        {
+          "type": "coach",
+          "phase": "speak"
+        },
+        {
+          "type": "boss"
+        },
+        {
+          "type": "song",
+          "id": "s1"
+        },
+        {
+          "type": "exit"
+        }
+      ]
+    }
+  ]
 }

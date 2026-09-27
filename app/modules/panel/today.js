@@ -16,7 +16,7 @@ export default {
       persist();
       ctx.store.setAbsent(ctx.classId, [...absent]);
       toast(`Bugün ${students.length - absent.size} öğrenci derste`);
-      ctx.go('#/panel');
+      ctx.finishActivity('#/panel'); // ders planındaysa sıradaki adıma
     }
 
     function card(s) {

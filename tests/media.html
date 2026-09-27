@@ -1,0 +1,41 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Medya incelemesi</title>
+<style>
+  body { font: 17px system-ui; margin: 24px; background: #15181c; color: #eee; }
+  h2 { margin-top: 36px; } .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(420px, 1fr)); gap: 20px; }
+  figure { margin: 0; background: #22272e; padding: 12px; border-radius: 8px; } iframe { width: 100%; aspect-ratio: 16/9; border: 0; }
+  figcaption { padding-top: 8px; line-height: 1.4; } b { color: #ffd21f; } a { color: #8ab4ff; }
+</style>
+<h1>Ünite 1 · aday videolar ve şarkılar</h1>
+<p>Beğendiklerinin <b>kodunu</b> (ör. 11-v1) sohbete yaz. İstersen başlangıç–bitiş saniyesini de belirt.</p>
+<div id="out"></div>
+<script>
+  const C = {
+    '11 · Future Jobs — video': [
+      ['11-v1', 'yzLh9Y9oOmA', 'Jobs vocabulary with sentences (Rock Rabbit English)', 'Meslekler + "what do they do?" — kelime girdisi'],
+      ['11-v2', 'j2I0p4GMcNw', '60+ jobs, listening quiz (Tom\'s Magic English)', 'Dinleme + tahmin — kelime tekrarı'],
+      ['11-v3', 'x8tF2aQoukY', 'Jobs and occupations (Easy English)', 'Kısa, resimli meslek adları'],
+      ['11-v4', '-8660VeIj4U', 'Present continuous and going to (BBC Learning English)', 'Kazanım: going to ile gelecek planı'],
+      ['11-v5', 'elPHkXNxi2g', 'How to talk about the future (BBC Learning English)', 'Kazanım: going to / will'],
+      ['11-v6', '79Yxp84s0KI', 'Future plans conversation (English Panda)', 'Kazanım: diyalogda gelecek planları'],
+    ],
+    '12 · Music — video': [
+      ['12-v1', 'y9Cb0Qd3JIQ', 'Music genres + guess the genre quiz (Caribou English)', 'Tür adları + dinleyip tahmin'],
+      ['12-v2', 'mOHX1ADX1Pg', 'Music genres in English (CodeLucky)', 'Türler, sade anlatım'],
+      ['12-v3', 'w_TShynxcek', 'Music genres — likes/dislikes (Teacher Belen)', 'Kazanım: tercih belirtme'],
+      ['12-v4', 'eqdq1L84osU', 'Agreement and disagreement (7ESL)', 'Kazanım: katılma/katılmama'],
+    ],
+  };
+  const S = [
+    ['11-s1', 'Hall of Fame — The Script ft. will.i.am', 'https://lyricstraining.com/play/the-script-william/hall-of-fame/H8nMdGu2S8', 'Hayaller, gelecek, sporcu olmak (Future Jobs)'],
+    ['12-s1', 'We Will Rock You — Queen', 'https://lyricstraining.com/play/queen/we-will-rock-you/UzhbW8nMCz', 'Stadyum şarkısı, kolay sözler (Music)'],
+    ['12-s2', 'Eye of the Tiger — Survivor', 'https://lyricstraining.com/play/survivor/eye-of-the-tiger/HK5ofqYUQK', 'Rocky, motivasyon (Music)'],
+  ];
+  const out = document.getElementById('out');
+  for (const [title, list] of Object.entries(C)) {
+    out.insertAdjacentHTML('beforeend', `<h2>${title}</h2><div class="grid">${list.map(([code, id, name, why]) =>
+      `<figure><iframe src="https://www.youtube-nocookie.com/embed/${id}" allowfullscreen></iframe><figcaption><b>${code}</b> · ${name}<br>${why}</figcaption></figure>`).join('')}</div>`);
+  }
+  out.insertAdjacentHTML('beforeend', `<h2>Şarkı molası (LyricsTraining, yeni sekmede açılır)</h2><ul>${S.map(([c, n, u, w]) => `<li><b>${c}</b> · <a href="${u}" target="_blank" rel="noopener">${n}</a> — ${w}</li>`).join('')}</ul>`);
+</script>

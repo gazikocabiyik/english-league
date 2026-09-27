@@ -9,6 +9,8 @@ import setup from './modules/panel/setup.js';
 import today from './modules/panel/today.js';
 import league from './modules/league/league.js';
 import { games } from './modules/registry.js';
+import { loadUnit } from './core/content.js';
+import { advance, normalize, stepRoute } from './core/lesson-plan.js';
 
 const store = createStore();
 const view = document.getElementById('view');
@@ -23,6 +25,33 @@ const ctx = {
   get classId() { return store.getSetting('lastClass'); },
   get grade() { return Number(String(store.getSetting('lastClass') ?? '').slice(0, 2)); },
   get unit() { return store.getSetting(`unit:${store.getSetting('lastClass')}`, 1); },
+  // Ders planı: "Derse başla" ile başlar; her etkinlik bitince finishActivity plandaki sıradaki adıma gider
+  inLesson() { return store.getSetting(`lessonRun:${ctx.classId}`)?.unit === ctx.unit; },
+  lessonProgress() { return store.getSetting(`lesson:${ctx.classId}:${ctx.unit}`, { lesson: 0, step: 0 }); },
+  async startLesson() {
+    const { unit } = await loadUnit(ctx.grade, ctx.unit);
+    if (!unit?.lessons) return;
+    const p = normalize(unit, ctx.lessonProgress());
+    if (p.unitDone) return;
+    store.setSetting(`lesson:${ctx.classId}:${ctx.unit}`, { lesson: p.lesson, step: p.step });
+    store.setSetting(`lessonRun:${ctx.classId}`, { unit: ctx.unit });
+    ctx.go(stepRoute(unit.lessons[p.lesson].steps[p.step], unit));
+  },
+  // fallback: ders planı dışında (serbest etkinlik) gidilecek yer
+  async finishActivity(fallback = '#/panel') {
+    if (!ctx.inLesson()) { ctx.go(fallback); return; }
+    const { unit } = await loadUnit(ctx.grade, ctx.unit);
+    if (!unit?.lessons) { ctx.go(fallback); return; }
+    const next = advance(unit, ctx.lessonProgress());
+    store.setSetting(`lesson:${ctx.classId}:${ctx.unit}`, { lesson: next.lesson, step: next.step });
+    if (next.lessonDone || next.unitDone) {
+      store.setSetting(`lessonRun:${ctx.classId}`, null);
+      toast(next.unitDone ? 'Ünite tamamlandı!' : `Ders ${next.lesson} bitti`);
+      ctx.go('#/league');
+      return;
+    }
+    ctx.go(stepRoute(unit.lessons[next.lesson].steps[next.step], unit));
+  },
 };
 
 // Sonraki görevler bu tabloya satır ekler.

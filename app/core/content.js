@@ -80,6 +80,29 @@ export function validateUnit(u) {
       if (blanks(l?.choose) !== 1 || !Array.isArray(l?.reply) || !l.reply.length) errors.push(`dj.lines.${L}: choose tek ___ içermeli, reply en az 1 cümle olmalı.`);
     }
   }
+  // Ders planı ve ek içerik (video, kitap görevi, şarkı)
+  const ids = key => new Set((Array.isArray(u[key]) ? u[key] : []).map(x => x?.id));
+  const videos = new Set((u.media?.videos ?? []).map(v => v?.id));
+  (u.media?.videos ?? []).forEach((v, i) => {
+    if (!/^[\w-]{11}$/.test(v?.youtubeId ?? '')) errors.push(`media.videos[${i}]: youtubeId 11 karakterlik YouTube kimliği olmalı.`);
+    if (!v?.predict || !v?.title) errors.push(`media.videos[${i}]: title ve predict gerekli.`);
+    if (!LEVELS.some(L => Array.isArray(v?.questions?.[L]) && v.questions[L].length)) errors.push(`media.videos[${i}]: en az bir seviyede soru olmalı.`);
+  });
+  (u.book ?? []).forEach((b, i) => {
+    if (!Number.isInteger(b?.page) || !Array.isArray(b?.items) || !b.items.length) errors.push(`book[${i}]: page (sayı) ve items gerekli.`);
+  });
+  (u.songs ?? []).forEach((x, i) => {
+    if (!String(x?.lyricsTrainingUrl ?? '').startsWith('https://lyricstraining.com/')) errors.push(`songs[${i}]: lyricsTrainingUrl https://lyricstraining.com/ ile başlamalı.`);
+  });
+  const TYPES = ['attendance', 'coach', 'mission', 'video', 'book', 'song', 'boss', 'exit'];
+  (u.lessons ?? []).forEach((l, li) => (l?.steps ?? []).forEach((st, si) => {
+    const at = `lessons[${li}].steps[${si}]`;
+    if (!TYPES.includes(st?.type)) errors.push(`${at}: bilinmeyen adım "${st?.type}".`);
+    if (st?.type === 'coach' && !['move', 'speak', 'exit'].includes(st.phase)) errors.push(`${at}: bilinmeyen tur "${st.phase}".`);
+    if (st?.type === 'video' && !videos.has(st.id)) errors.push(`${at}: video "${st.id}" yok.`);
+    if (st?.type === 'book' && !ids('book').has(st.id)) errors.push(`${at}: kitap görevi "${st.id}" yok.`);
+    if (st?.type === 'song' && !ids('songs').has(st.id)) errors.push(`${at}: şarkı "${st.id}" yok.`);
+  }));
   return errors;
 }
 

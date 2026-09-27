@@ -338,3 +338,31 @@ button.wide { min-width: 320px; }
 .interview .q-label { display: none; }
 .interview .word-side { justify-content: flex-start; padding-top: 4px; }
 .interview .question { font-size: min(var(--step-3), 5.6vh); }
+
+/* Ders planı kartı */
+.lesson-card { background: var(--surface); border-radius: var(--radius); padding: var(--space-3); display: grid; gap: var(--space-2); box-shadow: inset 6px 0 0 var(--accent); }
+.lesson-card.is-done { display: flex; align-items: center; justify-content: space-between; box-shadow: inset 6px 0 0 var(--team-3); }
+.lesson-head { display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap; }
+.lesson-title { font: 900 min(var(--step-1), 5vh)/1 var(--font-display); margin-right: auto; }
+.lesson-go { min-width: 280px; font: 900 min(var(--step-1), 5vh)/1 var(--font-display); display: inline-flex; gap: var(--space-1); align-items: center; justify-content: center; }
+.lesson-steps { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--space-1); counter-reset: st; }
+.lesson-steps li { counter-increment: st; background: var(--surface-2); padding: 6px 12px; border-radius: 999px; font-size: min(22px, 2.8vh); color: var(--ink-muted); }
+.lesson-steps li::before { content: counter(st) ". "; }
+.lesson-steps li.is-done { text-decoration: line-through; opacity: .6; }
+.lesson-steps li.is-now { background: var(--accent); color: var(--accent-ink); font-weight: 700; }
+.free-label { margin: 0; color: var(--ink-muted); font-size: min(22px, 2.8vh); }
+
+/* Video, kitap, şarkı, Boss */
+.small-label { margin: 0; font-size: min(24px, 3vh); color: var(--ink-muted); }
+.stage-move .small-label { color: var(--accent-ink); opacity: .7; }
+.video-watch { display: grid; grid-template-rows: minmax(0, 1fr) auto; gap: var(--space-2); }
+.video-watch iframe { width: 100%; height: 100%; border: 0; border-radius: var(--radius); background: #000; }
+.video-q { display: grid; align-content: center; gap: min(var(--space-3), 2vh); }
+.video-q .question { font-size: min(var(--step-3), 7vh); }
+.book-instruction { margin: 0; font-size: min(var(--step-0), 3.6vh); max-width: 60ch; }
+.song-card { display: grid; align-content: center; justify-items: start; gap: min(var(--space-2), 2vh); background: var(--tape); color: var(--tape-ink); padding: var(--space-4); }
+.song-artist { margin: 0; font: 700 min(var(--step-1), 4.6vh)/1 var(--font-body); }
+.song-clock { font-size: min(var(--step-3), 9vh); color: var(--team-1); }
+.go-link { display: inline-flex; align-items: center; gap: var(--space-1); background: var(--accent); color: var(--accent-ink); text-decoration: none; border-radius: var(--radius); padding: var(--space-2) var(--space-3); min-height: 72px; font-weight: 700; }
+.boss-card .question { font-size: min(var(--step-3), 7vh); }
+.boss-card.type-question { grid-template-columns: 0 1fr; }

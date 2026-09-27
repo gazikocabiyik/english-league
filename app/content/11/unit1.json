@@ -524,5 +524,286 @@
       ]
     },
     "perCandidate": 3
-  }
+  },
+  "media": {
+    "videos": [
+      {
+        "id": "v1",
+        "youtubeId": "yzLh9Y9oOmA",
+        "start": 0,
+        "end": 180,
+        "title": "Jobs and what they do",
+        "source": "Rock Rabbit English",
+        "predict": "Which jobs are you going to see in the video?",
+        "questions": {
+          "A1": [
+            {
+              "q": "Who helps sick animals?",
+              "a": "A vet."
+            },
+            {
+              "q": "Who flies a plane?",
+              "a": "A pilot."
+            },
+            {
+              "q": "Who teaches students?",
+              "a": "A teacher."
+            }
+          ],
+          "A2": [
+            {
+              "q": "What does a firefighter do?",
+              "a": "A firefighter puts out fires."
+            },
+            {
+              "q": "Where does a doctor work?",
+              "a": "A doctor works in a hospital."
+            },
+            {
+              "q": "What does an architect design?",
+              "a": "An architect designs buildings."
+            }
+          ],
+          "B1": [
+            {
+              "q": "Which job in the video is the most difficult? Why?",
+              "a": "I think … is the most difficult because …"
+            },
+            {
+              "q": "Which job needs a university degree?",
+              "a": "… needs a degree because …"
+            },
+            {
+              "q": "Which job would you like to try for one day?",
+              "a": "I'd like to try … because …"
+            }
+          ]
+        }
+      },
+      {
+        "id": "v2",
+        "youtubeId": "-8660VeIj4U",
+        "start": 0,
+        "end": 240,
+        "title": "Plans with 'going to'",
+        "source": "BBC Learning English",
+        "predict": "What are you going to do after school today?",
+        "questions": {
+          "A1": [
+            {
+              "q": "Is 'I'm going to' about the past or the future?",
+              "a": "The future."
+            },
+            {
+              "q": "Say it: I / going to / play football.",
+              "a": "I'm going to play football."
+            },
+            {
+              "q": "Say it: She / going to / be a nurse.",
+              "a": "She's going to be a nurse."
+            }
+          ],
+          "A2": [
+            {
+              "q": "Do we use 'going to' for plans?",
+              "a": "Yes, we use it for plans."
+            },
+            {
+              "q": "Make a sentence about tomorrow.",
+              "a": "Tomorrow I'm going to …"
+            },
+            {
+              "q": "What is your plan for the weekend?",
+              "a": "I'm going to …"
+            }
+          ],
+          "B1": [
+            {
+              "q": "What's the difference between 'will' and 'going to'?",
+              "a": "'Going to' is for plans; 'will' is for quick decisions."
+            },
+            {
+              "q": "What are you going to do after high school?",
+              "a": "After high school, I'm going to …"
+            },
+            {
+              "q": "What will you probably do in ten years?",
+              "a": "In ten years, I will probably …"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "book": [
+    {
+      "id": "b1",
+      "page": 13,
+      "title": "Idioms & future jobs",
+      "instruction": "Kitabın 13. sayfasını açın: 13. etkinlik ve 'Idioms / Proverbs Corner'. Okuyun, sonra takımlar yarışsın.",
+      "items": [
+        {
+          "text": "The career counselor says choosing a career is easy.",
+          "answer": false
+        },
+        {
+          "text": "Some students are going to be teachers or doctors.",
+          "answer": true
+        },
+        {
+          "text": "Melanie wants to study mechatronics engineering.",
+          "answer": true
+        },
+        {
+          "text": "'On top of the world' means 'very tired'.",
+          "answer": false
+        },
+        {
+          "text": "'Think outside the box' means 'think creatively'.",
+          "answer": true
+        },
+        {
+          "q": "What are YOU going to be? Use 'going to'.",
+          "a": "I'm going to be a/an …"
+        }
+      ]
+    },
+    {
+      "id": "b2",
+      "page": 22,
+      "title": "Two CVs",
+      "instruction": "Kitabın 22. sayfasını açın: 6. etkinlikteki iki CV (Catherine ve David). Okuyun, sonra takımlar yarışsın.",
+      "items": [
+        {
+          "text": "Catherine works in public relations.",
+          "answer": true
+        },
+        {
+          "text": "David is a teacher.",
+          "answer": false
+        },
+        {
+          "text": "Catherine studied at Cambridge University.",
+          "answer": true
+        },
+        {
+          "text": "David likes table tennis.",
+          "answer": true
+        },
+        {
+          "text": "David has no computer skills.",
+          "answer": false
+        },
+        {
+          "q": "Which job is better for you: Catherine's or David's? Why?",
+          "a": "I think … is better for me because …"
+        }
+      ]
+    }
+  ],
+  "songs": [
+    {
+      "id": "s1",
+      "title": "Hall of Fame",
+      "artist": "The Script ft. will.i.am",
+      "lyricsTrainingUrl": "https://lyricstraining.com/play/the-script-william/hall-of-fame/H8nMdGu2S8",
+      "why": "Hayaller, gelecek ve sporcu olmak: 'You can be the greatest…' Future Jobs kazanımıyla bağlantılı.",
+      "minutes": 4
+    }
+  ],
+  "lessons": [
+    {
+      "title": "Ders 1 · Meet the words",
+      "steps": [
+        {
+          "type": "attendance"
+        },
+        {
+          "type": "coach",
+          "phase": "move"
+        },
+        {
+          "type": "coach",
+          "phase": "speak"
+        },
+        {
+          "type": "book",
+          "id": "b1"
+        },
+        {
+          "type": "exit"
+        }
+      ]
+    },
+    {
+      "title": "Ders 2 · Watch & talk",
+      "steps": [
+        {
+          "type": "attendance"
+        },
+        {
+          "type": "coach",
+          "phase": "move"
+        },
+        {
+          "type": "video",
+          "id": "v1"
+        },
+        {
+          "type": "mission"
+        },
+        {
+          "type": "exit"
+        }
+      ]
+    },
+    {
+      "title": "Ders 3 · Read, watch, sing",
+      "steps": [
+        {
+          "type": "attendance"
+        },
+        {
+          "type": "book",
+          "id": "b2"
+        },
+        {
+          "type": "video",
+          "id": "v2"
+        },
+        {
+          "type": "mission"
+        },
+        {
+          "type": "song",
+          "id": "s1"
+        },
+        {
+          "type": "exit"
+        }
+      ]
+    },
+    {
+      "title": "Ders 4 · Boss day",
+      "steps": [
+        {
+          "type": "attendance"
+        },
+        {
+          "type": "coach",
+          "phase": "speak"
+        },
+        {
+          "type": "boss"
+        },
+        {
+          "type": "song",
+          "id": "s1"
+        },
+        {
+          "type": "exit"
+        }
+      ]
+    }
+  ]
 }

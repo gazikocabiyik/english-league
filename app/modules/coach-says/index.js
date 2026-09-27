@@ -82,8 +82,10 @@ export default {
       const moved = dir > 0 ? session.next() : session.prev();
       if (moved) { render(true); return; }
       if (dir < 0) return;
+      // Ders planı çalışıyorsa bu tur bir adımdır: plandaki sıradaki adıma geç
+      if (ctx.inLesson()) { ctx.finishActivity(); return; }
       const i = PHASES.indexOf(session.phase);
-      // Ders akışı: konuşma turundan sonra ünitenin görev oyunu (L+1), sonra çıkış bileti (L+2)
+      // Serbest akış: konuşma turundan sonra ünitenin görev oyunu (L+1), sonra çıkış bileti (L+2)
       const mission = unit.interview ? 'mock-interview' : unit.dj ? 'warmup-dj' : null;
       if (session.phase === 'speak' && mission) ctx.go(`#/game/${mission}`);
       else if (i < PHASES.length - 1) setPhase(PHASES[i + 1]);

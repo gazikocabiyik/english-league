@@ -44,6 +44,14 @@ def texts_of(unit):
     dj = unit.get('dj')
     if dj:  # Warm-up DJ durum kartları
         out += [(x['text'], x['text']) for x in dj['situations']]
+    for v in unit.get('media', {}).get('videos', []):  # video: tahmin ve anlama soruları
+        out.append((v['predict'], v['predict']))
+        for qs in v.get('questions', {}).values():
+            out += [(x['q'], x['q']) for x in qs]
+    for b in unit.get('book', []):  # kitap görevi maddeleri
+        for it in b['items']:
+            t = it.get('text') or it.get('q')
+            out.append((t, t))
     return list(dict.fromkeys(out))
 
 

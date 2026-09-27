@@ -1,5 +1,6 @@
 import { h, icon, lockKey } from '../../core/dom.js';
 import { loadIndex, loadUnit } from '../../core/content.js';
+import { lessonInfo } from '../../core/lesson-plan.js';
 import { games } from '../registry.js';
 import { weekStart } from '../../core/store.js';
 import { levelUp } from '../../core/levels.js';
@@ -17,7 +18,20 @@ export default {
     const level = ctx.store.ensureDailyLevel(ctx.classId);
     const index = await loadIndex();
     const { unit } = await loadUnit(ctx.grade, ctx.unit);
-    const visibleGames = games.filter(g => !UNIT_GAME[g.id] || unit?.[UNIT_GAME[g.id]]);
+    const visibleGames = games.filter(g => !g.hidden && (!UNIT_GAME[g.id] || unit?.[UNIT_GAME[g.id]]));
+    // Bugünün dersi (4 derslik ünite planı)
+    const info = unit ? lessonInfo(unit, ctx.lessonProgress()) : null;
+    const STEP = { attendance: 'Yoklama', coach: s => (s.phase === 'speak' ? 'Coach Says · konuşma' : 'Coach Says · hareket'), mission: 'Görev oyunu', video: 'Video', book: 'Kitap', song: 'Şarkı molası', boss: 'Boss Round', exit: 'Çıkış bileti' };
+    const stepName = s => (typeof STEP[s.type] === 'function' ? STEP[s.type](s) : STEP[s.type] ?? s.type);
+    const lessonCard = !info ? null : info.unitDone
+      ? h('div', { class: 'lesson-card is-done' },
+        h('span', { class: 'lesson-title' }, `Unit ${ctx.unit} tamamlandı · ${info.total} ders`),
+        h('button', { class: 'ghost', onclick: () => { ctx.store.setSetting(`lesson:${ctx.classId}:${ctx.unit}`, { lesson: 0, step: 0 }); ctx.rerender(); } }, 'Baştan başla'))
+      : h('div', { class: 'lesson-card' },
+        h('div', { class: 'lesson-head' },
+          h('span', { class: 'lesson-title' }, `Bugün: Ders ${info.number}/${info.total} · ${info.title.replace(/^Ders \d+ · /, '')}`),
+          h('button', { class: 'go lesson-go', onclick: () => ctx.startLesson() }, icon('play'), info.stepIndex > 0 ? ' Devam et' : ' Derse başla')),
+        h('ol', { class: 'lesson-steps' }, info.steps.map((s, k) => h('li', { class: k < info.stepIndex ? 'is-done' : k === info.stepIndex ? 'is-now' : '' }, stepName(s)))));
     const available = index[ctx.grade] ?? [];
     const pickUnit = n => { ctx.store.setSetting(`unit:${ctx.classId}`, n); ctx.rerender(); };
 
@@ -40,6 +54,8 @@ export default {
             onclick: () => pickUnit(n),
           }, String(n))))),
       cls.teams.length ? null : h('p', { class: 'tape callout' }, 'Bu sınıfta henüz takım yok. ', h('a', { href: '#/setup' }, 'Takımları kur')),
+      lessonCard,
+      h('p', { class: 'free-label' }, 'Serbest etkinlikler'),
       h('div', { class: 'tiles' },
         visibleGames.map((g, i) => h('button', { class: `tile game${i === 0 ? ' primary' : ''}`, onclick: () => ctx.go(`#/game/${g.id}`) }, icon(GAME_ICONS[g.id] ?? 'play'), h('span', { lang: 'en' }, g.title.toLocaleUpperCase('en')))),
         h('button', { class: 'tile', onclick: () => ctx.go('#/league') }, icon('trophy'), 'Lig'),
