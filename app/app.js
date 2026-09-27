@@ -6,6 +6,7 @@ import { mountTimerDock } from './modules/timer/timer-dock.js';
 import classSelect from './modules/panel/class-select.js';
 import panel from './modules/panel/panel.js';
 import setup from './modules/panel/setup.js';
+import league from './modules/league/league.js';
 
 const store = createStore();
 const view = document.getElementById('view');
@@ -27,6 +28,7 @@ const routes = {
   '': classSelect,
   panel,
   setup,
+  league,
 };
 
 let active = null;
