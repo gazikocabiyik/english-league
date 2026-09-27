@@ -3,3 +3,4 @@ import './content.test.js';
 import './coach.test.js';
 import './timer.test.js';
 import './roster.test.js';
+import './classes.test.js';

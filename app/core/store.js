@@ -1,5 +1,4 @@
 const KEY = 'okul.v1';
-export const CLASS_IDS = ['11-A', '11-B', '11-C', '12-A', '12-B'];
 
 export function memoryStorage() {
   const m = new Map();
