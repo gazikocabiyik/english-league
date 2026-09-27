@@ -136,3 +136,49 @@ test('store: iç yapısı bozuk yedek reddedilir ve kayıttan da yüklenmez (fin
   const b = createStore(mem);
   eq([b.getClass('11-L'), b.getSetting('x', 1)], [{ teams: [], students: [] }, 1]);
 });
+
+test('store: deneme kaydı ve sınıf filtresi', () => {
+  const s = setup();
+  s.addAttempt({ classId: '11-A', level: 'A1', ok: true, activity: 'speak' });
+  s.addAttempt({ classId: '11-B', level: 'A1', ok: false, activity: 'speak' });
+  eq(s.attemptsOf('11-A').map(a => [a.level, a.ok, a.activity]), [['A1', true, 'speak']]);
+});
+
+test('store: geri al, puana bağlı doğru kaydını da siler', () => {
+  const s = setup();
+  s.addAttempt({ classId: '11-A', level: 'A1', ok: false, activity: 'speak' });
+  const e = s.addEvent({ classId: '11-A', targetType: 'team', targetId: 't1', points: 1 });
+  s.addAttempt({ classId: '11-A', level: 'A1', ok: true, activity: 'speak', eventId: e.id });
+  s.undo('11-A');
+  eq(s.attemptsOf('11-A').map(a => a.ok), [false]);
+});
+
+test('store: yeni şube A1; gün değişince önceki dersin sonuçlarıyla seviye güncellenir', () => {
+  let t = new Date(2026, 8, 28, 9).getTime();
+  const s = setup(() => t);
+  eq(s.ensureDailyLevel('11-A'), 'A1');
+  for (let i = 0; i < 10; i++) s.addAttempt({ classId: '11-A', level: 'A1', ok: i < 9, activity: 'speak' });
+  for (let i = 0; i < 10; i++) s.addAttempt({ classId: '11-A', level: 'A2', ok: i < 8, activity: 'interview' });
+  eq(s.ensureDailyLevel('11-A'), 'A1', 'aynı gün değişmez');
+  t = new Date(2026, 8, 30, 9).getTime();
+  eq(s.ensureDailyLevel('11-A'), 'A2');
+  eq(s.classLevel('11-A'), 'A2');
+  eq(s.ensureDailyLevel('11-A'), 'A2', 'eski denemeler ikinci kez sayılmaz');
+});
+
+test('store: öğretmen seviyeyi elle değiştirebilir', () => {
+  const s = setup();
+  s.setClassLevel('11-A', 'B1');
+  eq(s.classLevel('11-A'), 'B1');
+});
+
+test('store: denemesiz eski yedek yüklenir, yeni yedek denemeleri taşır', () => {
+  const s = setup();
+  s.import('{"version":1,"classes":{},"events":[],"settings":{}}');
+  eq(s.attemptsOf('11-A'), []);
+  s.addAttempt({ classId: '11-A', level: 'A2', ok: true, activity: 'speak' });
+  const b = createStore(memoryStorage());
+  b.import(s.export());
+  eq(b.attemptsOf('11-A').length, 1);
+  throws(() => b.import('{"version":1,"classes":{},"events":[],"attempts":"x"}'));
+});

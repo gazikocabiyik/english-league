@@ -1,3 +1,5 @@
+import { nextLevel, dayKey, LEVELS } from './levels.js';
+
 const KEY = 'okul.v1';
 
 export function memoryStorage() {
@@ -12,7 +14,7 @@ export function weekStart(ts) {
   return d.getTime();
 }
 
-const emptyState = () => ({ version: 1, classes: {}, events: [], settings: {} });
+const emptyState = () => ({ version: 1, classes: {}, events: [], attempts: [], settings: {} });
 
 const isObj = v => !!v && typeof v === 'object' && !Array.isArray(v);
 
@@ -20,6 +22,7 @@ function isValidState(s) {
   return isObj(s) && s.version === 1 && isObj(s.classes)
     && Object.values(s.classes).every(c => isObj(c) && Array.isArray(c.teams) && Array.isArray(c.students))
     && (s.settings === undefined || (isObj(s.settings) && (s.settings.classList === undefined || Array.isArray(s.settings.classList))))
+    && (s.attempts === undefined || (Array.isArray(s.attempts) && s.attempts.every(a => isObj(a) && typeof a.classId === 'string' && typeof a.ok === 'boolean')))
     && Array.isArray(s.events)
     && s.events.every(e => e && typeof e.classId === 'string' && typeof e.targetId === 'string'
       && (e.targetType === 'team' || e.targetType === 'student')
@@ -78,6 +81,7 @@ export function createStore(storage, now = () => Date.now()) {
       for (let i = state.events.length - 1; i >= 0; i--) {
         if (state.events[i].classId === classId) {
           const [e] = state.events.splice(i, 1);
+          state.attempts = state.attempts.filter(a => a.eventId !== e.id);
           save();
           return e;
         }
@@ -85,6 +89,38 @@ export function createStore(storage, now = () => Date.now()) {
       return null;
     },
     standings,
+    addAttempt({ classId, level, ok, activity, eventId }) {
+      const a = { id: uid(), classId, level, ok: !!ok, activity, eventId, ts: now() };
+      state.attempts.push(a);
+      save();
+      return a;
+    },
+    attemptsOf(classId, { since = 0 } = {}) {
+      return state.attempts.filter(a => a.classId === classId && a.ts >= since);
+    },
+    classLevel(classId) {
+      const L = state.settings[`level:${classId}`];
+      return LEVELS.includes(L) ? L : 'A1';
+    },
+    setClassLevel(classId, L) {
+      if (!LEVELS.includes(L)) throw new Error(`Bilinmeyen seviye: ${L}`);
+      state.settings[`level:${classId}`] = L;
+      save();
+    },
+    // Gün değişince önceki dersin denemeleriyle sınıf seviyesi yeniden hesaplanır.
+    ensureDailyLevel(classId, today = dayKey(now())) {
+      const dayKeyName = `levelDay:${classId}`;
+      if (state.settings[dayKeyName] !== today) {
+        const since = state.settings[`levelSince:${classId}`];
+        if (since !== undefined) {
+          state.settings[`level:${classId}`] = nextLevel(this.classLevel(classId), this.attemptsOf(classId, { since }));
+        }
+        state.settings[`levelSince:${classId}`] = now();
+        state.settings[dayKeyName] = today;
+        save();
+      }
+      return this.classLevel(classId);
+    },
     getSetting(key, fallback = null) { return key in state.settings ? state.settings[key] : fallback; },
     setSetting(key, value) { state.settings[key] = value; save(); },
     export() { return JSON.stringify(state, null, 2); },
