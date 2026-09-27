@@ -23,7 +23,8 @@ export function balanceTeams(students, teams, absentIds = []) {
   const size = id => present().filter(s => s.teamId === id).length;
   const smallest = () => teams.reduce((a, t) => (size(t.id) < size(a.id) ? t : a));
   const largest = () => teams.reduce((a, t) => (size(t.id) > size(a.id) ? t : a));
-  for (const s of present()) if (!valid.has(s.teamId)) s.teamId = smallest().id;
+  // Grubu geçersiz her öğrenci (gelmeyenler dahil) bir gruba alınır; yoksa yoklama ekranında görünmez
+  for (const s of out) if (!valid.has(s.teamId)) s.teamId = smallest().id;
   while (size(largest().id) - size(smallest().id) > 1) {
     const from = largest().id;
     const to = smallest().id;

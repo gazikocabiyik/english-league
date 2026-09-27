@@ -1,5 +1,5 @@
 import { h, icon, seg, toast } from '../../core/dom.js';
-import { buildRoster } from '../league/roster.js';
+import { buildRoster, balanceTeams } from '../league/roster.js';
 
 export default {
   // step: 'students' (yeni şube 1/2), 'groups' (yeni şube 2/2) ya da boş (tam düzenleme + yedek)
@@ -23,6 +23,8 @@ export default {
 
     function save(next = '#/panel') {
       const roster = buildRoster(names.value, count, cls);
+      // Grup sayısı değişince yeni gruplar boş kalmasın
+      if (count !== cls.teams.length) roster.students = balanceTeams(roster.students, roster.teams);
       roster.teams.forEach((t, i) => { t.name = teamNames[i]?.trim() || t.name; });
       if (!roster.students.length) { toast('En az bir öğrenci adı yaz'); return; }
       ctx.store.saveClass(ctx.classId, roster);

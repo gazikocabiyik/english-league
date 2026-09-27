@@ -66,7 +66,7 @@ export default {
       ctx.store.addAttempt({ classId: ctx.classId, level: dj.level, ok, activity: 'dj', eventId, studentId: s.id });
       const wasChoose = dj.step === 'choose';
       dj.mark();
-      render(!dj.done && wasChoose === false);
+      render(!dj.done && (wasChoose === false || dj.step === 'choose')); // yeni durum kartı sesli okunur
     }
 
     const onKey = e => { if (e.key === 'Escape') ctx.go('#/panel'); };

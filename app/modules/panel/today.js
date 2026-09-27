@@ -7,7 +7,8 @@ export default {
     const cls = ctx.store.getClass(ctx.classId);
     if (!cls.students.length) { ctx.go('#/setup/students'); return; }
     let students = cls.students;
-    const absent = new Set(ctx.store.absentIds(ctx.classId));
+    // Eski (silinmiş/yeniden adlandırılmış) öğrenci kimlikleri sayılmasın
+    const absent = new Set(ctx.store.absentIds(ctx.classId).filter(id => cls.students.some(s => s.id === id)));
 
     const persist = () => ctx.store.saveClass(ctx.classId, { teams: cls.teams, students });
 
@@ -21,7 +22,7 @@ export default {
     function card(s) {
       const away = absent.has(s.id);
       return h('div', { class: `kid${away ? ' is-away' : ''}` },
-        h('button', { class: 'kid-name', 'aria-pressed': String(!away), onclick: () => { away ? absent.delete(s.id) : absent.add(s.id); render(); } },
+        h('button', { class: 'kid-name', 'aria-pressed': String(!away), onclick: () => { away ? absent.delete(s.id) : absent.add(s.id); ctx.store.setAbsent(ctx.classId, [...absent]); render(); } }, // dokunuş anında kaydedilir
           s.name, away ? h('span', { class: 'kid-away' }, 'yok') : null),
         cls.teams.length > 1 && !away
           ? h('button', { class: 'kid-move', 'aria-label': `${s.name} başka gruba`, onclick: () => { students = moveStudent(students, cls.teams, s.id); persist(); render(); } }, icon('caret-right'))

@@ -21,7 +21,12 @@ export function createDJ(unit, { level = 'A2', students = [], pickedToday = [], 
     for (let i = 0; i < students.length && (r.id === chooser.id || (r.teamId === chooser.teamId && students.some(s => s.teamId !== chooser.teamId))); i++) r = picker.skip();
     return r.id === chooser.id ? null : r;
   }
-  function newPeople() { chooser = picker.pick(); responder = chooser ? pickResponder() : null; }
+  // avoidId: bir önceki seçen (iki kişilik sınıfta roller değişsin; atlanan kişi hemen geri gelmesin)
+  function newPeople(avoidId) {
+    chooser = picker.pick();
+    if (chooser && chooser.id === avoidId && students.length > 1) chooser = picker.skip();
+    responder = chooser ? pickResponder() : null;
+  }
   newPeople();
 
   return {
@@ -49,12 +54,17 @@ export function createDJ(unit, { level = 'A2', students = [], pickedToday = [], 
       if (step === 'choose' && responder) { step = 'reply'; return true; }
       history.push({ situation: situations[round], genre, chooser, responder });
       round++; step = 'choose'; genre = null;
-      if (!this.done) newPeople();
+      if (!this.done) newPeople(history.at(-1).chooser.id);
       return true;
     },
     // Öğrenci yoksa/hazır değilse: işaretsiz başka öğrenci
     skipPerson() {
-      if (step === 'choose') { chooser = picker.skip(); responder = pickResponder(); }
+      if (step === 'choose') {
+        const old = chooser;
+        picker.release(old.id);
+        if (responder) picker.release(responder.id);
+        newPeople(old.id);
+      }
       else responder = pickResponder() ?? responder;
     },
   };

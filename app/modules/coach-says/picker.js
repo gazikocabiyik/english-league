@@ -31,6 +31,12 @@ export function createPicker(students, { excludeIds = [], rng = Math.random } = 
       const prev = current?.student;
       return take(choose(students.length > 1 ? prev?.id : undefined));
     },
+    // Belirli bir öğrencinin son seçimini sayma (sırası bekleyenlerden sonra gelir)
+    release(id) {
+      if (!count.has(id) || count.get(id) === 0) return;
+      count.set(id, count.get(id) - 1);
+      lastSeq.set(id, seq++);
+    },
     // "Başka öğrenci": şimdiki seçim sayılmaz, öğrenci bekleyenlerden sonra yine sıraya girer
     skip() {
       if (!current) return this.pick();

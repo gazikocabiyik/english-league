@@ -57,7 +57,7 @@ export default {
           ? h('ol', { class: `table table-${type}` }, list.map((r, i) => {
             const color = colorOf(r, i);
             const inner = [
-              h('span', { class: 'door stencil', style: { '--team': color ? `var(--${color})` : 'var(--surface-2)' } }, String(rankOf(i))),
+              h('span', { class: 'door stencil', style: { '--team': color ? `var(--${color})` : 'var(--surface-2)' } }, r.enough === false ? '–' : String(rankOf(i))),
               h('span', { class: 'name' }, r.name,
                 scope === 'school' && type !== 'class' ? h('span', { class: 'class-tag' }, ` · ${r.classId}`) : null,
                 scope === 'school' && type === 'class' ? h('span', { class: 'class-tag' }, ` · ${r.students} öğrenci`) : null),

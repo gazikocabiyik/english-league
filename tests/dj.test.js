@@ -61,3 +61,20 @@ test('dj: kişi değiştirme işaretsiz yeni öğrenci getirir', () => {
   ok(dj.chooser.id !== c);
   eq(dj.step, 'choose');
 });
+
+test('dj: seçen öğrenci atlanınca yeni seçen gelir, atlanan sırasını kaybetmez (inceleme)', () => {
+  for (let seed = 1; seed <= 10; seed++) {
+    const dj = createDJ(unit, { level: 'A2', students, rng: seeded(seed) });
+    const c = dj.chooser.id;
+    dj.skipPerson();
+    ok(dj.chooser.id !== c, `seed ${seed}`);
+    ok(dj.responder && dj.responder.id !== dj.chooser.id);
+  }
+});
+
+test('dj: iki kişilik sınıfta seçen ve cevaplayan her turda yer değiştirir (inceleme)', () => {
+  const dj = createDJ(unit, { level: 'A2', students: students.slice(0, 2), rng: seeded(1) });
+  const first = dj.chooser.id;
+  dj.setGenre('pop'); dj.mark(); dj.mark();
+  ok(dj.chooser.id !== first);
+});

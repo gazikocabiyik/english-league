@@ -65,3 +65,10 @@ test('grup değiştir: öğrenci sıradaki gruba geçer, sondan başa döner', (
   eq(moveStudent(st, T, 'a')[0].teamId, 't1');
   eq(moveStudent(S([['a', 't1']]), T, 'a')[0].teamId, 't2');
 });
+
+test('dengele: grubu geçersiz öğrenci (gelmeyen de olsa) geçerli bir gruba alınır; yeni grup boş kalmaz (inceleme)', () => {
+  const st = S([['a', 't1'], ['b', 't2'], ['c', 'tX'], ['d', 't1'], ['e', 't2'], ['f', 't1']]);
+  const out = balanceTeams(st, T, ['c']);
+  ok(['t1', 't2', 't3'].includes(out.find(s => s.id === 'c').teamId), 'gelmeyen de görünür bir grupta');
+  ok(out.some(s => s.teamId === 't3' && s.id !== 'c'), 'yeni grup (t3) boş kalmadı');
+});
