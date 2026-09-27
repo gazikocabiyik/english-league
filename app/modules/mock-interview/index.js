@@ -45,14 +45,20 @@ export default {
       return;
     }
 
-    const rec = (ok, eventId) => ctx.store.addAttempt({ classId: ctx.classId, level: iv.level, ok, activity: 'interview', eventId });
+    let marked = false; // bu soruda işaret verildi mi
+    const rec = (ok, eventId) => { marked = true; ctx.store.addAttempt({ classId: ctx.classId, level: iv.level, ok, activity: 'interview', eventId }); };
     let lastMiss = 0;
+    const lastPoint = {};
 
     function point(s) {
-      const se = award(ctx, 'student', s, 1, 'Mock Interview');
+      // Çift dokunuş koruması: aynı öğrenciye 500 ms içinde ikinci puan yok
+      if (Date.now() - (lastPoint[s.id] ?? 0) < 500) return;
+      lastPoint[s.id] = Date.now();
+      const groupId = `iv-${Date.now()}-${s.id}`; // öğrenci + takım puanı tek "Geri al" ile birlikte gider
+      const se = award(ctx, 'student', s, 1, 'Mock Interview', groupId);
       if (!se) return;
       const team = teamOf(s);
-      const te = team ? award(ctx, 'team', team, 1, `Mock Interview · ${s.name}`) : null;
+      const te = team ? award(ctx, 'team', team, 1, `Mock Interview · ${s.name}`, groupId) : null;
       rec(true, (te ?? se).id); // "Geri al" önce bu olayı siler, denemeyle birlikte
     }
     function missed(s) {
@@ -62,10 +68,12 @@ export default {
       toast(`${s.name}: bilemedi`);
     }
     function step(dir) {
+      if (dir > 0 && !iv.done && !marked) rec(false); // işaretlenmeden geçilen soru = bilemedi
+      marked = false;
       if (dir > 0) iv.next(); else iv.prev();
       render(!iv.done);
     }
-    function newPair() { iv.newPair(); render(true); }
+    function newPair() { iv.newPair(); marked = false; render(true); }
 
     const onKey = e => { if (e.key === 'ArrowRight') step(1); if (e.key === 'ArrowLeft') step(-1); };
     document.addEventListener('keydown', onKey);

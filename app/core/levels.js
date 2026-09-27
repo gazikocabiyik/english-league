@@ -19,7 +19,8 @@ export function nextLevel(current, attempts) {
   const cur = idx(current);
   if (stat[LEVELS[cur]].n >= MIN_TRIES && rate(LEVELS[cur]) < FAIL) return LEVELS[Math.max(0, cur - 1)];
   const passed = LEVELS.map((L, i) => (stat[L].n >= MIN_TRIES && rate(L) >= PASS ? i : -1));
-  return LEVELS[Math.max(cur, ...passed)];
+  // Bir derste en fazla bir seviye yükselir (tek derste A1 → B1 sıçraması olmaz)
+  return LEVELS[Math.min(cur + 1, Math.max(cur, ...passed))];
 }
 
 export function dayKey(ts) {

@@ -4,3 +4,4 @@
 .superpowers/
 .env
 .venv-tts/
+__pycache__/

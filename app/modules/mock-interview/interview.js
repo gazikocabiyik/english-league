@@ -48,7 +48,11 @@ export function createInterview(unit, { level = 'A2', students = [], rng = Math.
       finished = true;
       return false;
     },
-    prev() { if (i > 0) { i--; finished = false; return true; } return false; },
+    prev() {
+      if (finished) { finished = false; return true; } // HIRED ekranından son soruya dön
+      if (i > 0) { i--; return true; }
+      return false;
+    },
     newPair() { pair = pickPair(students, rng); job = nextJob(); i = 0; finished = false; },
   };
 }

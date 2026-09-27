@@ -182,3 +182,27 @@ test('store: denemesiz eski yedek yüklenir, yeni yedek denemeleri taşır', () 
   eq(b.attemptsOf('11-A').length, 1);
   throws(() => b.import('{"version":1,"classes":{},"events":[],"attempts":"x"}'));
 });
+
+test('store: öğretmenin elle seviyesi ertesi gün eski denemelerle bozulmaz (inceleme I3)', () => {
+  let t = new Date(2026, 8, 28, 9).getTime();
+  const s = setup(() => t);
+  s.ensureDailyLevel('11-A');
+  for (let i = 0; i < 7; i++) s.addAttempt({ classId: '11-A', level: 'A2', ok: i < 6, activity: 'interview' });
+  t += 1000;
+  s.setClassLevel('11-A', 'A1');
+  t = new Date(2026, 8, 29, 9).getTime();
+  eq(s.ensureDailyLevel('11-A'), 'A1');
+});
+
+test('store: tek geri al, aynı gruptaki olayları birlikte siler (inceleme I4)', () => {
+  const s = setup();
+  s.addEvent({ classId: '11-A', targetType: 'team', targetId: 't2', points: 3 });
+  const a = s.addEvent({ classId: '11-A', targetType: 'student', targetId: 's1', points: 1, groupId: 'g1' });
+  const b = s.addEvent({ classId: '11-A', targetType: 'team', targetId: 't1', points: 1, groupId: 'g1' });
+  s.addAttempt({ classId: '11-A', level: 'A2', ok: true, activity: 'interview', eventId: b.id });
+  const undone = s.undo('11-A');
+  eq(undone.groupId, 'g1');
+  eq([team(s, 't1'), s.standings('11-A', { type: 'student' }).find(r => r.id === 's1').points, team(s, 't2')], [0, 0, 3]);
+  eq(s.attemptsOf('11-A'), []);
+  ok(a.id);
+});

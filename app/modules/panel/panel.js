@@ -22,7 +22,7 @@ export default {
       h('div', { class: 'panel-head' },
         h('div', { class: 'title-row' },
           h('h1', { class: 'display' }, ctx.classId),
-          h('span', { class: 'tape level-badge' }, `Seviye ${level} · hedef ${levelUp(level)}`)),
+          h('span', { class: 'tape level-badge' }, level === 'B1' ? 'Seviye B1 · en üst seviye' : `Seviye ${level} · hedef ${levelUp(level)}`)),
         h('div', { class: 'unit-row', role: 'group', 'aria-label': 'Ünite' },
           Array.from({ length: 10 }, (_, i) => i + 1).map(n => h('button', {
             class: `unit-btn${n === ctx.unit ? ' is-active' : ''}`,

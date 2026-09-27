@@ -71,8 +71,8 @@ export function createStore(storage, now = () => Date.now()) {
     get persistent() { return persistent; },
     getClass,
     saveClass(classId, { teams, students }) { state.classes[classId] = { teams, students }; save(); },
-    addEvent({ classId, targetType, targetId, points, reason = '' }) {
-      const e = { id: uid(), classId, targetType, targetId, points, reason, ts: now() };
+    addEvent({ classId, targetType, targetId, points, reason = '', groupId }) {
+      const e = { id: uid(), classId, targetType, targetId, points, reason, ts: now(), ...(groupId ? { groupId } : {}) };
       state.events.push(e);
       save();
       return e;
@@ -81,7 +81,15 @@ export function createStore(storage, now = () => Date.now()) {
       for (let i = state.events.length - 1; i >= 0; i--) {
         if (state.events[i].classId === classId) {
           const [e] = state.events.splice(i, 1);
-          state.attempts = state.attempts.filter(a => a.eventId !== e.id);
+          // Aynı gruptaki olaylar (ör. Mock Interview: öğrenci + takım puanı) birlikte geri alınır
+          const removed = new Set([e.id]);
+          if (e.groupId) {
+            state.events = state.events.filter(x => {
+              if (x.classId === classId && x.groupId === e.groupId) { removed.add(x.id); return false; }
+              return true;
+            });
+          }
+          state.attempts = state.attempts.filter(a => !removed.has(a.eventId));
           save();
           return e;
         }
@@ -105,6 +113,9 @@ export function createStore(storage, now = () => Date.now()) {
     setClassLevel(classId, L) {
       if (!LEVELS.includes(L)) throw new Error(`Bilinmeyen seviye: ${L}`);
       state.settings[`level:${classId}`] = L;
+      // Elle ayar: önceki denemeler bir sonraki hesapta sayılmasın
+      state.settings[`levelSince:${classId}`] = now();
+      state.settings[`levelDay:${classId}`] = dayKey(now());
       save();
     },
     // Gün değişince önceki dersin denemeleriyle sınıf seviyesi yeniden hesaplanır.

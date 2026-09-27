@@ -41,7 +41,8 @@ export default {
     const lv = lessonLevels(ctx.store.ensureDailyLevel(ctx.classId));
     const review = pickReview(plan, unitsByNo, { exclude: unit.vocab.map(v => v.word), level: lv.speak });
     const session = createSession(unit, { review, level: lv.speak, exitLevel: lv.exit });
-    const rec = (ok, eventId) => ctx.store.addAttempt({ classId: ctx.classId, level: session.level, ok, activity: session.phase, eventId });
+    let marked = false; // bu kartta doğru/yanlış işaretlendi mi
+    const rec = (ok, eventId) => { marked = true; ctx.store.addAttempt({ classId: ctx.classId, level: session.level, ok, activity: session.phase, eventId }); };
     let lastMiss = 0;
     const miss = () => { if (Date.now() - lastMiss > 500) { lastMiss = Date.now(); rec(false); return true; } return false; };
     const cls = ctx.store.getClass(ctx.classId);
@@ -58,7 +59,7 @@ export default {
       if (undone?.targetType === 'student' && answered.delete(undone.targetId)) render(false);
     };
     let lastSkip = 0;
-    const skip = () => { if (Date.now() - lastSkip > 500) { lastSkip = Date.now(); rec(false); step(1); } };
+    const skip = () => { if (Date.now() - lastSkip > 500) { lastSkip = Date.now(); if (!marked) rec(false); step(1); } };
     document.addEventListener('keydown', onKey);
     document.addEventListener('scores-changed', onScores);
     this.unmount = () => {
@@ -68,10 +69,13 @@ export default {
       ctx.sound.stopSpeaking();
     };
 
-    function setPhase(p) { session.setPhase(p); answered.clear(); render(true); }
+    function setPhase(p) { session.setPhase(p); answered.clear(); marked = false; render(true); }
 
     function step(dir) {
+      // Puan ya da "bilemedi" verilmeden geçilen konuşma/çıkış kartı yanlış sayılır (seviye şişmesin)
+      if (dir > 0 && session.phase !== 'move' && !marked) rec(false);
       const moved = dir > 0 ? session.next() : session.prev();
+      marked = false;
       if (moved) { answered.clear(); render(true); return; }
       if (dir < 0) return;
       const i = PHASES.indexOf(session.phase);
@@ -84,7 +88,7 @@ export default {
       return h('div', { class: 'team-buttons' },
         cls.teams.map(t => h('button', {
           class: 'team-btn', style: { '--team': `var(--${t.color})` }, 'aria-label': `${t.name} doğru söyledi: +1`,
-          onclick: () => { const e = award(ctx, 'team', t, 1, 'Coach Says'); if (e) rec(true, e.id); step(1); },
+          onclick: () => { const e = award(ctx, 'team', t, 1, 'Coach Says'); if (!e) return; rec(true, e.id); step(1); }, // çift dokunuş kart atlatmasın
         }, t.name)),
         h('button', { class: 'nobody', onclick: skip }, 'Kimse bilemedi'));
     }

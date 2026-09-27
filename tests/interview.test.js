@@ -74,3 +74,11 @@ test('interview: Python seslendirme betiği soruları aynı doldurur (parite)', 
   const py = `import json,sys,importlib.util\nspec=importlib.util.spec_from_file_location('t','scripts/text_rules.py');m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)\nprint(json.dumps([m.fill_job(t,w) for t,w in json.loads(sys.argv[1])]))`;
   eq(JSON.parse(execFileSync('python3', ['-c', py, JSON.stringify(cases)]).toString()), cases.map(([t, w]) => fillJob(t, w)));
 });
+
+test('interview: HIRED ekranından geri dönünce son soru atlanmaz (inceleme)', () => {
+  const iv = createInterview(unit, { level: 'A2', students, teams, rng: seeded(2) });
+  iv.next(); iv.next(); iv.next();
+  ok(iv.done);
+  ok(iv.prev());
+  eq([iv.done, iv.index], [false, 2]);
+});

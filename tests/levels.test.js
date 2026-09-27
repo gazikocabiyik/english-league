@@ -37,3 +37,8 @@ test('levels: gün anahtarı yerel tarih', () => {
   eq(dayKey(new Date(2026, 8, 27, 23, 59).getTime()), '2026-09-27');
   eq(dayKey(new Date(2026, 0, 5, 0, 1).getTime()), '2026-01-05');
 });
+
+test('levels: bir derste en fazla bir seviye yükselir (inceleme I2)', () => {
+  eq(nextLevel('A1', tries('B1', 5, 5)), 'A2');
+  eq(nextLevel('A1', [...tries('A1', 9, 10), ...tries('A2', 9, 10), ...tries('B1', 9, 10)]), 'A2');
+});
