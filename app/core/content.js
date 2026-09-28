@@ -99,6 +99,19 @@ export function validateUnit(u) {
   (u.songs ?? []).forEach((x, i) => {
     if (!String(x?.lyricsTrainingUrl ?? '').startsWith('https://lyricstraining.com/')) errors.push(`songs[${i}]: lyricsTrainingUrl https://lyricstraining.com/ ile başlamalı.`);
   });
+  (u.media?.videos ?? []).forEach((v, i) => {
+    if (!Array.isArray(v?.questions?.A2) || !v.questions.A2.length) errors.push(`media.videos[${i}]: A2 soruları gerekli (seviye bulunamazsa A2 kullanılır).`);
+    for (const L of LEVELS) (v?.questions?.[L] ?? []).forEach((x, k) => {
+      if (typeof x?.q !== 'string' || typeof x?.a !== 'string') errors.push(`media.videos[${i}].questions.${L}[${k}]: q ve a metin olmalı.`);
+    });
+  });
+  (u.book ?? []).forEach((b, i) => { if (!b?.title || !b?.instruction) errors.push(`book[${i}]: title ve instruction gerekli.`); });
+  (u.songs ?? []).forEach((x, i) => {
+    if (!x?.title || !x?.artist || !x?.why) errors.push(`songs[${i}]: title, artist ve why gerekli.`);
+    if (x?.minutes !== undefined && !(Number.isFinite(x.minutes) && x.minutes > 0)) errors.push(`songs[${i}]: minutes pozitif sayı olmalı.`);
+  });
+  (u.lessons ?? []).forEach((l, i) => { if (typeof l?.title !== 'string' || !l.title) errors.push(`lessons[${i}]: title gerekli.`); });
+  if (u.interview && u.interview.perCandidate !== undefined && !(Number.isInteger(u.interview.perCandidate) && u.interview.perCandidate > 0)) errors.push('interview.perCandidate pozitif tam sayı olmalı.');
   const TYPES = ['attendance', 'coach', 'mission', 'video', 'book', 'song', 'boss', 'exit'];
   (u.lessons ?? []).forEach((l, li) => (l?.steps ?? []).forEach((st, si) => {
     const at = `lessons[${li}].steps[${si}]`;

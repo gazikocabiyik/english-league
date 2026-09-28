@@ -36,8 +36,16 @@ const ctx = {
   async startLesson() {
     const { unit } = await loadUnit(ctx.grade, ctx.unit);
     if (!unit?.lessons) return;
-    const p = normalize(unit, ctx.lessonProgress());
-    if (p.unitDone) return;
+    let p = normalize(unit, ctx.lessonProgress());
+    if (p.unitDone) { toast('Ünite tamamlandı'); return; }
+    const attendanceStep = s => s?.type === 'attendance';
+    // Yoklama bugün alındıysa yoklama adımını atla; alınmadıysa (ör. yarım ders ertesi gün) önce yoklama
+    if (attendanceStep(unit.lessons[p.lesson].steps[p.step]) && store.isAttendanceDone(ctx.classId)) p = advance(unit, p);
+    else if (!attendanceStep(unit.lessons[p.lesson].steps[p.step]) && !store.isAttendanceDone(ctx.classId)) {
+      store.setSetting(`resumeLesson:${ctx.classId}`, true);
+      ctx.go('#/today');
+      return;
+    }
     store.setSetting(`lesson:${ctx.classId}:${ctx.unit}`, { lesson: p.lesson, step: p.step });
     store.setSetting(`lessonRun:${ctx.classId}`, { unit: ctx.unit, day: dayKey(Date.now()) });
     ctx.go(stepRoute(unit.lessons[p.lesson].steps[p.step], unit));
@@ -49,7 +57,9 @@ const ctx = {
     if (!ctx.inLesson()) { ctx.go(fallback); return; }
     finishing = true;
     const progress = ctx.lessonProgress(); // beklemeden önce oku
+    const here = location.hash;
     const { unit } = await loadUnit(ctx.grade, ctx.unit);
+    if (location.hash !== here) { finishing = false; return; } // öğretmen bu arada başka ekrana geçti
     if (!unit?.lessons || currentRoute(unit, progress) !== route) { finishing = false; ctx.go(fallback); return; }
     const next = advance(unit, progress);
     store.setSetting(`lesson:${ctx.classId}:${ctx.unit}`, { lesson: next.lesson, step: next.step });
@@ -91,7 +101,13 @@ const router = createRouter(routes, (screen, args) => {
   view.replaceChildren(host);
   if (screen !== classSelect && !ctx.classId) { active = null; router.go('#/'); return; }
   active = screen;
-  screen.mount(host, ctx, args);
+  Promise.resolve(screen.mount(host, ctx, args)).catch(err => {
+    console.error(err);
+    host.replaceChildren(h('section', { class: 'screen error' },
+      h('h1', { class: 'display' }, 'Bu ekran açılamadı'), h('p', { class: 'hint' }, String(err?.message ?? err)),
+      h('div', { class: 'today-actions' }, h('button', { onclick: () => ctx.go('#/panel') }, 'Panele dön'),
+        h('button', { class: 'go', onclick: () => ctx.finishActivity('#/panel') }, 'Sonraki adım'))));
+  });
   renderTopbar();
 });
 
@@ -120,8 +136,8 @@ function toggleFullscreen() {
 }
 
 function checkPersistence() {
-  banner.hidden = store.persistent;
-  banner.textContent = 'Puanlar bu tarayıcıya kaydedilemiyor. Ders sonunda Ayarlar → Yedeği indir.';
+  banner.hidden = store.persistent && !store.nearlyFull;
+  banner.textContent = store.persistent ? 'Depolama dolmak üzere: Takımlar → Yedeği indir ile yedek alın.' : 'Puanlar bu tarayıcıya kaydedilemiyor. Ders sonunda Ayarlar → Yedeği indir.';
 }
 document.addEventListener('scores-changed', checkPersistence);
 checkPersistence();

@@ -45,7 +45,10 @@ export default {
     // Uyarlanır seviye: konuşma L, çıkış bileti L+2
     const lv = lessonLevels(ctx.store.ensureDailyLevel(ctx.classId));
     const review = pickReview(plan, unitsByNo, { exclude: unit.vocab.map(v => v.word), level: lv.speak });
-    const session = createSession(unit, { review, level: lv.speak, exitLevel: lv.exit });
+    // Günün kelimeleri: konuşma turu ve çıkış bileti aynı gün aynı kelimeleri kullanır
+    const dayWordsKey = `words:${ctx.classId}:${ctx.unit}:${new Date().toLocaleDateString('sv-SE')}`;
+    const session = createSession(unit, { review, level: lv.speak, exitLevel: lv.exit, words: ctx.store.getSetting(dayWordsKey, []) });
+    ctx.store.setSetting(dayWordsKey, session.words.map(w => w.word));
     const markedCards = new Set(); // "tur:index" — işaretlenmiş kartlar
     const cardKey = () => `${session.phase}:${session.index}`;
     const isMarked = () => markedCards.has(cardKey());
@@ -79,7 +82,7 @@ export default {
 
     function step(dir) {
       // Puan ya da "bilemedi" verilmeden geçilen konuşma/çıkış kartı yanlış sayılır (seviye şişmesin)
-      if (dir > 0 && session.phase !== 'move' && !isMarked()) rec(false, undefined, session.phase === 'exit' ? lucky?.id : undefined);
+      if (dir > 0 && session.phase !== 'move' && !isMarked() && !(session.phase === 'exit' && !lucky)) rec(false, undefined, session.phase === 'exit' ? lucky?.id : undefined);
       const moved = dir > 0 ? session.next() : session.prev();
       if (moved) { render(true); return; }
       if (dir < 0) return;

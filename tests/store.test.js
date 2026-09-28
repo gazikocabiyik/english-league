@@ -267,3 +267,44 @@ test('yoklama: gelmeyenler o gün için tutulur, ertesi gün herkes var sayılı
   t = new Date(2026, 8, 29, 9).getTime();
   eq([s.presentStudents('11-A').map(x => x.id), s.isAttendanceDone('11-A')], [['s1', 's2'], false]);
 });
+
+test('depo: eski olaylar ve denemeler özetlenir; tüm zamanlar puanı ve oranlar korunur (tarama C1)', () => {
+  let t = new Date(2026, 0, 5, 10).getTime();
+  const s = setup(() => t);
+  s.setSetting('classList', ['11-A']);
+  for (let i = 0; i < 30; i++) {
+    s.addEvent({ classId: '11-A', targetType: 'team', targetId: 't1', points: 1 });
+    s.addEvent({ classId: '11-A', targetType: 'student', targetId: 's1', points: 2 });
+    s.addAttempt({ classId: '11-A', level: 'A2', ok: i % 3 !== 0, activity: 'exit', studentId: 's1' });
+  }
+  t = new Date(2026, 5, 1, 10).getTime(); // ~5 ay sonra
+  s.addEvent({ classId: '11-A', targetType: 'team', targetId: 't1', points: 5 });
+  const before = { team: team(s, 't1'), cls: s.schoolStandings({ type: 'class' })[0].points, stu: s.schoolStandings({ type: 'student' }).find(r => r.id === 's1').points };
+  const removed = s.compact();
+  ok(removed > 0, 'eski kayıtlar özetlendi');
+  eq(team(s, 't1'), before.team);
+  eq(s.standings('11-A', { type: 'student' }).find(r => r.id === 's1').points, 60);
+  eq(s.schoolStandings({ type: 'class' })[0].points, before.cls);
+  eq(s.schoolStandings({ type: 'student' }).find(r => r.id === 's1').points, before.stu);
+  eq(s.standings('11-A', { since: weekStart(t) }).find(r => r.id === 't1').points, 5, 'bu hafta etkilenmez');
+  ok(s.export().length < 6000, 'depo küçüldü');
+});
+
+test('depo: bozuk kayıt silinmeden önce yedeklenir (tarama I5)', () => {
+  const mem = memoryStorage();
+  mem.setItem('okul.v1', '{"version":1,"classes":{"x":{}}}');
+  createStore(mem);
+  eq(mem.getItem('okul.v1.bak'), '{"version":1,"classes":{"x":{}}}');
+});
+
+test('depo: classList yoksa (eski yedek) şubeler sınıf kayıtlarından okunur (tarama M8)', () => {
+  const s = setup();
+  eq(s.getSetting('classList', null), null);
+  eq(s.classIds(), ['11-A']);
+});
+
+test('depo: adı olmayan öğrenci ya da takım içeren yedek reddedilir (tarama M8)', () => {
+  const s = setup();
+  throws(() => s.import('{"version":1,"classes":{"11-L":{"teams":[{"id":"t1"}],"students":[]}},"events":[]}'));
+  throws(() => s.import('{"version":1,"classes":{"11-L":{"teams":[],"students":[{"name":"Ali"}]}},"events":[]}'));
+});

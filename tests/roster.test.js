@@ -4,10 +4,10 @@ import { createStore, memoryStorage } from '../app/core/store.js';
 
 const ids = () => { let n = 0; return () => `id${++n}`; };
 
-test('roster: boş satır, boşluk ve tekrar temizlenir, takımlara sırayla dağılır', () => {
+test('roster: boş satır ve boşluk temizlenir, aynı isim (2) olur, takımlara sırayla dağılır', () => {
   const r = buildRoster('Ali\nBerk\nCan\n\n  Deniz  \nAli', 2, undefined, ids());
   eq(r.teams, [{ id: 't1', name: 'Team A', color: 'team-1' }, { id: 't2', name: 'Team B', color: 'team-2' }]);
-  eq(r.students.map(s => [s.name, s.teamId]), [['Ali', 't1'], ['Berk', 't2'], ['Can', 't1'], ['Deniz', 't2']]);
+  eq(r.students.map(s => [s.name, s.teamId]), [['Ali', 't1'], ['Berk', 't2'], ['Can', 't1'], ['Deniz', 't2'], ['Ali (2)', 't1']]);
 });
 
 test('roster: aynı isim id ve takımını korur, silinen öğrenci çıkar (RF5)', () => {
@@ -71,4 +71,13 @@ test('dengele: grubu geçersiz öğrenci (gelmeyen de olsa) geçerli bir gruba a
   const out = balanceTeams(st, T, ['c']);
   ok(['t1', 't2', 't3'].includes(out.find(s => s.id === 'c').teamId), 'gelmeyen de görünür bir grupta');
   ok(out.some(s => s.teamId === 't3' && s.id !== 'c'), 'yeni grup (t3) boş kalmadı');
+});
+
+test('kadro: aynı satırdaki isim değişirse öğrenci kimliği ve puanı korunur; aynı isimler ayrı öğrenci olur (tarama I4)', () => {
+  const prev = buildRoster('Ali\nBerk\nCan', 2, undefined, ids());
+  const next = buildRoster('Ali\nBerkay\nCan', 2, prev, ids());
+  eq(next.students[1].id, prev.students[1].id, 'yeniden adlandırma');
+  eq(next.students[1].name, 'Berkay');
+  const dup = buildRoster('Mehmet\nMehmet\nAli', 2, undefined, ids());
+  eq(dup.students.map(s => s.name), ['Mehmet', 'Mehmet (2)', 'Ali']);
 });

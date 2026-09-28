@@ -7,7 +7,7 @@ export default {
     let adding = false;
     let grade = 11;
 
-    const list = () => sortClassIds(ctx.store.getSetting('classList', []));
+    const list = () => sortClassIds(ctx.store.classIds());
     const saveList = ids => ctx.store.setSetting('classList', sortClassIds(ids));
 
     function add(section) {

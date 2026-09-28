@@ -164,3 +164,14 @@ test('content: pilot 1. ünitelerde 4 derslik plan var', async () => {
     eq(u.lessons?.length, 4, `${g}/1`);
   }
 });
+
+test('content: çalışırken çökertecek içerik doğrulamada yakalanır (tarama M1)', () => {
+  const u = good();
+  u.lessons = [{ steps: [{ type: 'exit' }] }];
+  u.interview = { jobs: ['coach'], perCandidate: 0, questions: { A1: [{ q: 'a', a: 'b' }, { q: 'a', a: 'b' }, { q: 'a', a: 'b' }], A2: [{ q: 'a', a: 'b' }, { q: 'a', a: 'b' }, { q: 'a', a: 'b' }], B1: [{ q: 'a', a: 'b' }, { q: 'a', a: 'b' }, { q: 'a', a: 'b' }] } };
+  u.songs = [{ id: 's1', lyricsTrainingUrl: 'https://lyricstraining.com/x', minutes: 'dört' }];
+  u.book = [{ id: 'b1', page: 3, items: [{ text: 'x', answer: true }] }];
+  u.media = { videos: [{ id: 'v1', youtubeId: 'abc123DEF45', title: 'T', predict: 'P', questions: { B1: [{ q: 1 }] } }] };
+  const errs = validateUnit(u).join(' | ');
+  for (const key of ['lessons[0]: title', 'perCandidate', 'minutes', 'songs[0]: title', 'book[0]: title', 'A2', 'media.videos[0].questions']) ok(errs.includes(key), `eksik: ${key}`);
+});

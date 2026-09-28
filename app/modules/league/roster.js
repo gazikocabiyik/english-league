@@ -1,12 +1,28 @@
-export function buildRoster(namesText, teamCount, prev = { teams: [], students: [] }, newId = () => crypto.randomUUID()) {
-  const names = [...new Set(namesText.split('\n').map(n => n.trim()).filter(Boolean))];
+// crypto.randomUUID yalnız güvenli (https/localhost) adreslerde var; yoksa basit kimlik
+const uid = () => (globalThis.crypto?.randomUUID ? crypto.randomUUID() : `s${Date.now().toString(36)}${Math.random().toString(36).slice(2, 8)}`);
+
+export function buildRoster(namesText, teamCount, prev = { teams: [], students: [] }, newId = uid) {
+  // Aynı isim iki kez yazılırsa ikinci öğrenci "Ad (2)" olur (gerçekten iki Mehmet olabilir)
+  const seen = new Map();
+  const names = namesText.split('\n').map(n => n.trim()).filter(Boolean).map(n => {
+    const k = (seen.get(n) ?? 0) + 1;
+    seen.set(n, k);
+    return k === 1 ? n : `${n} (${k})`;
+  });
   const teams = Array.from({ length: teamCount }, (_, i) => {
     const id = `t${i + 1}`;
     const old = prev.teams.find(t => t.id === id);
     return { id, name: old?.name ?? `Team ${String.fromCharCode(65 + i)}`, color: `team-${i + 1}` };
   });
+  // Önce isimle eşleştir; eşleşmeyen yeni isim aynı satırdaki eşleşmeyen eski öğrencinin kimliğini alır (yeniden adlandırma)
+  const byName = new Map(prev.students.map(s => [s.name, s]));
+  const used = new Set(names.filter(n => byName.has(n)).map(n => byName.get(n).id));
   const students = names.map((name, i) => {
-    const old = prev.students.find(s => s.name === name);
+    let old = byName.get(name);
+    if (!old) {
+      const sameRow = prev.students[i];
+      if (sameRow && !used.has(sameRow.id) && !names.includes(sameRow.name)) { old = sameRow; used.add(sameRow.id); }
+    }
     const keepTeam = old && teams.some(t => t.id === old.teamId);
     return { id: old?.id ?? newId(), name, teamId: keepTeam ? old.teamId : teams[i % teamCount].id };
   });

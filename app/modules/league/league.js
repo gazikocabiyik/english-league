@@ -13,7 +13,7 @@ export default {
     let grade = null;        // okul filtresi: null | 11 | 12
     const onChange = e => render(e.detail?.targetId);
     document.addEventListener('scores-changed', onChange);
-    this.unmount = () => document.removeEventListener('scores-changed', onChange);
+    this.unmount = () => { document.removeEventListener('scores-changed', onChange); document.querySelector('.sheet-backdrop')?.remove(); };
 
     function rows() {
       const since = range === 'week' ? weekStart(Date.now()) : 0;

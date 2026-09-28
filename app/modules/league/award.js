@@ -4,7 +4,7 @@ let last = { key: '', t: 0 };
 
 // Dokunmatik tahtalar bazen tek dokunuşu iki kez iletir; aynı hedefe 500 ms içindeki ikinci puanı yok say.
 export function award(ctx, targetType, target, points, source, groupId) {
-  const key = `${targetType}:${target.id}:${points}`;
+  const key = `${targetType}:${target.id}:${points}:${source}`;
   const t = Date.now();
   if (key === last.key && t - last.t < 500) return null;
   last = { key, t };

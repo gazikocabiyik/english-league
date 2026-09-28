@@ -76,3 +76,9 @@ test('session: o seviyede komut yoksa tüm komutlara düşer', () => {
   const u = { ...leveled, commands: leveled.commands.filter(c => c.level !== 'B1') };
   eq(createSession(u, { level: 'B1' }).total, 4);
 });
+
+test('session: günün kelime listesi verilirse aynı kelimeler kullanılır (tarama I3)', () => {
+  const s = createSession(leveled, { words: ['c', 'a', 'x'], rng: seeded(2) });
+  eq(s.words.map(w => w.word), ['c', 'a']);
+  eq(createSession(leveled, { words: [], pick: 3, rng: seeded(2) }).words.length, 3);
+});

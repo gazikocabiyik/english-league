@@ -14,13 +14,15 @@ export function weekStart(ts) {
   return d.getTime();
 }
 
-const emptyState = () => ({ version: 1, classes: {}, events: [], attempts: [], settings: {} });
+const emptyState = () => ({ version: 1, classes: {}, events: [], attempts: [], settings: {}, archive: null });
+const KEEP_WEEKS = 8; // bu kadar haftadan eski kayıtlar özetlenir (depo dolmasın)
 
 const isObj = v => !!v && typeof v === 'object' && !Array.isArray(v);
 
 function isValidState(s) {
   return isObj(s) && s.version === 1 && isObj(s.classes)
-    && Object.values(s.classes).every(c => isObj(c) && Array.isArray(c.teams) && Array.isArray(c.students))
+    && Object.values(s.classes).every(c => isObj(c) && Array.isArray(c.teams) && Array.isArray(c.students)
+      && [...c.teams, ...c.students].every(x => isObj(x) && typeof x.id === 'string' && typeof x.name === 'string'))
     && (s.settings === undefined || (isObj(s.settings) && (s.settings.classList === undefined || Array.isArray(s.settings.classList))))
     && (s.attempts === undefined || (Array.isArray(s.attempts) && s.attempts.every(a => isObj(a) && typeof a.classId === 'string' && typeof a.ok === 'boolean')))
     && Array.isArray(s.events)
@@ -39,19 +41,53 @@ export function createStore(storage, now = () => Date.now()) {
   let persistent = !!storage && canWrite(storage);
   const backend = persistent ? storage : memoryStorage();
   let state = emptyState();
+  let raw = null;
   try {
-    const saved = JSON.parse(backend.getItem(KEY));
+    raw = backend.getItem(KEY);
+    const saved = JSON.parse(raw);
     if (isValidState(saved)) state = { ...emptyState(), ...saved };
-  } catch { /* bozuk kayıt: boş başla */ }
+    else if (raw) backend.setItem(`${KEY}.bak`, raw); // tanınmayan kayıt silinmeden önce yedeklenir
+  } catch {
+    try { if (raw) backend.setItem(`${KEY}.bak`, raw); } catch { /* yer yok */ }
+  }
 
+  let size = 0;
   function save() {
     if (!persistent) return;
-    try { backend.setItem(KEY, JSON.stringify(state)); } catch { persistent = false; }
+    try { const json = JSON.stringify(state); size = json.length; backend.setItem(KEY, json); } catch { persistent = false; }
   }
   const uid = () => `${now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`;
 
   function getClass(classId) {
     return state.classes[classId] ?? { teams: [], students: [] };
+  }
+
+  function classIds() {
+    return state.settings.classList ?? Object.keys(state.classes); // eski yedeklerde classList yok
+  }
+
+  // Eski olayları ve denemeleri özetle: puan toplamları ve doğru/deneme sayıları arşivde kalır
+  function compact(at = now()) {
+    const cutoff = weekStart(at) - KEEP_WEEKS * 7 * 864e5;
+    const arch = state.archive ?? { until: 0, events: {}, attempts: {} };
+    let removed = 0;
+    state.events = state.events.filter(e => {
+      if (e.ts >= cutoff) return true;
+      const c = (arch.events[e.classId] ??= { team: {}, student: {} });
+      c[e.targetType][e.targetId] = (c[e.targetType][e.targetId] ?? 0) + e.points;
+      removed++;
+      return false;
+    });
+    state.attempts = state.attempts.filter(a => {
+      if (a.ts >= cutoff) return true;
+      const c = (arch.attempts[a.classId] ??= { n: 0, ok: 0, students: {} });
+      c.n++; if (a.ok) c.ok++;
+      if (a.studentId) { const st = (c.students[a.studentId] ??= { n: 0, ok: 0 }); st.n++; if (a.ok) st.ok++; }
+      removed++;
+      return false;
+    });
+    if (removed) { arch.until = Math.max(arch.until, cutoff); state.archive = arch; save(); }
+    return removed;
   }
 
   function standings(classId, { type = 'team', since = 0 } = {}) {
@@ -63,12 +99,19 @@ export function createStore(storage, now = () => Date.now()) {
         pts.set(e.targetId, pts.get(e.targetId) + e.points);
       }
     }
+    if (since === 0 && state.archive?.events?.[classId]) {
+      for (const [id, p] of Object.entries(state.archive.events[classId][type] ?? {})) if (pts.has(id)) pts.set(id, pts.get(id) + p);
+    }
     return roster.map(r => ({ ...r, points: pts.get(r.id) }))
       .sort((a, b) => b.points - a.points || a.name.localeCompare(b.name, 'tr'));
   }
 
+  compact(); // açılışta eski kayıtları özetle
+
   return {
     get persistent() { return persistent; },
+    // Depo ~5 MB; 4 MB üstünde uyarı gösterilir
+    get nearlyFull() { return size > 4e6; },
     getClass,
     saveClass(classId, { teams, students }) { state.classes[classId] = { teams, students }; save(); },
     addEvent({ classId, targetType, targetId, points, reason = '', groupId }) {
@@ -97,16 +140,23 @@ export function createStore(storage, now = () => Date.now()) {
       return null;
     },
     standings,
+    classIds,
+    compact,
     // Okul ligi (adil karşılaştırma): şubeler ve öğrenciler başarı oranıyla (doğru ÷ cevap, %), takımlar puanla
     schoolStandings({ type = 'class', grade = null, since = 0 } = {}) {
       const byName = (a, b) => b.points - a.points || a.name.localeCompare(b.name, 'tr');
       const byRate = (a, b) => (b.enough - a.enough) || byName(a, b);
-      const ids = (state.settings.classList ?? []).filter(id => !grade || id.startsWith(`${grade}-`));
-      const rate = list => ({ tries: list.length, points: list.length ? Math.round((list.filter(a => a.ok).length / list.length) * 100) : 0 });
+      const ids = classIds().filter(id => !grade || id.startsWith(`${grade}-`));
+      const rate = (list, extra = { n: 0, ok: 0 }) => {
+        const n = list.length + (since === 0 ? extra.n : 0);
+        const good = list.filter(a => a.ok).length + (since === 0 ? extra.ok : 0);
+        return { tries: n, points: n ? Math.round((good / n) * 100) : 0 };
+      };
+      const arch = id => state.archive?.attempts?.[id];
       const tried = id => state.attempts.filter(a => a.classId === id && a.ts >= since);
       if (type === 'class') {
         return ids.map(id => {
-          const r = rate(tried(id));
+          const r = rate(tried(id), arch(id));
           return { id, name: id, classId: id, students: getClass(id).students.length, ...r, enough: r.tries >= 10 };
         }).sort(byRate);
       }
@@ -114,7 +164,7 @@ export function createStore(storage, now = () => Date.now()) {
         return ids.flatMap(id => {
           const mine = tried(id);
           return getClass(id).students.map(st => {
-            const r = rate(mine.filter(a => a.studentId === st.id));
+            const r = rate(mine.filter(a => a.studentId === st.id), arch(id)?.students?.[st.id]);
             return { ...st, classId: id, ...r, enough: r.tries >= 5 };
           });
         }).sort(byRate);

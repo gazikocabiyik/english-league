@@ -19,7 +19,8 @@ export default {
     if (!alive) return;
     const next = () => ctx.finishActivity('#/league');
     if (!unit) {
-      el.replaceChildren(h('section', { class: 'screen error' }, h('h1', { class: 'display' }, 'Ünite açılamadı'), h('ul', {}, errors.map(e => h('li', {}, e)))));
+      el.replaceChildren(h('section', { class: 'screen error' }, h('h1', { class: 'display' }, 'Ünite açılamadı'), h('ul', {}, errors.map(e => h('li', {}, e))),
+        h('button', { class: 'go', onclick: next }, 'Sonraki adım ', icon('caret-right'))));
       return;
     }
     const lv = lessonLevels(ctx.store.ensureDailyLevel(ctx.classId));
@@ -58,14 +59,15 @@ export default {
         return;
       }
       const c = cards[i];
-      const img = c.img ? h('img', { class: 'word-photo', src: `content/${c.img}`, alt: '' }) : null;
+      const img = c.img ? h('img', { class: 'word-photo', src: `content/${c.img}`, alt: '', onerror: () => img.replaceWith(h('div', { class: 'photo-missing' }, c.answer)) }) : null;
       const parts = c.prompt.split('___');
       el.replaceChildren(h('section', { class: 'screen coach boss' },
         h('header', { class: 'coach-head' },
           h('span', { class: 'tape lucky-name' }, icon('trophy'), ' Boss Round'),
           h('span', { class: 'spacer' }),
           h('span', { class: 'level-chip' }, c.level),
-          h('span', { class: 'progress' }, `${i + 1} / ${cards.length}`)),
+          h('span', { class: 'progress' }, `${i + 1} / ${cards.length}`),
+          h('button', { class: 'ghost', onclick: () => { i = cards.length; render(false); } }, 'Etkinliği bitir')),
         h('div', { class: `stage stage-word boss-card type-${c.type}` },
           img ? h('div', { class: 'photo' }, img) : h('div'),
           h('div', { class: 'word-side' },

@@ -24,7 +24,7 @@ export default {
 
     const back = h('div', { class: 'today-actions' },
       h('button', { onclick: () => ctx.go('#/panel') }, 'Panele dön'),
-      h('button', { class: 'go', onclick: () => ctx.go('#/game/coach-says/exit') }, 'Çıkış biletine geç ', icon('caret-right')));
+      h('button', { class: 'go', onclick: () => ctx.finishActivity('#/game/coach-says/exit') }, 'Sonraki adım ', icon('caret-right'))); // ders planında adımı geçer
     if (!unit) {
       el.replaceChildren(h('section', { class: 'screen error' }, h('h1', { class: 'display' }, 'Ünite açılamadı'), h('ul', {}, errors.map(e => h('li', {}, e))), back));
       return;

@@ -16,6 +16,8 @@ export default {
       persist();
       ctx.store.setAbsent(ctx.classId, [...absent]);
       toast(`Bugün ${students.length - absent.size} öğrenci derste`);
+      // Yarım kalan derse dönülüyorsa yoklamadan sonra ders devam eder
+      if (ctx.store.getSetting(`resumeLesson:${ctx.classId}`)) { ctx.store.setSetting(`resumeLesson:${ctx.classId}`, null); ctx.startLesson(); return; }
       ctx.finishActivity('#/panel'); // ders planındaysa sıradaki adıma
     }
 

@@ -3,8 +3,10 @@ import { frameFor } from '../../core/content.js';
 
 export const PHASES = ['move', 'speak', 'exit'];
 
-export function createSession(unit, { pick = 8, rng = Math.random, review = [], level = 'A2', exitLevel = level } = {}) {
-  const words = shuffle(unit.vocab, rng).slice(0, pick);
+// words: günün kelimeleri (aynı gün konuşma turu ve çıkış bileti aynı kelimeleri kullansın)
+export function createSession(unit, { pick = 8, rng = Math.random, review = [], level = 'A2', exitLevel = level, words: fixed = [] } = {}) {
+  const chosen = fixed.map(w => unit.vocab.find(v => v.word === w)).filter(Boolean);
+  const words = chosen.length ? chosen : shuffle(unit.vocab, rng).slice(0, pick);
   const cards = [...words, ...review];
   const atLevel = unit.commands.filter(c => c.level === level);
   const commands = shuffle(atLevel.length ? atLevel : unit.commands, rng);
