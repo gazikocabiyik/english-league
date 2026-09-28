@@ -10,7 +10,7 @@ export default {
       const m = Math.round((Date.now() - ts) / 60000);
       return m < 1 ? 'az önce' : `${m} dk önce`;
     };
-    const back = h('button', { class: 'ghost', onclick: () => ctx.go('#/setup') }, 'Takımlar ve ayarlara dön');
+    const back = h('button', { class: 'ghost', onclick: () => ctx.go(ctx.classId ? '#/setup' : '#/') }, ctx.classId ? 'Takımlar ve ayarlara dön' : 'Sınıf seçimine dön');
     let body;
 
     if (!conf?.url) {
@@ -43,7 +43,7 @@ export default {
         h('p', { class: 'hint' }, c.status === 'offline' ? 'Buluta şu an ulaşılamıyor; tahta yerel olarak çalışmaya devam ediyor.' : 'Supabase\'te oluşturduğun öğretmen hesabıyla giriş yap. Tahta oturumu hatırlar.'),
         email, pass,
         h('button', { class: 'go wide', onclick: login }, icon('check'), ' Giriş yap'),
-        h('button', { class: 'ghost', onclick: () => { ctx.saveCloudConfig(null); ctx.rerender(); } }, 'Bağlantı bilgisini değiştir'),
+        conf.fromCode ? null : h('button', { class: 'ghost', onclick: () => { ctx.saveCloudConfig(null); ctx.rerender(); } }, 'Bağlantı bilgisini değiştir'),
       ];
     } else {
       const s = c.sync;

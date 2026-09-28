@@ -37,7 +37,7 @@ const ctx = {
   // Bulut (Faz 5a): bağlantı bilgisi koddaki config.js'ten ya da bu tahtada bir kez girilen değerden
   cloud: { client: null, sync: null, status: 'off' },
   cloudConfig() {
-    if (CLOUD.url && CLOUD.anonKey) return CLOUD;
+    if (CLOUD.url && CLOUD.anonKey) return { ...CLOUD, fromCode: true };
     try { return JSON.parse(localStorage.getItem('okul.cloud') || 'null'); } catch { return null; }
   },
   saveCloudConfig(conf) { try { conf ? localStorage.setItem('okul.cloud', JSON.stringify(conf)) : localStorage.removeItem('okul.cloud'); } catch { /* yok */ } },
@@ -130,7 +130,7 @@ const router = createRouter(routes, (screen, args) => {
   active?.unmount?.();
   const host = h('div', { class: 'screen-host' });
   view.replaceChildren(host);
-  if (screen !== classSelect && !ctx.classId) { active = null; router.go('#/'); return; }
+  if (screen !== classSelect && screen !== cloudScreen && !ctx.classId) { active = null; router.go('#/'); return; }
   active = screen;
   Promise.resolve(screen.mount(host, ctx, args)).catch(err => {
     console.error(err);
@@ -144,14 +144,15 @@ const router = createRouter(routes, (screen, args) => {
 
 function renderTopbar() {
   const cls = ctx.classId;
-  document.getElementById('topbar').replaceChildren(
+  document.getElementById('topbar').replaceChildren(...[
     h('button', { class: 'ghost', onclick: () => ctx.go('#/') }, h('span', { class: 'class-badge' }, cls ?? 'English League')),
     cls ? h('button', { class: 'ghost', onclick: () => ctx.go('#/panel') }, `Unit ${ctx.unit}`) : null,
     h('span', { class: 'spacer' }),
     document.getElementById('timer-dock'),
     cls ? h('button', { class: 'ghost', onclick: undo }, icon('arrow-counter-clockwise'), ' Geri al') : null,
     cloudButton(),
-    h('button', { class: 'ghost', 'aria-label': 'Tam ekran', onclick: toggleFullscreen }, icon('arrows-out')));
+    h('button', { class: 'ghost', 'aria-label': 'Tam ekran', onclick: toggleFullscreen }, icon('arrows-out')),
+  ].filter(Boolean)); // boş öğe "null" yazısı olarak görünmesin
 }
 
 // Bulut simgesi: yeşil eşitlendi, sarı bekleyen kayıt, gri çevrimdışı ya da giriş yok
