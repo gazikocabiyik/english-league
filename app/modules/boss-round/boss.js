@@ -1,6 +1,6 @@
 // Boss Round: ünitenin kelime, kalıp ve görev sorularından 10 hızlı kart (seviye L ve L+1 karışık).
 import { shuffle } from '../coach-says/deck.js';
-import { frameFor } from '../../core/content.js';
+import { frameFor, sayFor } from '../../core/content.js';
 import { fillFrame } from '../../core/speech-map.js';
 
 const article = w => (/^[aeiou]/i.test(w) ? 'an' : 'a');
@@ -18,7 +18,7 @@ export function buildBoss(unit, { levels = ['A2'], size = 10, rng = Math.random 
     : { type: 'def', prompt: `Which word means: "${v.def}"?`, answer: v.word, level: lv(i) }));
   const frame = words.map((v, i) => {
     const L = lv(i + 1);
-    const t = frameFor(unit, v.frame, L) ?? '';
+    const t = sayFor(v, L) ?? frameFor(unit, v.frame, L) ?? '';
     return { type: 'frame', prompt: t.replace('a/an ___', `${article(v.word)} ___`), img: v.img, answer: fillFrame(t, v.word), level: L };
   }).filter(c => c.prompt.includes('___'));
   const qs = [];

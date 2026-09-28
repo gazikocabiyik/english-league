@@ -1,5 +1,5 @@
 import { buildMixedDeck, shuffle } from './deck.js';
-import { frameFor } from '../../core/content.js';
+import { frameFor, sayFor } from '../../core/content.js';
 
 export const PHASES = ['move', 'speak', 'exit'];
 
@@ -31,7 +31,7 @@ export function createSession(unit, { pick = 8, rng = Math.random, review = [], 
   const lengths = { move: commands.length, speak: deck.length, exit: exitItems ? exitItems.length : words.length };
   let phase = 'move';
   let i = 0;
-  const asWord = (w, L) => ({ type: 'word', ...w, frameText: w.frameText ?? frameFor(unit, w.frame, L) });
+  const asWord = (w, L) => ({ type: 'word', ...w, frameText: w.frameText ?? sayFor(w, L) ?? frameFor(unit, w.frame, L) });
 
   return {
     get phase() { return phase; },

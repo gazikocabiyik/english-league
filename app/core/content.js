@@ -5,6 +5,15 @@ const LEVELS = ['A1', 'A2', 'B1'];
 const levelsIn = obj => ALL_LEVELS.filter(L => obj?.[L] !== undefined);
 
 // Kelimenin kalıbı: seviyeli (nesne) ya da eski düz dizi biçimi
+// Kelimenin kendi cümlesi (say): metin ya da seviyeli nesne; o seviyede yoksa bir alttaki
+export function sayFor(v, level = 'A2') {
+  if (typeof v?.say === 'string') return v.say;
+  if (!v?.say) return undefined;
+  const order = ['A1', 'A2', 'B1', 'B2'];
+  for (let i = order.indexOf(level); i >= 0; i--) if (v.say[order[i]]) return v.say[order[i]];
+  return Object.values(v.say)[0];
+}
+
 export function frameFor(unit, index, level = 'A2') {
   const f = unit.frames;
   return Array.isArray(f) ? f[index] : (f?.[level] ?? f?.A2)?.[index];
@@ -43,7 +52,10 @@ export function validateUnit(u) {
       if (!hasImg && !hasDef) errors.push(`${label}: img ya da def (soyut kelimede tanım) gerekli.`);
       if (v?.level !== undefined && !ALL_LEVELS.includes(v.level)) errors.push(`${label}: level A1, A2, B1 ya da B2 olmalı.`);
       if (v?.lesson !== undefined && !(Number.isInteger(v.lesson) && v.lesson > 0)) errors.push(`${label}: lesson 1 ya da daha büyük tam sayı olmalı.`);
-      if (!Number.isInteger(v?.frame) || v.frame < 0 || v.frame >= count) errors.push(`${label}: frame numarası geçersiz.`);
+      if (v?.say !== undefined) {
+        const says = typeof v.say === 'string' ? [v.say] : Object.values(v.say ?? {});
+        if (!says.length || !says.every(t => blanks(t) === 1)) errors.push(`${label}: say cümlelerinde tek ___ olmalı.`);
+      } else if (!Number.isInteger(v?.frame) || v.frame < 0 || v.frame >= count) errors.push(`${label}: frame numarası geçersiz.`);
     });
   }
 

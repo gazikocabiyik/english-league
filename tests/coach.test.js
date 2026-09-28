@@ -135,3 +135,16 @@ test('session: dersin çıkış maddesi yoksa o dersin kelimeleri kullanılır',
   s.setPhase('exit');
   ok(s.total > 0 && s.current().type === 'word');
 });
+
+test('session: kelimenin kendi cümlesi (say) varsa kalıp yerine o kullanılır', () => {
+  const u = { ...byLesson, vocab: [{ word: 'demand', def: 'a need', say: { A1: 'There is a big ___.', B2: 'Tech jobs will be in high ___.' }, lesson: 1, level: 'A1' }], exits: undefined };
+  const s = createSession(u, { lesson: 1, level: 'A1', rng: seeded(1) });
+  s.setPhase('speak');
+  eq(s.current().frameText, 'There is a big ___.');
+  const b = createSession(u, { lesson: 1, level: 'B2', rng: seeded(1) });
+  b.setPhase('speak');
+  eq(b.current().frameText, 'Tech jobs will be in high ___.');
+  const a2 = createSession(u, { lesson: 1, level: 'A2', rng: seeded(1) });
+  a2.setPhase('speak');
+  eq(a2.current().frameText, 'There is a big ___.', 'o seviyede yoksa bir alttaki');
+});
