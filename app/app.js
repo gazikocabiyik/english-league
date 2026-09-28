@@ -188,4 +188,18 @@ checkPersistence();
 
 mountTimerDock(document.getElementById('timer-dock'), ctx);
 ctx.startCloud();
+
+// Ekrana sığdır: tasarım 1600×900; daha küçük pencerede her şey aynı oranda küçülür (üst üste binme ve kırpılma olmaz)
+function fitScreen() {
+  const z = Math.min(1, innerWidth / 1600, innerHeight / 900);
+  document.documentElement.style.setProperty('--z', z.toFixed(3));
+  document.documentElement.style.setProperty('--vh', `${(innerHeight / z / 100).toFixed(2)}px`);
+}
+fitScreen();
+addEventListener('resize', fitScreen);
 router.start();
+
+// Çevrimdışı açılış: okul ağı siteyi engellese de tahta uygulamayı kendi hafızasından açar (bkz. ../sw.js)
+if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+  navigator.serviceWorker.register('../sw.js', { scope: '../' }).catch(() => { /* desteklenmiyor: normal çalışır */ });
+}

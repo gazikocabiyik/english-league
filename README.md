@@ -25,3 +25,8 @@ Tahtalar önce kendi hafızasıyla çalışır; giriş yapılmış tahta her de�
 4. Her tahtada Ayarlar → Bulut → e-posta ve şifre ile bir kez giriş yap. İlk girişte o tahtadaki mevcut veri buluta yüklenir.
 - Üst çubuktaki bulut: yeşil eşitlendi, sarı kayıt bekliyor, gri çevrimdışı ya da giriş yok.
 - Ücretsiz proje 7 gün kullanılmazsa uyur; tahta yerel çalışmaya devam eder, panelden "Restore" ile uyandırılınca bekleyen kayıtlar gider.
+
+## Okul ağı engeli: çevrimdışı açılış
+MEB filtresi github-pages'i engelleyebilir. Kök dizindeki `sw.js` (Service Worker), tahta siteyi internetle bir kez açınca bütün dosyaları (~22 MB) tahtanın hafızasına indirir. Sonra okul ağı engellese de uygulama tahtanın hafızasından açılır.
+- Kod ya da içerik değiştiğinde yayından önce `node scripts/precache.mjs` çalıştır. Liste eskiyse `npm test` bunu yakalar.
+- Tahta yeni sürümü, tarayıcı kapanıp internetle yeniden açıldığında alır.
