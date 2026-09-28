@@ -185,3 +185,12 @@ test('mülakat: boş havuzda çökmez (inceleme)', () => {
   eq(iv.total, 0);
   eq(iv.question(), null);
 });
+
+test('interview: derse özel soru seti varsa o dersin soruları sorulur', () => {
+  const special = [{ q: 'What are your strengths?', a: "I'm good at ___." }, { q: 'Why should we hire you?', a: 'Because I ___.' }, { q: 'What are your weaknesses?', a: 'Sometimes I ___.' }];
+  const u = { ...unit, interview: { ...unit.interview, byLesson: { 3: { A2: special } } } };
+  const iv = createInterview(u, { level: 'A2', lesson: 3, students, teams, rng: seeded(2) });
+  ok(special.some(x => x.q === iv.question().q), iv.question().q);
+  const other = createInterview(u, { level: 'A2', lesson: 2, students, teams, rng: seeded(2) });
+  ok(!special.some(x => x.q === other.question().q));
+});

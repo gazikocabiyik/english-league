@@ -38,7 +38,7 @@ export function gapAnswer(question, job, { level = 'A2', index = 0, rng = Math.r
 }
 
 
-export function createInterview(unit, { level = 'A2', students = [], candidatesToday = [], rng = Math.random } = {}) {
+export function createInterview(unit, { level = 'A2', lesson, students = [], candidatesToday = [], rng = Math.random } = {}) {
   // Adaylık sayısı: bugün aday olmamışlar önce aday olur
   const asCandidate = new Map(students.map(s => [s.id, 0]));
   for (const id of candidatesToday) if (asCandidate.has(id)) asCandidate.set(id, asCandidate.get(id) + 1);
@@ -64,7 +64,8 @@ export function createInterview(unit, { level = 'A2', students = [], candidatesT
   }
 
   const iv = unit.interview;
-  const pool = iv.questions[level] ?? iv.questions.A2;
+  // Derse özel soru seti (ör. 3. ders kitabın mülakat soruları), yoksa seviyenin genel soruları
+  const pool = iv.byLesson?.[lesson]?.[level] ?? iv.questions[level] ?? iv.questions.A2;
   const perCandidate = Math.min(iv.perCandidate ?? 3, pool.length);
   // Soru havuzu: bitene kadar tekrar etmez, sonra karışık baştan
   let qQueue = [];
@@ -106,7 +107,7 @@ export function createInterview(unit, { level = 'A2', students = [], candidatesT
     // Bugün gelen herkes en az bir kez aday oldu mu
     get allCandidatesDone() { return students.length > 0 && students.every(s => completed.has(s.id)); },
     get done() { return finished; },
-    get level() { return iv.questions[level] ? level : 'A2'; },
+    get level() { return iv.byLesson?.[lesson]?.[level] || iv.questions[level] ? level : 'A2'; },
     question() {
       const item = questions[i];
       if (!item) return null;

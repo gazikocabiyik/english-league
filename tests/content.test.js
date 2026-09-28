@@ -183,3 +183,17 @@ test('content: B2 yazılmamış ünite yüklenince B2 alanları B1\'den dolar', 
   eq(u.commands.filter(c => c.level === 'B2').length, u.commands.filter(c => c.level === 'B1').length);
   eq(good().frames.B2, undefined, 'asıl nesne değişmez');
 });
+
+test('content: ders ders içerik alanları doğrulanır', () => {
+  const u = good();
+  u.vocab.push({ word: 'achieve', tr: 'başarmak', def: 'to succeed in reaching an aim', frame: 0, lesson: 3, level: 'B1' });
+  u.exits = { 1: { A1: [{ word: 'coach' }, { q: 'Which word means a sports trainer?', a: 'coach' }, { idiom: 'think outside the box', q: 'What does it mean?', a: 'think creatively' }] } };
+  u.book = [{ id: 'b1', page: 11, title: 't', instruction: 'i', audio: 'audio/1.1.mp3', track: 'Audio 1.1', items: [{ q: 'q', a: 'a' }] }];
+  eq(validateUnit(u), []);
+  const bad = good();
+  bad.vocab.push({ word: 'x', frame: 0, level: 'C1', lesson: 0 });
+  bad.exits = { 1: { A1: [{ word: 'nope' }, { q: 'only q' }] } };
+  bad.book = [{ id: 'b1', page: 11, title: 't', instruction: 'i', audio: 'http://x/1.mp3', items: [{ q: 'q', a: 'a' }] }];
+  const e = validateUnit(bad).join(' | ');
+  for (const part of ['img ya da def', 'level', 'lesson', 'exits.1.A1[0]', 'exits.1.A1[1]', 'audio']) ok(e.includes(part), `${part}: ${e}`);
+});

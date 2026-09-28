@@ -38,7 +38,11 @@ export function validateUnit(u) {
     u.vocab.forEach((v, i) => {
       const label = `vocab[${i}] (${v?.word ?? '?'})`;
       if (typeof v?.word !== 'string' || !v.word) errors.push(`${label}: word eksik ya da metin değil.`);
-      if (typeof v?.img !== 'string' || !v.img) errors.push(`${label}: img eksik ya da metin değil.`);
+      const hasImg = typeof v?.img === 'string' && v.img;
+      const hasDef = typeof v?.def === 'string' && v.def;
+      if (!hasImg && !hasDef) errors.push(`${label}: img ya da def (soyut kelimede tanım) gerekli.`);
+      if (v?.level !== undefined && !ALL_LEVELS.includes(v.level)) errors.push(`${label}: level A1, A2, B1 ya da B2 olmalı.`);
+      if (v?.lesson !== undefined && !(Number.isInteger(v.lesson) && v.lesson > 0)) errors.push(`${label}: lesson 1 ya da daha büyük tam sayı olmalı.`);
       if (!Number.isInteger(v?.frame) || v.frame < 0 || v.frame >= count) errors.push(`${label}: frame numarası geçersiz.`);
     });
   }
@@ -85,6 +89,26 @@ export function validateUnit(u) {
       if (blanks(l?.choose) !== 1 || !Array.isArray(l?.reply) || !l.reply.length) errors.push(`dj.lines.${L}: choose tek ___ içermeli, reply en az 1 cümle olmalı.`);
     }
   }
+  // Derse özel çıkış bileti: { "1": { "A1": [ {word} | {q, a} | {idiom, q, a} ] } }
+  if (u.exits !== undefined) {
+    const words = new Set((u.vocab ?? []).map(v => v?.word));
+    for (const [n, byLevel] of Object.entries(u.exits ?? {})) for (const [L, items] of Object.entries(byLevel ?? {})) {
+      if (!ALL_LEVELS.includes(L) || !Array.isArray(items) || !items.length) { errors.push(`exits.${n}.${L}: seviye A1–B2 olmalı ve en az 1 madde içermeli.`); continue; }
+      items.forEach((x, i) => {
+        const at = `exits.${n}.${L}[${i}]`;
+        if (x?.word !== undefined) { if (!words.has(x.word)) errors.push(`${at}: "${x.word}" kelime listesinde yok.`); }
+        else if (typeof x?.q !== 'string' || typeof x?.a !== 'string' || !x.q || !x.a) errors.push(`${at}: {word} ya da {q, a} olmalı.`);
+      });
+    }
+  }
+  if (u.interview?.byLesson !== undefined) {
+    for (const [n, byLevel] of Object.entries(u.interview.byLesson ?? {})) for (const [L, qs] of Object.entries(byLevel ?? {})) {
+      if (!Array.isArray(qs) || qs.length < 3 || !qs.every(x => typeof x?.q === 'string' && typeof x?.a === 'string')) errors.push(`interview.byLesson.${n}.${L}: en az 3 {q, a} olmalı.`);
+    }
+  }
+  (u.book ?? []).forEach((b, i) => {
+    if (b?.audio !== undefined && !/^audio\/[\w.-]+\.mp3$/.test(b.audio)) errors.push(`book[${i}].audio: "audio/…mp3" biçiminde ünite klasöründeki dosya olmalı.`);
+  });
   // Ders planı ve ek içerik (video, kitap görevi, şarkı)
   const ids = key => new Set((Array.isArray(u[key]) ? u[key] : []).map(x => x?.id));
   const videos = new Set((u.media?.videos ?? []).map(v => v?.id));

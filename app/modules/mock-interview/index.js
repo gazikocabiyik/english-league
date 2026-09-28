@@ -37,11 +37,12 @@ export default {
     }
 
     const cls = ctx.store.getClass(ctx.classId);
-    // Uyarlanır seviye: Mock Interview sınıf seviyesinin bir üstünde oynar
+    // Mülakat sınıfın o dersteki seviyesinde oynar
     const level = lessonLevels(ctx.store.classLevel(ctx.classId)).interview;
     const dayStart = new Date(); dayStart.setHours(0, 0, 0, 0);
     const candidatesToday = ctx.store.attemptsOf(ctx.classId, { since: dayStart.getTime() }).filter(a => a.activity === 'interview' && a.studentId).map(a => a.studentId);
-    const iv = createInterview(unit, { level, students: ctx.store.presentStudents(ctx.classId), candidatesToday: [...new Set(candidatesToday)] }); // yalnız bugün gelenler
+    const lessonNo = await ctx.lessonNo();
+    const iv = createInterview(unit, { level, lesson: lessonNo, students: ctx.store.presentStudents(ctx.classId), candidatesToday: [...new Set(candidatesToday)] }); // yalnız bugün gelenler
     const teamOf = s => cls.teams.find(t => t.id === s.teamId);
 
     if (!iv.pair) {
@@ -161,7 +162,7 @@ export default {
             !reveal && gap.hint ? h('span', { class: 'tape hint-chip', lang: 'en' }, `İpucu: ${gap.hint}`) : null,
             !reveal && gap.options ? h('div', { class: 'word-bank', lang: 'en' }, gap.options.map(o => h('span', { class: 'bank-word' }, o))) : null,
             hasGap ? h('button', { class: 'ghost small', onclick: () => { reveal = !reveal; render(false); } }, reveal ? 'Cevabı gizle' : 'Cevabı göster') : null,
-            iv.level === 'B1' && unit.b1Extend ? h('span', { class: 'tape hint-chip', lang: 'en' }, unit.b1Extend) : null),
+            ['B1', 'B2'].includes(iv.level) && unit.b1Extend ? h('span', { class: 'tape hint-chip', lang: 'en' }, unit.b1Extend) : null),
           h('div', { class: 'scores one' },
             h('span', { class: 'person-label' }, `${candidate.name} doğru cevapladı mı?`),
             h('button', { class: 'go', onclick: () => { if (point(candidate)) step(1); } }, icon('check'), ' Doğru'),

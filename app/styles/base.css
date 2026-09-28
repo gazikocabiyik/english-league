@@ -374,3 +374,13 @@ button.wide { min-width: 320px; }
 .cloud-btn.is-ok { color: var(--team-3); }
 .cloud-btn.is-wait { color: var(--accent); }
 .cloud-btn.is-off { color: var(--ink-muted); }
+
+/* Soyut kelime tanım kartı ve çıkış bileti soru/deyim kartı */
+.def-panel, .prompt-panel { display: flex; flex-direction: column; justify-content: center; gap: var(--space-3); padding: var(--space-4); background: var(--surface-2); border-radius: var(--radius); min-height: 0; overflow: hidden; }
+.phase-exit .def-panel, .phase-exit .prompt-panel { background: #fff; color: var(--tape-ink); }
+.def { margin: 0; font: 700 min(var(--step-2), calc(6 * var(--vh, 1vh)))/1.15 var(--font-body); text-wrap: balance; }
+.def-ex { margin: 0; font: 600 min(var(--step-1), calc(4.2 * var(--vh, 1vh)))/1.2 var(--font-body); color: var(--ink-muted); font-style: italic; }
+.phase-exit .def-ex { color: #555; }
+.prompt-q { all: unset; cursor: pointer; font: 800 min(var(--step-2), calc(6.5 * var(--vh, 1vh)))/1.15 var(--font-body); text-wrap: balance; }
+.idiom { all: unset; cursor: pointer; font: 900 min(var(--step-3), calc(8 * var(--vh, 1vh)))/.95 var(--font-display); text-transform: uppercase; }
+.stage-prompt .word-side .hint { font-size: min(28px, calc(3.4 * var(--vh, 1vh))); }

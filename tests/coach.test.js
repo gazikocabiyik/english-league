@@ -82,3 +82,56 @@ test('session: günün kelime listesi verilirse aynı kelimeler kullanılır (ta
   eq(s.words.map(w => w.word), ['c', 'a']);
   eq(createSession(leveled, { words: [], pick: 3, rng: seeded(2) }).words.length, 3);
 });
+
+// Ders ders içerik: kelime, komut ve çıkış bileti her derste farklı; seviye sınıfın seviyesi
+const byLesson = {
+  frames: { A1: ['It is ___.'], A2: ['I like ___.'], B1: ['I enjoy ___.'], B2: ['I would love ___.'] },
+  vocab: [1, 2, 3, 4].flatMap(n => ['A1', 'A2', 'B1', 'B2'].flatMap(L =>
+    [1, 2, 3].map(k => ({ word: `w${n}${L}${k}`, tr: 'x', img: 'm/x.jpg', frame: 0, lesson: n, level: L })))),
+  commands: [
+    ...['A1', 'A2'].flatMap(L => [{ text: `${L} gen`, safe: true, level: L }, { text: `${L} trap`, safe: false, level: L }]),
+    ...[1, 2].map(n => ({ text: `A1 lesson ${n}`, safe: true, level: 'A1', lesson: n })),
+  ],
+  exits: {
+    1: { A1: [{ word: 'w1A11' }, { q: 'Q1?', a: 'A1' }] },
+    2: { A1: [{ idiom: 'think outside the box', q: 'Meaning?', a: 'think creatively' }] },
+  },
+};
+
+test('session: konuşma turunda o dersin, seviyeye kadar olan kelimeleri', () => {
+  const s = createSession(byLesson, { lesson: 2, level: 'A2', rng: seeded(4), pick: 6 });
+  ok(s.words.length && s.words.every(w => w.lesson === 2 && ['A1', 'A2'].includes(w.level)), JSON.stringify(s.words.map(w => w.word)));
+  eq(s.words.length, 6);
+});
+
+test('session: dersin kelimesi azsa önceki derslerin kelimeleriyle tamamlanır', () => {
+  const s = createSession(byLesson, { lesson: 3, level: 'A1', pick: 8, rng: seeded(1) });
+  eq(s.words.length, 8);
+  ok(s.words.filter(w => w.lesson === 3).length === 3, 'önce dersin kendi kelimeleri');
+  ok(s.words.every(w => w.lesson <= 3 && w.level === 'A1'));
+});
+
+test('session: hareket turu dersin özel komutlarını da alır, başka dersinkini almaz', () => {
+  const texts = s => Array.from({ length: s.total }, (_, i) => (i && s.next(), s.current().text));
+  const t1 = texts(createSession(byLesson, { lesson: 1, level: 'A1', rng: seeded(2) }));
+  ok(t1.includes('A1 lesson 1') && !t1.includes('A1 lesson 2'), JSON.stringify(t1));
+});
+
+test('session: çıkış bileti dersin kendi maddeleri, sınıf seviyesinde; dersler arası farklı', () => {
+  const s1 = createSession(byLesson, { lesson: 1, level: 'A1', rng: seeded(2) });
+  s1.setPhase('exit');
+  eq(s1.total, 2);
+  eq(s1.levelOf('exit'), 'A1');
+  const items = [s1.current(), (s1.next(), s1.current())];
+  ok(items.some(c => c.type === 'word' && c.word === 'w1A11' && c.frameText === 'It is ___.'));
+  ok(items.some(c => c.type === 'prompt' && c.prompt === 'Q1?' && c.answer === 'A1'));
+  const s2 = createSession(byLesson, { lesson: 2, level: 'A1', rng: seeded(2) });
+  s2.setPhase('exit');
+  eq(s2.current(), { type: 'prompt', kind: 'idiom', idiom: 'think outside the box', prompt: 'Meaning?', answer: 'think creatively' });
+});
+
+test('session: dersin çıkış maddesi yoksa o dersin kelimeleri kullanılır', () => {
+  const s = createSession(byLesson, { lesson: 3, level: 'A2', rng: seeded(2) });
+  s.setPhase('exit');
+  ok(s.total > 0 && s.current().type === 'word');
+});

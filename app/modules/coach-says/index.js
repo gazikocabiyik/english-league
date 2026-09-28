@@ -44,10 +44,12 @@ export default {
     const unitsByNo = Object.fromEntries(loaded.filter(r => r.unit).map(r => [r.unit.unit, r.unit]));
     // Uyarlanır seviye: konuşma L, çıkış bileti L+2
     const lv = lessonLevels(ctx.store.classLevel(ctx.classId));
+    const lessonNo = await ctx.lessonNo();
+    if (!alive) return;
     const review = pickReview(plan, unitsByNo, { exclude: unit.vocab.map(v => v.word), level: lv.speak });
-    // Günün kelimeleri: konuşma turu ve çıkış bileti aynı gün aynı kelimeleri kullanır
-    const dayWordsKey = `words:${ctx.classId}:${ctx.unit}:${new Date().toLocaleDateString('sv-SE')}`;
-    const session = createSession(unit, { review, level: lv.speak, exitLevel: lv.exit, words: ctx.store.getSetting(dayWordsKey, []) });
+    // Dersin kelimeleri: aynı dersin konuşma turu ve çıkış bileti aynı listeyi kullanır; sonraki ders yeni kelimeler
+    const dayWordsKey = `words:${ctx.classId}:${ctx.unit}:L${lessonNo}:${lv.speak}`;
+    const session = createSession(unit, { review, lesson: lessonNo, level: lv.speak, exitLevel: lv.exit, words: ctx.store.getSetting(dayWordsKey, []) });
     ctx.store.setSetting(dayWordsKey, session.words.map(w => w.word));
     const markedCards = new Set(); // "tur:index" — işaretlenmiş kartlar
     const cardKey = () => `${session.phase}:${session.index}`;
@@ -64,6 +66,7 @@ export default {
     let lucky = null;
     let lastLucky = 0; // Doğru/Bilemedi çift dokunuş koruması
     let showTr = false;
+    let showAnswer = false;
 
     const onKey = e => {
       if (e.key === 'ArrowRight') step(1);
@@ -78,13 +81,13 @@ export default {
       ctx.sound.stopSpeaking();
     };
 
-    function setPhase(p) { session.setPhase(p); render(true); }
+    function setPhase(p) { session.setPhase(p); showAnswer = false; render(true); }
 
     function step(dir) {
       // Puan ya da "bilemedi" verilmeden geçilen konuşma/çıkış kartı yanlış sayılır (seviye şişmesin)
       if (dir > 0 && session.phase !== 'move' && !isMarked() && !(session.phase === 'exit' && !lucky)) rec(false, undefined, session.phase === 'exit' ? lucky?.id : undefined);
       const moved = dir > 0 ? session.next() : session.prev();
-      if (moved) { render(true); return; }
+      if (moved) { showAnswer = false; render(true); return; }
       if (dir < 0) return;
       // Ders planı çalışıyorsa bu tur bir adımdır: plandaki sıradaki adıma geç
       // Yalnız ders planının şu anki adımı olarak açılmış bu tur planı ilerletir; serbest oyun ya da sekme değişikliği ilerletmez
@@ -130,6 +133,16 @@ export default {
         h('button', { class: 'ghost small', onclick: () => { lucky = picker.skip(); luckyByIndex.set(session.index, lucky); render(false); } }, 'Başka öğrenci'));
     }
 
+    function wordSide(c) {
+      return h('div', { class: 'word-side' },
+        c.reviewOf ? h('span', { class: 'tape review-tag' }, `Tekrar · Ü${c.reviewOf}`) : null,
+        h('button', { class: `word${c.word.length > 9 ? ' is-long' : ''}`, lang: 'en', onclick: () => ctx.sound.speak(c.word) }, c.word.toLocaleUpperCase('en')),
+        showTr && c.tr ? h('p', { class: 'tr tape' }, c.tr) : null,
+        ['B1', 'B2'].includes(session.level) && unit.b1Extend ? h('span', { class: 'tape hint-chip', lang: 'en' }, unit.b1Extend) : null,
+        h('p', { class: `frame${c.frameText.length > 34 ? ' is-long' : ''}`, lang: 'en', onclick: () => ctx.sound.speak(fillFrame(c.frameText, c.word)) }, frameParts(c.frameText, c.word)),
+        h('button', { class: 'ghost small', onclick: () => { showTr = !showTr; render(false); } }, showTr ? 'Türkçeyi gizle' : 'Türkçe'));
+    }
+
     function render(announce) {
       const c = session.current();
       let stage;
@@ -139,6 +152,27 @@ export default {
         stage = h('div', { class: 'stage stage-move' },
           h('p', { class: `command ${size}`, lang: 'en' }, c.text.toLocaleUpperCase('en')));
         if (announce) ctx.sound.speak(c.text);
+      } else if (c.type === 'prompt') {
+        // Çıkış bileti sorusu ya da deyim: soru büyük, cevap öğretmen isteyince
+        stage = h('div', { class: 'stage stage-word stage-prompt' },
+          h('div', { class: 'prompt-panel' },
+            c.kind === 'idiom' ? h('span', { class: 'tape review-tag' }, 'Idiom') : null,
+            c.idiom ? h('button', { class: 'idiom', lang: 'en', onclick: () => ctx.sound.speak(c.idiom) }, c.idiom) : null,
+            h('button', { class: 'prompt-q', lang: 'en', onclick: () => ctx.sound.speak(c.prompt) }, c.prompt)),
+          h('div', { class: 'word-side' },
+            showAnswer ? h('p', { class: 'frame', lang: 'en' }, c.answer) : h('span', { class: 'hint' }, 'Öğrenci cevaplasın, sonra kontrol edin.'),
+            h('button', { class: 'ghost small', onclick: () => { showAnswer = !showAnswer; render(false); } }, showAnswer ? 'Cevabı gizle' : 'Cevabı göster')),
+          luckyBar());
+        if (announce) ctx.sound.speak(c.idiom ?? c.prompt);
+      } else if (!c.img) {
+        // Soyut kelime: foto yerine tanım ve örnek cümle
+        stage = h('div', { class: 'stage stage-word' },
+          h('div', { class: 'def-panel' },
+            c.def ? h('p', { class: 'def', lang: 'en' }, c.def) : null,
+            c.ex ? h('p', { class: 'def-ex', lang: 'en' }, `“${c.ex}”`) : null),
+          wordSide(c),
+          session.phase === 'speak' ? teamButtons() : luckyBar());
+        if (announce) ctx.sound.speak(c.word);
       } else {
         const img = h('img', {
           class: 'word-photo', src: `content/${c.img}`, alt: c.word,
@@ -146,13 +180,7 @@ export default {
         });
         stage = h('div', { class: 'stage stage-word' },
           h('div', { class: 'photo' }, img),
-          h('div', { class: 'word-side' },
-            c.reviewOf ? h('span', { class: 'tape review-tag' }, `Tekrar · Ü${c.reviewOf}`) : null,
-            h('button', { class: `word${c.word.length > 9 ? ' is-long' : ''}`, lang: 'en', onclick: () => ctx.sound.speak(c.word) }, c.word.toLocaleUpperCase('en')),
-            showTr && c.tr ? h('p', { class: 'tr tape' }, c.tr) : null,
-            session.level === 'B1' && unit.b1Extend ? h('span', { class: 'tape hint-chip', lang: 'en' }, unit.b1Extend) : null,
-            h('p', { class: `frame${c.frameText.length > 34 ? ' is-long' : ''}`, lang: 'en', onclick: () => ctx.sound.speak(fillFrame(c.frameText, c.word)) }, frameParts(c.frameText, c.word)),
-            h('button', { class: 'ghost small', onclick: () => { showTr = !showTr; render(false); } }, showTr ? 'Türkçeyi gizle' : 'Türkçe')),
+          wordSide(c),
           session.phase === 'speak' ? teamButtons() : luckyBar());
         if (announce) ctx.sound.speak(c.word);
       }
