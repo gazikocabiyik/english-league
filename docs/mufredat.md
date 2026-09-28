@@ -62,3 +62,11 @@ Her ünitenin kelimeleri sonraki ünitelerde bilgi yoklaması olarak geri gelir:
 - **Çıkış bileti — şanslı öğrenci:** her kelimede tahta bir öğrenci seçer (o gün seçilmemişler önce). Öğretmen yalnız **Doğru** (+1) ya da **Bilemedi**'ye basar; "Başka öğrenci" hiçbir şey kaydetmez. 20 kişilik sınıfta kelime başına 1 dokunuş.
 - **Mock Interview:** yalnız aday işaretlenir (Doğru +1 adaya ve takımına / Bilemedi). Mülakatçı mülakat bitince +1 katılım puanı alır (seviye ölçümüne girmez). Sıradaki turda aday mülakatçı olur, yeni aday başka takımdan ve o gün aday olmamışlardan gelir.
 - **Okul ligi:** Lig → Okul. Şubeler öğrenci başına ortalama puanla, takımlar ve öğrenciler okul genelinde sıralanır; 11/12 filtresi ve haftalık/tüm zamanlar seçimi var. Panelde şubenin haftalık okul sırası görünür.
+
+## Ünite = 4 ders (Faz 4, pilot 1. üniteler)
+Panelde "Bugün: Ders n/4" kartı; "Derse başla" ile adımlar sırayla akar, her etkinlik bitince sıradakine geçilir (yalnız planın o anki adımı planı ilerletir; serbest etkinlikler planı etkilemez). "Dersi durdur" ile plan bekletilir; yarım kalan ders ertesi gün kendiliğinden devreye girmez.
+- **Ders 1 · Meet the words:** yoklama → Coach Says hareket → Coach Says konuşma → Kitap görevi 1 → çıkış bileti
+- **Ders 2 · Watch & talk:** yoklama → Coach Says hareket → Video 1 → ünite görevi → çıkış bileti
+- **Ders 3 · Read, watch, sing:** yoklama → Kitap görevi 2 → Video 2 → ünite görevi → şarkı molası → çıkış bileti
+- **Ders 4 · Boss day:** yoklama → Coach Says konuşma → Boss Round (+ ünite rozeti) → şarkı molası → çıkış bileti
+Onaylı içerik: 11/Ü1 videolar BBC Learning English "Present continuous and going to", English Panda "Future plans conversation"; şarkı *Hall of Fame*. 12/Ü1 videolar Caribou English "Music genres + guess the genre", Teacher Belen "Music genres — likes/dislikes"; şarkılar *We Will Rock You*, *Eye of the Tiger*. Videolar gömülür, sözler ve kitap metni kopyalanmaz. 12. sınıf kitap sayfa numaraları öğretmen kitabından; öğrenci kitabında teyit edilecek.

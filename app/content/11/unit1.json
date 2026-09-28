@@ -529,59 +529,6 @@
     "videos": [
       {
         "id": "v1",
-        "youtubeId": "yzLh9Y9oOmA",
-        "start": 0,
-        "end": 180,
-        "title": "Jobs and what they do",
-        "source": "Rock Rabbit English",
-        "predict": "Which jobs are you going to see in the video?",
-        "questions": {
-          "A1": [
-            {
-              "q": "Who helps sick animals?",
-              "a": "A vet."
-            },
-            {
-              "q": "Who flies a plane?",
-              "a": "A pilot."
-            },
-            {
-              "q": "Who teaches students?",
-              "a": "A teacher."
-            }
-          ],
-          "A2": [
-            {
-              "q": "What does a firefighter do?",
-              "a": "A firefighter puts out fires."
-            },
-            {
-              "q": "Where does a doctor work?",
-              "a": "A doctor works in a hospital."
-            },
-            {
-              "q": "What does an architect design?",
-              "a": "An architect designs buildings."
-            }
-          ],
-          "B1": [
-            {
-              "q": "Which job in the video is the most difficult? Why?",
-              "a": "I think … is the most difficult because …"
-            },
-            {
-              "q": "Which job needs a university degree?",
-              "a": "… needs a degree because …"
-            },
-            {
-              "q": "Which job would you like to try for one day?",
-              "a": "I'd like to try … because …"
-            }
-          ]
-        }
-      },
-      {
-        "id": "v2",
         "youtubeId": "-8660VeIj4U",
         "start": 0,
         "end": 240,
@@ -629,6 +576,59 @@
             {
               "q": "What will you probably do in ten years?",
               "a": "In ten years, I will probably …"
+            }
+          ]
+        }
+      },
+      {
+        "id": "v2",
+        "youtubeId": "79Yxp84s0KI",
+        "start": 0,
+        "end": 240,
+        "title": "Future plans conversation",
+        "source": "English Panda",
+        "predict": "What is your plan for next summer?",
+        "questions": {
+          "A1": [
+            {
+              "q": "Is the conversation about the past or the future?",
+              "a": "The future."
+            },
+            {
+              "q": "Say it: I / will / study / tomorrow.",
+              "a": "I will study tomorrow."
+            },
+            {
+              "q": "What are you going to do this weekend?",
+              "a": "I'm going to …"
+            }
+          ],
+          "A2": [
+            {
+              "q": "What do the people talk about?",
+              "a": "They talk about their future plans."
+            },
+            {
+              "q": "Which words do they use for the future?",
+              "a": "Will, going to, and the present continuous."
+            },
+            {
+              "q": "What are you doing next weekend?",
+              "a": "Next weekend, I'm …"
+            }
+          ],
+          "B1": [
+            {
+              "q": "Why do we use the present continuous for some plans?",
+              "a": "For fixed plans with a time, like 'I'm meeting Ali at 5.'"
+            },
+            {
+              "q": "Tell us about a plan you have for next year.",
+              "a": "Next year, I'm going to …"
+            },
+            {
+              "q": "What job will you have in ten years? Why?",
+              "a": "In ten years, I will be … because …"
             }
           ]
         }

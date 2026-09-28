@@ -368,53 +368,53 @@
       },
       {
         "id": "v2",
-        "youtubeId": "eqdq1L84osU",
+        "youtubeId": "w_TShynxcek",
         "start": 0,
-        "end": 180,
-        "title": "Agreeing and disagreeing",
-        "source": "7ESL Learning English",
-        "predict": "How do you say 'Katılıyorum' in English?",
+        "end": 240,
+        "title": "Music genres — likes and dislikes",
+        "source": "Teacher Belen",
+        "predict": "Which music do you love, and which music do you hate?",
         "questions": {
           "A1": [
             {
-              "q": "How do you say 'Katılıyorum'?",
-              "a": "I agree."
+              "q": "Say: I like … music.",
+              "a": "I like … music."
             },
             {
-              "q": "How do you say 'Katılmıyorum'?",
-              "a": "I disagree."
+              "q": "Say: I don't like … music.",
+              "a": "I don't like … music."
             },
             {
-              "q": "Rap is the best music. Do you agree?",
-              "a": "I agree. / I disagree."
+              "q": "Do you like pop music?",
+              "a": "Yes, I do. / No, I don't."
             }
           ],
           "A2": [
             {
-              "q": "Say it politely: I disagree.",
-              "a": "I'm afraid I disagree."
+              "q": "What music do you love? Why?",
+              "a": "I love … because it's …"
             },
             {
-              "q": "Rock is good for a match. Do you agree? Why?",
-              "a": "I agree because …"
+              "q": "What music can't you stand?",
+              "a": "I can't stand …"
             },
             {
-              "q": "Classical music is boring. Do you agree?",
-              "a": "I disagree because …"
+              "q": "Do you prefer rock or pop?",
+              "a": "I prefer … to …"
             }
           ],
           "B1": [
             {
-              "q": "Give a polite way to disagree.",
-              "a": "I see your point, but …"
+              "q": "Which genre would you rather listen to before a match? Why?",
+              "a": "I'd rather listen to … because …"
             },
             {
-              "q": "Music is important for athletes. Do you agree? Why?",
-              "a": "Absolutely, because …"
+              "q": "Is there a genre you used to like but don't now?",
+              "a": "I used to like … but now …"
             },
             {
-              "q": "Loud music is bad for studying. Agree or disagree?",
-              "a": "I partly agree, because …"
+              "q": "Do you agree that taste in music shows personality?",
+              "a": "I agree / I disagree because …"
             }
           ]
         }
@@ -592,7 +592,7 @@
         },
         {
           "type": "song",
-          "id": "s1"
+          "id": "s2"
         },
         {
           "type": "exit"
