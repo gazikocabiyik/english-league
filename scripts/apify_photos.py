@@ -46,6 +46,8 @@ def main():
     for v in unit['vocab']:
         if only and v['word'] not in only:
             continue
+        if not v.get('img'):  # soyut kelime: foto yerine tanım kartı
+            continue
         dest = content / v['img']
         if dest.exists() and not force:
             print('var   ', v['word'])

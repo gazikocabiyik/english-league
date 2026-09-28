@@ -37,98 +37,126 @@
       "tr": "klasik",
       "img": "media/12/classical.jpg",
       "frame": 0,
-      "q": "symphony orchestra concert"
+      "q": "symphony orchestra concert",
+      "lesson": 1,
+      "level": "A1"
     },
     {
       "word": "rock",
       "tr": "rock",
       "img": "media/12/rock.jpg",
       "frame": 0,
-      "q": "rock band concert electric guitar"
+      "q": "rock band concert electric guitar",
+      "lesson": 1,
+      "level": "A1"
     },
     {
       "word": "pop",
       "tr": "pop",
       "img": "media/12/pop.jpg",
       "frame": 0,
-      "q": "pop concert stage singer"
+      "q": "pop concert stage singer",
+      "lesson": 1,
+      "level": "A1"
     },
     {
       "word": "rap",
       "tr": "rap",
       "img": "media/12/rap.jpg",
       "frame": 0,
-      "q": "rapper performing microphone"
+      "q": "rapper performing microphone",
+      "lesson": 1,
+      "level": "A1"
     },
     {
       "word": "folk",
       "tr": "halk müziği",
       "img": "media/12/folk.jpg",
       "frame": 0,
-      "q": "baglama saz musician"
+      "q": "baglama saz musician",
+      "lesson": 1,
+      "level": "A1"
     },
     {
       "word": "guitar",
       "tr": "gitar",
       "img": "media/12/guitar.jpg",
       "frame": 1,
-      "q": "acoustic guitar"
+      "q": "acoustic guitar",
+      "lesson": 2,
+      "level": "A1"
     },
     {
       "word": "violin",
       "tr": "keman",
       "img": "media/12/violin.jpg",
       "frame": 1,
-      "q": "violinist playing violin"
+      "q": "violinist playing violin",
+      "lesson": 2,
+      "level": "A1"
     },
     {
       "word": "piano",
       "tr": "piyano",
       "img": "media/12/piano.jpg",
       "frame": 1,
-      "q": "grand piano"
+      "q": "grand piano",
+      "lesson": 2,
+      "level": "A1"
     },
     {
       "word": "drums",
       "tr": "davul",
       "img": "media/12/drums.jpg",
       "frame": 1,
-      "q": "drum kit"
+      "q": "drum kit",
+      "lesson": 2,
+      "level": "A1"
     },
     {
       "word": "loud",
       "tr": "yüksek sesli",
       "img": "media/12/loud.jpg",
       "frame": 2,
-      "q": "stadium crowd cheering"
+      "q": "stadium crowd cheering",
+      "lesson": 3,
+      "level": "A1"
     },
     {
       "word": "calm",
       "tr": "sakin",
       "img": "media/12/calm.jpg",
       "frame": 2,
-      "q": "calm lake morning"
+      "q": "calm lake morning",
+      "lesson": 3,
+      "level": "A1"
     },
     {
       "word": "song",
       "tr": "şarkı",
       "img": "media/12/song.jpg",
       "frame": 3,
-      "q": "singer singing microphone"
+      "q": "singer singing microphone",
+      "lesson": 3,
+      "level": "A1"
     },
     {
       "word": "instrument",
       "tr": "enstrüman",
       "img": "media/12/instrument.jpg",
       "frame": 3,
-      "q": "musical instruments collection"
+      "q": "musical instruments collection",
+      "lesson": 4,
+      "level": "A1"
     },
     {
       "word": "lyrics",
       "tr": "şarkı sözleri",
       "img": "media/12/lyrics.jpg",
       "frame": 4,
-      "q": "lyrics sheet"
+      "q": "lyrics sheet",
+      "lesson": 4,
+      "level": "A1"
     }
   ],
   "commands": [
@@ -251,6 +279,150 @@
       "text": "Dance as if the music is very loud!",
       "safe": false,
       "level": "B1"
+    },
+    {
+      "text": "Coach says: dance to pop music!",
+      "safe": true,
+      "level": "A1",
+      "lesson": 1
+    },
+    {
+      "text": "Rock like a rock star!",
+      "safe": false,
+      "level": "A1",
+      "lesson": 1
+    },
+    {
+      "text": "Coach says: rap like a rapper!",
+      "safe": true,
+      "level": "A2",
+      "lesson": 1
+    },
+    {
+      "text": "Coach says: conduct an orchestra!",
+      "safe": true,
+      "level": "A2",
+      "lesson": 1
+    },
+    {
+      "text": "Coach says: show us how folk dancers dance!",
+      "safe": true,
+      "level": "B1",
+      "lesson": 1
+    },
+    {
+      "text": "Show us what rock fans do at a concert!",
+      "safe": false,
+      "level": "B1",
+      "lesson": 1
+    },
+    {
+      "text": "Coach says: play the piano!",
+      "safe": true,
+      "level": "A1",
+      "lesson": 2
+    },
+    {
+      "text": "Play the violin!",
+      "safe": false,
+      "level": "A1",
+      "lesson": 2
+    },
+    {
+      "text": "Coach says: play the drums very fast!",
+      "safe": true,
+      "level": "A2",
+      "lesson": 2
+    },
+    {
+      "text": "Tune your guitar!",
+      "safe": false,
+      "level": "A2",
+      "lesson": 2
+    },
+    {
+      "text": "Coach says: play an instrument you would like to learn!",
+      "safe": true,
+      "level": "B1",
+      "lesson": 2
+    },
+    {
+      "text": "Play the drums as quietly as you can!",
+      "safe": false,
+      "level": "B1",
+      "lesson": 2
+    },
+    {
+      "text": "Coach says: be calm!",
+      "safe": true,
+      "level": "A1",
+      "lesson": 3
+    },
+    {
+      "text": "Be loud!",
+      "safe": false,
+      "level": "A1",
+      "lesson": 3
+    },
+    {
+      "text": "Coach says: sing a song quietly!",
+      "safe": true,
+      "level": "A2",
+      "lesson": 3
+    },
+    {
+      "text": "Cover your ears because the music is loud!",
+      "safe": false,
+      "level": "A2",
+      "lesson": 3
+    },
+    {
+      "text": "Coach says: move as if you're listening to calm music!",
+      "safe": true,
+      "level": "B1",
+      "lesson": 3
+    },
+    {
+      "text": "Show us how you feel after losing a match!",
+      "safe": false,
+      "level": "B1",
+      "lesson": 3
+    },
+    {
+      "text": "Coach says: sing la la la!",
+      "safe": true,
+      "level": "A1",
+      "lesson": 4
+    },
+    {
+      "text": "Coach says: hold up your invisible instrument!",
+      "safe": true,
+      "level": "A1",
+      "lesson": 4
+    },
+    {
+      "text": "Coach says: write lyrics in the air!",
+      "safe": true,
+      "level": "A2",
+      "lesson": 4
+    },
+    {
+      "text": "Clap the rhythm of your favourite song!",
+      "safe": false,
+      "level": "A2",
+      "lesson": 4
+    },
+    {
+      "text": "Coach says: act out the story of a song!",
+      "safe": true,
+      "level": "B1",
+      "lesson": 4
+    },
+    {
+      "text": "Show us your music taste with one move!",
+      "safe": false,
+      "level": "B1",
+      "lesson": 4
     }
   ],
   "dj": {
@@ -599,5 +771,381 @@
         }
       ]
     }
-  ]
+  ],
+  "exits": {
+    "1": {
+      "A1": [
+        {
+          "word": "classical"
+        },
+        {
+          "word": "rock"
+        },
+        {
+          "word": "pop"
+        },
+        {
+          "word": "rap"
+        },
+        {
+          "word": "folk"
+        },
+        {
+          "q": "Do you like rock music?",
+          "a": "Yes, I do. / No, I don't."
+        },
+        {
+          "q": "What music do you like?",
+          "a": "I like … music."
+        },
+        {
+          "q": "Is rap music loud or calm?",
+          "a": "It's loud."
+        }
+      ],
+      "A2": [
+        {
+          "word": "classical"
+        },
+        {
+          "word": "rock"
+        },
+        {
+          "word": "pop"
+        },
+        {
+          "word": "rap"
+        },
+        {
+          "word": "folk"
+        },
+        {
+          "q": "What kind of music do you prefer?",
+          "a": "I prefer … music."
+        },
+        {
+          "q": "Which music is good for studying?",
+          "a": "I think … music is good for studying."
+        },
+        {
+          "q": "What music do you listen to before a match?",
+          "a": "I listen to … music."
+        }
+      ],
+      "B1": [
+        {
+          "word": "classical"
+        },
+        {
+          "word": "rock"
+        },
+        {
+          "word": "pop"
+        },
+        {
+          "word": "rap"
+        },
+        {
+          "word": "folk"
+        },
+        {
+          "q": "Why do you prefer this kind of music?",
+          "a": "I prefer … because it makes me feel …"
+        },
+        {
+          "q": "Which genre would you choose for a party? Why?",
+          "a": "I'd choose … because …"
+        },
+        {
+          "q": "How does music help athletes?",
+          "a": "It motivates them. / It helps them …"
+        }
+      ]
+    },
+    "2": {
+      "A1": [
+        {
+          "word": "guitar"
+        },
+        {
+          "word": "violin"
+        },
+        {
+          "word": "piano"
+        },
+        {
+          "word": "drums"
+        },
+        {
+          "q": "Can you play the guitar?",
+          "a": "Yes, I can. / No, I can't."
+        },
+        {
+          "q": "Is the piano big or small?",
+          "a": "It's big."
+        },
+        {
+          "q": "Which instrument is loud?",
+          "a": "The drums."
+        },
+        {
+          "q": "Do you like the violin?",
+          "a": "Yes, I do. / No, I don't."
+        }
+      ],
+      "A2": [
+        {
+          "word": "guitar"
+        },
+        {
+          "word": "violin"
+        },
+        {
+          "word": "piano"
+        },
+        {
+          "word": "drums"
+        },
+        {
+          "q": "Which instrument can you play?",
+          "a": "I can play the … / I can't play an instrument."
+        },
+        {
+          "q": "Which instruments are in rock music?",
+          "a": "The guitar and the drums."
+        },
+        {
+          "q": "Which instruments are in classical music?",
+          "a": "The violin and the piano."
+        },
+        {
+          "q": "Which instrument would you like to learn?",
+          "a": "I'd like to learn the …"
+        }
+      ],
+      "B1": [
+        {
+          "word": "guitar"
+        },
+        {
+          "word": "violin"
+        },
+        {
+          "word": "piano"
+        },
+        {
+          "word": "drums"
+        },
+        {
+          "q": "Which instrument would you like to learn one day? Why?",
+          "a": "I'd like to learn the … because …"
+        },
+        {
+          "q": "Is it easier to learn the drums or the violin? Why?",
+          "a": "I think … is easier because …"
+        },
+        {
+          "q": "How long does it take to learn an instrument?",
+          "a": "It takes … / It depends on …"
+        },
+        {
+          "q": "Would you rather play in a band or alone? Why?",
+          "a": "I'd rather … because …"
+        }
+      ]
+    },
+    "3": {
+      "A1": [
+        {
+          "word": "loud"
+        },
+        {
+          "word": "calm"
+        },
+        {
+          "word": "song"
+        },
+        {
+          "q": "Do you like loud music?",
+          "a": "Yes, I do. / No, I don't."
+        },
+        {
+          "q": "Is classical music calm?",
+          "a": "Yes, it is."
+        },
+        {
+          "q": "What is your favourite song?",
+          "a": "My favourite song is …"
+        },
+        {
+          "q": "Do you sing in the shower?",
+          "a": "Yes, I do. / No, I don't."
+        },
+        {
+          "q": "Is rock music loud?",
+          "a": "Yes, it is."
+        }
+      ],
+      "A2": [
+        {
+          "word": "loud"
+        },
+        {
+          "word": "calm"
+        },
+        {
+          "word": "song"
+        },
+        {
+          "q": "What music do you like after losing a match?",
+          "a": "I like … music."
+        },
+        {
+          "q": "What music is good for sleeping?",
+          "a": "Calm music."
+        },
+        {
+          "q": "Who is your favourite singer?",
+          "a": "My favourite singer is …"
+        },
+        {
+          "q": "When do you listen to loud music?",
+          "a": "When I …"
+        },
+        {
+          "q": "What song makes you happy?",
+          "a": "… makes me happy."
+        }
+      ],
+      "B1": [
+        {
+          "word": "loud"
+        },
+        {
+          "word": "calm"
+        },
+        {
+          "word": "song"
+        },
+        {
+          "q": "Can you study when the music is loud? Why?",
+          "a": "No, I can't, because …"
+        },
+        {
+          "q": "Which song is special to you? Why?",
+          "a": "… is special to me because …"
+        },
+        {
+          "q": "Why do people listen to calm music?",
+          "a": "Because it helps them relax."
+        },
+        {
+          "q": "Should schools play music in the breaks? Why?",
+          "a": "I think … because …"
+        },
+        {
+          "q": "What music would you choose before a big match?",
+          "a": "I'd choose … because it …"
+        }
+      ]
+    },
+    "4": {
+      "A1": [
+        {
+          "word": "instrument"
+        },
+        {
+          "word": "lyrics"
+        },
+        {
+          "q": "Do you listen to music every day?",
+          "a": "Yes, I do. / No, I don't."
+        },
+        {
+          "q": "Do you like songs with lyrics?",
+          "a": "Yes, I do. / No, I don't."
+        },
+        {
+          "q": "Can you sing a song in English?",
+          "a": "Yes, I can. / No, I can't."
+        },
+        {
+          "q": "What music do you like?",
+          "a": "I like … music."
+        },
+        {
+          "q": "Is music important for you?",
+          "a": "Yes, it is."
+        },
+        {
+          "q": "What instrument do you like?",
+          "a": "I like the …"
+        }
+      ],
+      "A2": [
+        {
+          "word": "instrument"
+        },
+        {
+          "word": "lyrics"
+        },
+        {
+          "q": "How often do you listen to music?",
+          "a": "I listen to music every day."
+        },
+        {
+          "q": "Where do you listen to music?",
+          "a": "On my phone. / In the car."
+        },
+        {
+          "q": "Do you prefer songs in English or in Turkish?",
+          "a": "I prefer …"
+        },
+        {
+          "q": "What do the lyrics of your favourite song say?",
+          "a": "They say …"
+        },
+        {
+          "q": "What was the most popular answer in our music survey?",
+          "a": "The most popular answer was …"
+        },
+        {
+          "q": "Which song do you know all the lyrics of?",
+          "a": "I know the lyrics of …"
+        }
+      ],
+      "B1": [
+        {
+          "word": "instrument"
+        },
+        {
+          "word": "lyrics"
+        },
+        {
+          "q": "Are lyrics more important than the melody? Why?",
+          "a": "I think … because …"
+        },
+        {
+          "q": "How has your music taste changed?",
+          "a": "I used to …, but now I …"
+        },
+        {
+          "q": "Which song has lyrics that tell a story?",
+          "a": "The lyrics of … tell a story about …"
+        },
+        {
+          "q": "Would you rather write lyrics or play an instrument? Why?",
+          "a": "I'd rather … because …"
+        },
+        {
+          "q": "How does music change your mood?",
+          "a": "When I listen to …, I feel …"
+        },
+        {
+          "q": "What would a world without music be like?",
+          "a": "It would be …"
+        }
+      ]
+    }
+  }
 }

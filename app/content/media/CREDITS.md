@@ -63,3 +63,35 @@ Khatri Caste Surnames  book
 - `media/12/shy.jpg` — Dwi Woro, Pexels License, https://www.pexels.com/photo/woman-wearing-hijab-covering-her-mouth-4676437/
 - `media/12/jealous.jpg` — Gustavo Fring, Pexels License, https://www.pexels.com/photo/a-woman-throwing-fruits-at-a-man-6870553/
 - `media/12/trust.jpg` — PNW Production, Pexels License, https://www.pexels.com/photo/friends-supporting-each-other-7625036/
+- `media/11/technician.jpg` — Mikhail Nilov, Pexels License, https://www.pexels.com/photo/fixing-of-an-engine-by-a-person-9242911/
+- `media/11/doctor.jpg` — Felipe Queiroz, Pexels License, https://www.pexels.com/photo/stethoscope-in-doctor-hands-20100299/
+- `media/11/actor.jpg` — cottonbro studio, Pexels License, https://www.pexels.com/photo/man-with-a-script-on-hand-6895807/
+- `media/11/dancer.jpg` — Rubén Ostria Baltazar, Pexels License, https://www.pexels.com/photo/elegant-ballet-dancer-in-a-black-outfit-17029891/
+- `media/11/psychologist.jpg` — Vitaly Gariev, Pexels License, https://www.pexels.com/photo/professional-counseling-session-in-modern-office-36729385/
+- `media/11/fashion-designer.jpg` — Vitaly Gariev, Pexels License, https://www.pexels.com/photo/young-fashion-designer-working-in-studio-36731207/
+- `media/11/civil-engineer.jpg` — celal keser, Pexels License, https://www.pexels.com/photo/bridge-construction-against-blue-sky-39597003/
+- `media/11/software-engineer.jpg` — Alicia Christin Gerald, Pexels License, https://www.pexels.com/photo/programming-code-on-laptop-with-developer-hands-37880001/
+- `media/11/physical-therapist.jpg` — Funkcinės Terapijos Centras, Pexels License, https://www.pexels.com/photo/physiotherapist-massaging-knee-20860607/
+- `media/11/laboratory-technician.jpg` —    https://kaboompics.com/, Pexels License, https://www.pexels.com/photo/laboratory-worker-using-modern-hospital-equipment-6627687/
+- `media/11/statistician.jpg` — Gustavo Fring, Pexels License, https://www.pexels.com/photo/charts-on-a-desk-6285258/
+- `media/11/biomedical-engineer.jpg` — ThisIsEngineering, Pexels License, https://www.pexels.com/photo/engineer-fitting-prosthetic-arm-3912950/
+- `media/11/mechatronics-engineer.jpg` — Pavel Danilyuk, Pexels License, https://www.pexels.com/photo/a-man-and-a-woman-wearing-white-coats-and-protective-goggles-8439008/
+- `media/11/human-resources-manager.jpg` — Pavel Danilyuk, Pexels License, https://www.pexels.com/photo/smiling-employee-in-suit-shaking-hands-with-client-8112156/
+- `media/11/computer-systems-analyst.jpg` — Field Engineer, Pexels License, https://www.pexels.com/photo/serious-ethnic-field-engineer-examining-hardware-and-working-on-laptop-442152/
+- `media/11/digital-content-specialist.jpg` — Jakub Zerdzicki, Pexels License, https://www.pexels.com/photo/professional-podcast-studio-setup-with-equipment-34519002/
+- `media/11/information-security-analyst.jpg` — Tima Miroshnichenko, Pexels License, https://www.pexels.com/photo/person-using-computer-5380603/
+- `media/11/nanotechnologist.jpg` — Mikhail Nilov, Pexels License, https://www.pexels.com/photo/scientists-experimenting-in-the-laboratory-9243751/
+- `media/11/market-research-analyst.jpg` — Lukas Blazek, Pexels License, https://www.pexels.com/photo/close-up-photo-of-survey-spreadsheet-590022/
+- `media/11/job.jpg` — Ivan S, Pexels License, https://www.pexels.com/photo/colleagues-using-a-laptop-7212946/
+- `media/11/computer.jpg` — Thành Đỗ, Pexels License, https://www.pexels.com/photo/woman-in-black-crew-neck-t-shirt-sitting-5530475/
+- `media/11/office.jpg` — Max Vakhtbovych, Pexels License, https://www.pexels.com/photo/open-space-office-with-tables-6794970/
+- `media/11/solar-energy.jpg` — Tom Fisk, Pexels License, https://www.pexels.com/photo/directly-above-solar-farm-9893731/
+- `media/11/phone.jpg` — Tiger Lily, Pexels License, https://www.pexels.com/photo/man-in-blue-suit-jacket-standing-near-glass-window-7109014/
+- `media/11/appointment.jpg` — Towfiqu barbhuiya, Pexels License, https://www.pexels.com/photo/close-up-photo-of-red-pins-on-a-calendar-9810172/
+- `media/11/CV.jpg` — Lukas Blazek, Pexels License, https://www.pexels.com/photo/white-ceramic-cup-on-brown-wooden-surface-590044/
+- `media/11/team-player.jpg` — Pavel Danilyuk, Pexels License, https://www.pexels.com/photo/hands-of-team-standing-together-6203631/
+- `media/11/job-ad.jpg` — Ron Lach , Pexels License, https://www.pexels.com/photo/person-making-call-while-searching-for-job-9832697/
+- `media/11/volunteer.jpg` — RDNE Stock project, Pexels License, https://www.pexels.com/photo/two-men-wearing-white-volunteer-t-shirt-6647027/
+- `media/11/donation.jpg` — RDNE Stock project, Pexels License, https://www.pexels.com/photo/a-cardboard-box-with-food-label-beside-a-charity-sign-and-paper-cups-6646847/
+- `media/11/entrepreneur.jpg` — RDNE Stock project, Pexels License, https://www.pexels.com/photo/a-man-having-a-presentation-7413908/
+- `media/11/wind-energy.jpg` — Jan van der Wolf, Pexels License, https://www.pexels.com/photo/white-wind-turbines-under-the-clear-blue-sky-8194322/
