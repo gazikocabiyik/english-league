@@ -24,7 +24,7 @@ export default {
       return;
     }
     const lv = lessonLevels(ctx.store.classLevel(ctx.classId));
-    const cards = buildBoss(unit, { levels: [lv.speak, lv.interview] });
+    const cards = buildBoss(unit, { levels: [lv.speak] });
     const cls = ctx.store.getClass(ctx.classId);
     const startTs = Date.now();
     let i = 0;

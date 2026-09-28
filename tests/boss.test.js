@@ -31,3 +31,18 @@ test('video: seviyeye göre sorular, yoksa A2', () => {
   eq(videoQuestions(v, 'B1')[0].q, '2');
   eq(videoQuestions({}, 'A1'), []);
 });
+
+test('boss: soyut kelimede foto yerine tanım sorusu; seviye üstü kelime gelmez', () => {
+  const u = {
+    frames: { A1: ['It is ___.'], A2: ['It is ___.'], B1: ['It is ___.'] },
+    vocab: [
+      { word: 'achieve', def: 'to succeed in reaching an aim', frame: 0, level: 'A2' },
+      { word: 'surgeon', img: 'm/s.jpg', frame: 0, level: 'A1' },
+      { word: 'entrepreneur', def: 'a person who starts a business', frame: 0, level: 'B2' },
+    ],
+  };
+  const deck = buildBoss(u, { levels: ['A2'], rng: seeded(3) });
+  ok(!deck.some(c => c.answer.includes('entrepreneur')), 'B2 kelime A2 sınıfa gelmez');
+  ok(!deck.some(c => c.type === 'photo' && !c.img), 'fotosuz foto kartı yok');
+  ok(deck.some(c => c.type === 'def' && c.prompt.includes('to succeed in reaching an aim') && c.answer === 'achieve'));
+});

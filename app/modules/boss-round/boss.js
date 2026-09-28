@@ -8,8 +8,14 @@ const strip = a => a.replace(/\[\[(.+?)\]\]/g, '$1');
 
 export function buildBoss(unit, { levels = ['A2'], size = 10, rng = Math.random } = {}) {
   const lv = i => levels[i % levels.length];
-  const words = shuffle(unit.vocab ?? [], rng);
-  const photo = words.map((v, i) => ({ type: 'photo', prompt: 'What is this?', img: v.img, answer: v.word, level: lv(i) }));
+  const ORDER = ['A1', 'A2', 'B1', 'B2'];
+  const top = Math.max(...levels.map(L => ORDER.indexOf(L)));
+  // Sınıfın seviyesini aşan kelime gelmez
+  const words = shuffle((unit.vocab ?? []).filter(v => ORDER.indexOf(v.level ?? 'A1') <= top), rng);
+  // Fotoğraflı kelime: "What is this?"; soyut kelime: tanımdan kelimeyi bul
+  const photo = words.map((v, i) => (v.img
+    ? { type: 'photo', prompt: 'What is this?', img: v.img, answer: v.word, level: lv(i) }
+    : { type: 'def', prompt: `Which word means: "${v.def}"?`, answer: v.word, level: lv(i) }));
   const frame = words.map((v, i) => {
     const L = lv(i + 1);
     const t = frameFor(unit, v.frame, L) ?? '';
