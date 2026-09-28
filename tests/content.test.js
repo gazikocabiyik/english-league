@@ -71,7 +71,9 @@ test('content: pilot üniteler geçerli, tuzak oranı %20–40, index uyumlu', a
       eq([u.grade, u.unit], [Number(grade), n], `${grade}/${n} başlık`);
       const traps = u.commands.filter(c => !c.safe).length / u.commands.length;
       ok(traps >= 0.2 && traps <= 0.4, `${grade}/${n} tuzak oranı ${traps}`);
-      ok(u.vocab.length >= 12 && u.vocab.length <= 16, `${grade}/${n} kelime sayısı ${u.vocab.length}`);
+      // Derslere bölünmüş ünitede her kelimenin dersi ve seviyesi olur; bölünmemişte 12–16 kelime
+      if (u.vocab.some(v => v.lesson)) ok(u.vocab.every(v => v.lesson && v.level), `${grade}/${n}: dersi/seviyesi eksik kelime`);
+      else ok(u.vocab.length >= 12 && u.vocab.length <= 16, `${grade}/${n} kelime sayısı ${u.vocab.length}`);
     }
   }
 });
@@ -196,4 +198,20 @@ test('content: ders ders içerik alanları doğrulanır', () => {
   bad.book = [{ id: 'b1', page: 11, title: 't', instruction: 'i', audio: 'http://x/1.mp3', items: [{ q: 'q', a: 'a' }] }];
   const e = validateUnit(bad).join(' | ');
   for (const part of ['img ya da def', 'level', 'lesson', 'exits.1.A1[0]', 'exits.1.A1[1]', 'audio']) ok(e.includes(part), `${part}: ${e}`);
+});
+
+test('content 11/1: her ders × A1–B2 için ≥ 8 çıkış maddesi, kelime ve komut; dersler arası bilet farklı', async () => {
+  const { readFileSync, existsSync } = await import('node:fs');
+  const u = JSON.parse(readFileSync(new URL('../app/content/11/unit1.json', import.meta.url), 'utf8'));
+  const seen = new Set();
+  for (const n of [1, 2, 3, 4]) for (const L of ['A1', 'A2', 'B1', 'B2']) {
+    const items = u.exits[n][L];
+    ok(items.length >= 8, `ders ${n} ${L}: ${items.length} madde`);
+    ok(u.vocab.some(v => v.lesson === n && v.level === L), `ders ${n} ${L}: kelime yok`);
+    ok(u.commands.some(c => c.lesson === n && c.level === L), `ders ${n} ${L}: komut yok`);
+    const sig = JSON.stringify(items);
+    ok(!seen.has(sig), `ders ${n} ${L}: bilet başka dersle aynı`);
+    seen.add(sig);
+  }
+  for (const b of u.book.filter(b => b.audio)) ok(existsSync(new URL(`../app/content/11/${b.audio}`, import.meta.url)), b.audio);
 });

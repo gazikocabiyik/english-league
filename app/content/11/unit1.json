@@ -4,7 +4,9 @@
   "title": "Future Jobs",
   "goals": [
     "Gelecek planlarından bahsetme (be going to / will)",
-    "Meslekleri ve gerekliliklerini anlatma"
+    "Meslekleri ve gerekliliklerini anlatma",
+    "Telefonda randevu alma ve iş mülakatı dili",
+    "İş ilanı ve CV okuma"
   ],
   "frames": {
     "A1": [
@@ -21,6 +23,11 @@
       "When I finish school, I'm going to be a/an ___.",
       "I'm nervous because I have a job ___ tomorrow.",
       "I'm going to study hard to get a good ___."
+    ],
+    "B2": [
+      "I'd like to work as a/an ___ because it's challenging.",
+      "I'm preparing carefully for my job ___ next week.",
+      "I'm working hard so that I can earn a decent ___."
     ]
   },
   "b1Extend": "+ Say why: because …",
@@ -30,112 +37,709 @@
       "tr": "mühendis",
       "img": "media/11/engineer.jpg",
       "frame": 0,
-      "q": "civil engineer helmet construction site"
+      "q": "civil engineer helmet construction site",
+      "level": "A1",
+      "lesson": 1
     },
     {
       "word": "architect",
       "tr": "mimar",
       "img": "media/11/architect.jpg",
       "frame": 0,
-      "q": "architect with blueprints"
+      "q": "architect with blueprints",
+      "level": "A1",
+      "lesson": 1
     },
     {
       "word": "accountant",
       "tr": "muhasebeci",
       "img": "media/11/accountant.jpg",
       "frame": 0,
-      "q": "accountant working at desk"
+      "q": "accountant working at desk",
+      "level": "A1",
+      "lesson": 1
     },
     {
       "word": "surgeon",
       "tr": "cerrah",
       "img": "media/11/surgeon.jpg",
       "frame": 0,
-      "q": "surgeon operating room"
+      "q": "surgeon operating room",
+      "level": "A1",
+      "lesson": 1
     },
     {
       "word": "dentist",
       "tr": "diş hekimi",
       "img": "media/11/dentist.jpg",
       "frame": 0,
-      "q": "dentist with patient"
+      "q": "dentist with patient",
+      "level": "A1",
+      "lesson": 1
     },
     {
       "word": "vet",
       "tr": "veteriner",
       "img": "media/11/vet.jpg",
       "frame": 0,
-      "q": "veterinarian examining dog"
+      "q": "veterinarian examining dog",
+      "level": "A1",
+      "lesson": 1
     },
     {
       "word": "designer",
       "tr": "tasarımcı",
       "img": "media/11/designer.jpg",
       "frame": 0,
-      "q": "graphic designer working"
+      "q": "graphic designer working",
+      "level": "A1",
+      "lesson": 1
     },
     {
       "word": "teacher",
       "tr": "öğretmen",
       "img": "media/11/teacher.jpg",
       "frame": 0,
-      "q": "teacher classroom students"
+      "q": "teacher classroom students",
+      "level": "A1",
+      "lesson": 1
     },
     {
       "word": "coach",
       "tr": "antrenör",
       "img": "media/11/coach.jpg",
       "frame": 0,
-      "q": "sports coach training athletes"
+      "q": "sports coach training athletes",
+      "level": "A1",
+      "lesson": 1
     },
     {
       "word": "police officer",
       "tr": "polis memuru",
       "img": "media/11/police-officer.jpg",
       "frame": 0,
-      "q": "police officer uniform street"
+      "q": "police officer uniform street",
+      "level": "A1",
+      "lesson": 1
     },
     {
       "word": "soldier",
       "tr": "asker",
       "img": "media/11/soldier.jpg",
       "frame": 0,
-      "q": "soldier in uniform"
+      "q": "soldier in uniform",
+      "level": "A1",
+      "lesson": 1
     },
     {
       "word": "firefighter",
       "tr": "itfaiyeci",
       "img": "media/11/firefighter.jpg",
       "frame": 0,
-      "q": "firefighter hose fire"
+      "q": "firefighter hose fire",
+      "level": "A1",
+      "lesson": 1
     },
     {
       "word": "pilot",
       "tr": "pilot",
       "img": "media/11/pilot.jpg",
       "frame": 0,
-      "q": "airline pilot cockpit"
+      "q": "airline pilot cockpit",
+      "level": "A1",
+      "lesson": 1
     },
     {
       "word": "interview",
       "tr": "mülakat",
       "img": "media/11/interview.jpg",
       "frame": 1,
-      "q": "interview office"
+      "q": "interview office",
+      "level": "A1",
+      "lesson": 3
     },
     {
       "word": "salary",
       "tr": "maaş",
       "img": "media/11/salary.jpg",
       "frame": 2,
-      "q": "banknotes money wallet"
+      "q": "banknotes money wallet",
+      "level": "A1",
+      "lesson": 3
     },
     {
       "word": "degree",
       "tr": "diploma",
       "img": "media/11/degree.jpg",
       "frame": 2,
-      "q": "university graduation diploma"
+      "q": "university graduation diploma",
+      "level": "A2",
+      "lesson": 3
+    },
+    {
+      "word": "technician",
+      "tr": "teknisyen",
+      "img": "media/11/technician.jpg",
+      "frame": 0,
+      "q": "technician repairing machine",
+      "level": "A1",
+      "lesson": 1
+    },
+    {
+      "word": "doctor",
+      "tr": "doktor",
+      "img": "media/11/doctor.jpg",
+      "frame": 0,
+      "q": "doctor hospital stethoscope",
+      "level": "A1",
+      "lesson": 1
+    },
+    {
+      "word": "actor",
+      "tr": "oyuncu",
+      "img": "media/11/actor.jpg",
+      "frame": 0,
+      "q": "actor on theatre stage",
+      "level": "A1",
+      "lesson": 1
+    },
+    {
+      "word": "dancer",
+      "tr": "dansçı",
+      "img": "media/11/dancer.jpg",
+      "frame": 0,
+      "q": "ballet dancer",
+      "level": "A1",
+      "lesson": 1
+    },
+    {
+      "word": "psychologist",
+      "tr": "psikolog",
+      "img": "media/11/psychologist.jpg",
+      "frame": 0,
+      "q": "psychologist therapy session",
+      "level": "A2",
+      "lesson": 1
+    },
+    {
+      "word": "fashion designer",
+      "tr": "moda tasarımcısı",
+      "img": "media/11/fashion-designer.jpg",
+      "frame": 0,
+      "q": "fashion designer sewing studio",
+      "level": "A2",
+      "lesson": 1
+    },
+    {
+      "word": "civil engineer",
+      "tr": "inşaat mühendisi",
+      "img": "media/11/civil-engineer.jpg",
+      "frame": 0,
+      "q": "civil engineer bridge construction",
+      "level": "A2",
+      "lesson": 1
+    },
+    {
+      "word": "software engineer",
+      "tr": "yazılım mühendisi",
+      "img": "media/11/software-engineer.jpg",
+      "frame": 0,
+      "q": "software developer coding laptop",
+      "level": "A2",
+      "lesson": 1
+    },
+    {
+      "word": "physical therapist",
+      "tr": "fizyoterapist",
+      "img": "media/11/physical-therapist.jpg",
+      "frame": 0,
+      "q": "physiotherapist knee athlete",
+      "level": "A2",
+      "lesson": 1
+    },
+    {
+      "word": "laboratory technician",
+      "tr": "laboratuvar teknisyeni",
+      "img": "media/11/laboratory-technician.jpg",
+      "frame": 0,
+      "q": "laboratory technician test tubes",
+      "level": "A2",
+      "lesson": 1
+    },
+    {
+      "word": "statistician",
+      "tr": "istatistikçi",
+      "img": "media/11/statistician.jpg",
+      "frame": 0,
+      "q": "data charts analysis desk",
+      "level": "B1",
+      "lesson": 1
+    },
+    {
+      "word": "biomedical engineer",
+      "tr": "biyomedikal mühendisi",
+      "img": "media/11/biomedical-engineer.jpg",
+      "frame": 0,
+      "q": "biomedical engineer prosthetic",
+      "level": "B1",
+      "lesson": 1
+    },
+    {
+      "word": "mechatronics engineer",
+      "tr": "mekatronik mühendisi",
+      "img": "media/11/mechatronics-engineer.jpg",
+      "frame": 0,
+      "q": "robot arm engineer",
+      "level": "B1",
+      "lesson": 1
+    },
+    {
+      "word": "human resources manager",
+      "tr": "insan kaynakları müdürü",
+      "img": "media/11/human-resources-manager.jpg",
+      "frame": 0,
+      "q": "manager job interview handshake office",
+      "level": "B1",
+      "lesson": 1
+    },
+    {
+      "word": "computer systems analyst",
+      "tr": "bilgisayar sistemleri analisti",
+      "img": "media/11/computer-systems-analyst.jpg",
+      "frame": 0,
+      "q": "server room computer specialist",
+      "level": "B2",
+      "lesson": 1
+    },
+    {
+      "word": "digital content specialist",
+      "tr": "dijital içerik uzmanı",
+      "img": "media/11/digital-content-specialist.jpg",
+      "frame": 0,
+      "q": "content creator camera video",
+      "level": "B2",
+      "lesson": 1
+    },
+    {
+      "word": "information security analyst",
+      "tr": "bilgi güvenliği analisti",
+      "img": "media/11/information-security-analyst.jpg",
+      "frame": 0,
+      "q": "cyber security screens code",
+      "level": "B2",
+      "lesson": 1
+    },
+    {
+      "word": "nanotechnologist",
+      "tr": "nanoteknoloji uzmanı",
+      "img": "media/11/nanotechnologist.jpg",
+      "frame": 0,
+      "q": "scientist electron microscope lab",
+      "level": "B2",
+      "lesson": 1
+    },
+    {
+      "word": "market research analyst",
+      "tr": "pazar araştırma analisti",
+      "img": "media/11/market-research-analyst.jpg",
+      "frame": 0,
+      "q": "market research survey charts",
+      "level": "B2",
+      "lesson": 1
+    },
+    {
+      "word": "job",
+      "tr": "iş, meslek",
+      "img": "media/11/job.jpg",
+      "frame": 0,
+      "q": "people working office",
+      "level": "A1",
+      "lesson": 2,
+      "say": "My father has a good ___."
+    },
+    {
+      "word": "computer",
+      "tr": "bilgisayar",
+      "img": "media/11/computer.jpg",
+      "frame": 0,
+      "q": "student using computer",
+      "level": "A1",
+      "lesson": 2,
+      "say": "I use a ___ every day."
+    },
+    {
+      "word": "office",
+      "tr": "ofis",
+      "img": "media/11/office.jpg",
+      "frame": 0,
+      "q": "modern office desks",
+      "level": "A1",
+      "lesson": 2,
+      "say": "She works in an ___."
+    },
+    {
+      "word": "solar energy",
+      "tr": "güneş enerjisi",
+      "img": "media/11/solar-energy.jpg",
+      "frame": 0,
+      "q": "solar panels field",
+      "level": "A2",
+      "lesson": 2,
+      "say": "We get ___ from the sun."
+    },
+    {
+      "word": "wind energy",
+      "tr": "rüzgâr enerjisi",
+      "img": "media/11/wind-energy.jpg",
+      "frame": 0,
+      "q": "wind turbines",
+      "level": "A2",
+      "lesson": 2,
+      "say": "Wind turbines make ___."
+    },
+    {
+      "word": "popular",
+      "tr": "popüler, sevilen",
+      "def": "liked by many people",
+      "say": "Football is very ___ in Turkey.",
+      "level": "A2",
+      "lesson": 2
+    },
+    {
+      "word": "future",
+      "tr": "gelecek",
+      "def": "the time that will come after now",
+      "say": "I want a good job in the ___.",
+      "level": "A2",
+      "lesson": 2
+    },
+    {
+      "word": "demand",
+      "tr": "talep, ihtiyaç",
+      "def": "a need for something to be supplied",
+      "say": "Digital jobs will be in high ___.",
+      "level": "B1",
+      "lesson": 2
+    },
+    {
+      "word": "employment",
+      "tr": "iş, istihdam",
+      "def": "work, especially when it is done to earn money",
+      "say": "Biomedical engineers can easily find ___.",
+      "level": "B1",
+      "lesson": 2
+    },
+    {
+      "word": "renewable",
+      "tr": "yenilenebilir",
+      "def": "able to be replaced by natural cycles, like wind and sun",
+      "say": "Wind and solar power are ___ energy sources.",
+      "level": "B1",
+      "lesson": 2
+    },
+    {
+      "word": "advances",
+      "tr": "gelişmeler",
+      "def": "developments in a particular area",
+      "say": "Tomorrow's jobs will come from today's technological ___.",
+      "level": "B2",
+      "lesson": 2
+    },
+    {
+      "word": "decline",
+      "tr": "azalmak, düşmek",
+      "def": "to become smaller, weaker or fewer",
+      "say": "The popularity of this career won't ___.",
+      "level": "B2",
+      "lesson": 2
+    },
+    {
+      "word": "addition",
+      "tr": "ek, ilave",
+      "def": "a thing that is added to something else",
+      "say": "In ___, nanotechnology is the technology of the future.",
+      "level": "B2",
+      "lesson": 2
+    },
+    {
+      "word": "phone",
+      "tr": "telefon",
+      "img": "media/11/phone.jpg",
+      "frame": 0,
+      "q": "man talking on phone office",
+      "level": "A1",
+      "lesson": 3,
+      "say": "Robin calls the manager on the ___."
+    },
+    {
+      "word": "appointment",
+      "tr": "randevu",
+      "img": "media/11/appointment.jpg",
+      "frame": 0,
+      "q": "calendar appointment planner",
+      "level": "A1",
+      "lesson": 3,
+      "say": "I can't come. I have an ___ at the dentist."
+    },
+    {
+      "word": "apply",
+      "tr": "başvurmak",
+      "def": "to ask officially for a job",
+      "say": "I'm going to ___ for the web designer job.",
+      "level": "A2",
+      "lesson": 3
+    },
+    {
+      "word": "hire",
+      "tr": "işe almak",
+      "def": "to give someone a job",
+      "say": "The company is going to ___ a new designer.",
+      "level": "A2",
+      "lesson": 3
+    },
+    {
+      "word": "CV",
+      "tr": "özgeçmiş",
+      "img": "media/11/CV.jpg",
+      "frame": 0,
+      "q": "resume cv paper desk",
+      "level": "A2",
+      "lesson": 3,
+      "say": "Write your ___ and send it to the company."
+    },
+    {
+      "word": "skills",
+      "tr": "beceriler",
+      "def": "abilities to do something well",
+      "say": "I have good computer ___.",
+      "level": "A2",
+      "lesson": 3
+    },
+    {
+      "word": "strengths",
+      "tr": "güçlü yönler",
+      "def": "the things you are good at",
+      "say": "Teamwork is one of my ___.",
+      "level": "A2",
+      "lesson": 3
+    },
+    {
+      "word": "weaknesses",
+      "tr": "zayıf yönler",
+      "def": "the things you are not good at",
+      "say": "One of my ___ is time management.",
+      "level": "A2",
+      "lesson": 3
+    },
+    {
+      "word": "vacancy",
+      "tr": "açık pozisyon",
+      "def": "a job that no one is doing and is available for someone new",
+      "say": "There is a ___ for a web designer.",
+      "level": "B1",
+      "lesson": 3
+    },
+    {
+      "word": "schedule",
+      "tr": "planlamak, ayarlamak",
+      "def": "to arrange an event for a particular time",
+      "say": "Let's ___ the interview for Wednesday.",
+      "level": "B1",
+      "lesson": 3
+    },
+    {
+      "word": "achieve",
+      "tr": "başarmak",
+      "def": "to succeed in reaching an aim",
+      "say": "I did my best to ___ success.",
+      "level": "B1",
+      "lesson": 3
+    },
+    {
+      "word": "temporary",
+      "tr": "geçici",
+      "def": "not lasting very long; not permanent",
+      "say": "I had a ___ job in the summer holidays.",
+      "level": "B1",
+      "lesson": 3
+    },
+    {
+      "word": "determined",
+      "tr": "kararlı",
+      "def": "wanting to do something very much and not letting anything stop you",
+      "say": "I'm ___ to work really hard here.",
+      "level": "B1",
+      "lesson": 3
+    },
+    {
+      "word": "ambitious",
+      "tr": "hırslı, azimli",
+      "def": "wanting very much to be successful",
+      "say": "She's an ___ young web designer.",
+      "level": "B1",
+      "lesson": 3
+    },
+    {
+      "word": "upgrade",
+      "tr": "geliştirmek",
+      "def": "to improve something so that it works better",
+      "say": "I follow new trends to ___ my skills.",
+      "level": "B2",
+      "lesson": 3
+    },
+    {
+      "word": "cope with",
+      "tr": "başa çıkmak",
+      "def": "to deal successfully with something difficult",
+      "say": "I can ___ a crisis by finding practical solutions.",
+      "level": "B2",
+      "lesson": 3
+    },
+    {
+      "word": "competent",
+      "tr": "yetkin",
+      "def": "having the knowledge or skill to do something well",
+      "say": "I'm a ___ team member.",
+      "level": "B2",
+      "lesson": 3
+    },
+    {
+      "word": "essential",
+      "tr": "çok önemli, gerekli",
+      "def": "extremely important and necessary",
+      "say": "Teamwork is ___ to an organization.",
+      "level": "B2",
+      "lesson": 3
+    },
+    {
+      "word": "letter of intent",
+      "tr": "niyet mektubu",
+      "def": "a letter you send with your CV when you apply for a job",
+      "say": "Please e-mail me a ___ this week.",
+      "level": "B2",
+      "lesson": 3
+    },
+    {
+      "word": "team player",
+      "tr": "takım oyuncusu",
+      "img": "media/11/team-player.jpg",
+      "frame": 0,
+      "q": "teamwork hands together sport team",
+      "level": "A1",
+      "lesson": 4,
+      "say": "The company needs a strong ___."
+    },
+    {
+      "word": "experience",
+      "tr": "deneyim",
+      "def": "the knowledge and skill you get from doing a job",
+      "say": "You need five years of ___.",
+      "level": "A1",
+      "lesson": 4
+    },
+    {
+      "word": "job ad",
+      "tr": "iş ilanı",
+      "img": "media/11/job-ad.jpg",
+      "frame": 0,
+      "q": "newspaper job advertisements",
+      "level": "A2",
+      "lesson": 4,
+      "say": "I read a ___ on a job search website."
+    },
+    {
+      "word": "unemployed",
+      "tr": "işsiz",
+      "def": "without a job",
+      "say": "If I were ___, I'd look for a job online.",
+      "level": "A2",
+      "lesson": 4
+    },
+    {
+      "word": "responsibilities",
+      "tr": "sorumluluklar, görevler",
+      "def": "the duties you must do in a job",
+      "say": "Planning campaigns is one of her ___.",
+      "level": "A2",
+      "lesson": 4
+    },
+    {
+      "word": "qualifications",
+      "tr": "nitelikler",
+      "def": "the degrees, skills and experience you need for a job",
+      "say": "You need a B.S. and good ___ for this job.",
+      "level": "A2",
+      "lesson": 4
+    },
+    {
+      "word": "collaborate",
+      "tr": "iş birliği yapmak",
+      "def": "to work together with other people",
+      "say": "Engineers ___ with the research department.",
+      "level": "B1",
+      "lesson": 4
+    },
+    {
+      "word": "evaluate",
+      "tr": "değerlendirmek",
+      "def": "to judge how good or useful something is",
+      "say": "The manager will ___ new digital technologies.",
+      "level": "B1",
+      "lesson": 4
+    },
+    {
+      "word": "volunteer",
+      "tr": "gönüllü",
+      "img": "media/11/volunteer.jpg",
+      "frame": 0,
+      "q": "volunteers helping community",
+      "level": "B1",
+      "lesson": 4,
+      "say": "She works as a ___ at a charity."
+    },
+    {
+      "word": "donation",
+      "tr": "bağış",
+      "img": "media/11/donation.jpg",
+      "frame": 0,
+      "q": "donation box charity",
+      "level": "B1",
+      "lesson": 4,
+      "say": "The charity received a big ___."
+    },
+    {
+      "word": "entrepreneur",
+      "tr": "girişimci",
+      "img": "media/11/entrepreneur.jpg",
+      "frame": 0,
+      "q": "young entrepreneur presenting startup",
+      "level": "B2",
+      "lesson": 4,
+      "say": "Wendy Kopp is a successful ___."
+    },
+    {
+      "word": "approximately",
+      "tr": "yaklaşık olarak",
+      "def": "close to a number, but not exactly",
+      "say": "The job will take ___ five weeks.",
+      "level": "B2",
+      "lesson": 4
+    },
+    {
+      "word": "expand",
+      "tr": "genişlemek, büyümek",
+      "def": "to become larger",
+      "say": "The organization started to ___ rapidly.",
+      "level": "B2",
+      "lesson": 4
+    },
+    {
+      "word": "recruitment agency",
+      "tr": "istihdam ajansı",
+      "def": "a company that finds workers for other companies",
+      "say": "I found my job through a ___.",
+      "level": "B2",
+      "lesson": 4
     }
   ],
   "commands": [
@@ -258,6 +862,309 @@
       "text": "Show us how a surgeon washes their hands!",
       "safe": false,
       "level": "B1"
+    },
+    {
+      "text": "Coach says: be a pilot!",
+      "safe": true,
+      "level": "A1",
+      "lesson": 1
+    },
+    {
+      "text": "Coach says: be a doctor!",
+      "safe": true,
+      "level": "A1",
+      "lesson": 1
+    },
+    {
+      "text": "Dance like a dancer!",
+      "safe": false,
+      "level": "A1",
+      "lesson": 1
+    },
+    {
+      "text": "Coach says: act like a surgeon!",
+      "safe": true,
+      "level": "A2",
+      "lesson": 1
+    },
+    {
+      "text": "Coach says: fix a machine like a technician!",
+      "safe": true,
+      "level": "A2",
+      "lesson": 1
+    },
+    {
+      "text": "Sew a shirt like a fashion designer!",
+      "safe": false,
+      "level": "A2",
+      "lesson": 1
+    },
+    {
+      "text": "Coach says: show us what a vet does with a sick dog!",
+      "safe": true,
+      "level": "B1",
+      "lesson": 1
+    },
+    {
+      "text": "Coach says: draw a building in the air like an architect!",
+      "safe": true,
+      "level": "B1",
+      "lesson": 1
+    },
+    {
+      "text": "Show us how a dancer moves!",
+      "safe": false,
+      "level": "B1",
+      "lesson": 1
+    },
+    {
+      "text": "Coach says: if you'd like to be an engineer, build an invisible bridge!",
+      "safe": true,
+      "level": "B2",
+      "lesson": 1
+    },
+    {
+      "text": "Coach says: pretend you're a psychologist listening carefully!",
+      "safe": true,
+      "level": "B2",
+      "lesson": 1
+    },
+    {
+      "text": "Analyse the data like a statistician!",
+      "safe": false,
+      "level": "B2",
+      "lesson": 1
+    },
+    {
+      "text": "Coach says: type on a computer!",
+      "safe": true,
+      "level": "A1",
+      "lesson": 2
+    },
+    {
+      "text": "Coach says: turn like a wind turbine!",
+      "safe": true,
+      "level": "A1",
+      "lesson": 2
+    },
+    {
+      "text": "Smile big!",
+      "safe": false,
+      "level": "A1",
+      "lesson": 2
+    },
+    {
+      "text": "Coach says: shine like the sun!",
+      "safe": true,
+      "level": "A2",
+      "lesson": 2
+    },
+    {
+      "text": "Coach says: jump if you feel on top of the world!",
+      "safe": true,
+      "level": "A2",
+      "lesson": 2
+    },
+    {
+      "text": "Stand on one leg and think outside the box!",
+      "safe": false,
+      "level": "A2",
+      "lesson": 2
+    },
+    {
+      "text": "Coach says: if you've made up your mind about your future job, raise your hand!",
+      "safe": true,
+      "level": "B1",
+      "lesson": 2
+    },
+    {
+      "text": "Coach says: act out a job that will be in high demand!",
+      "safe": true,
+      "level": "B1",
+      "lesson": 2
+    },
+    {
+      "text": "Show us something that will decline in the future!",
+      "safe": false,
+      "level": "B1",
+      "lesson": 2
+    },
+    {
+      "text": "Coach says: act out a great technological advance!",
+      "safe": true,
+      "level": "B2",
+      "lesson": 2
+    },
+    {
+      "text": "Coach says: if you think renewable energy is the future, spin around!",
+      "safe": true,
+      "level": "B2",
+      "lesson": 2
+    },
+    {
+      "text": "Mime a job that nanotechnology will create!",
+      "safe": false,
+      "level": "B2",
+      "lesson": 2
+    },
+    {
+      "text": "Coach says: answer the phone!",
+      "safe": true,
+      "level": "A1",
+      "lesson": 3
+    },
+    {
+      "text": "Coach says: shake hands!",
+      "safe": true,
+      "level": "A1",
+      "lesson": 3
+    },
+    {
+      "text": "Wave goodbye!",
+      "safe": false,
+      "level": "A1",
+      "lesson": 3
+    },
+    {
+      "text": "Coach says: write your CV in the air!",
+      "safe": true,
+      "level": "A2",
+      "lesson": 3
+    },
+    {
+      "text": "Coach says: show your strengths — flex your muscles!",
+      "safe": true,
+      "level": "A2",
+      "lesson": 3
+    },
+    {
+      "text": "Check your calendar!",
+      "safe": false,
+      "level": "A2",
+      "lesson": 3
+    },
+    {
+      "text": "Coach says: act like a determined candidate!",
+      "safe": true,
+      "level": "B1",
+      "lesson": 3
+    },
+    {
+      "text": "Coach says: schedule an interview on your fingers!",
+      "safe": true,
+      "level": "B1",
+      "lesson": 3
+    },
+    {
+      "text": "Show us an ambitious face!",
+      "safe": false,
+      "level": "B1",
+      "lesson": 3
+    },
+    {
+      "text": "Coach says: show us how you cope with a crisis!",
+      "safe": true,
+      "level": "B2",
+      "lesson": 3
+    },
+    {
+      "text": "Coach says: act like a competent team member!",
+      "safe": true,
+      "level": "B2",
+      "lesson": 3
+    },
+    {
+      "text": "Upgrade your posture and sit up straight!",
+      "safe": false,
+      "level": "B2",
+      "lesson": 3
+    },
+    {
+      "text": "Coach says: high five a team player!",
+      "safe": true,
+      "level": "A1",
+      "lesson": 4
+    },
+    {
+      "text": "Coach says: stand in a team line!",
+      "safe": true,
+      "level": "A1",
+      "lesson": 4
+    },
+    {
+      "text": "Clap for your team!",
+      "safe": false,
+      "level": "A1",
+      "lesson": 4
+    },
+    {
+      "text": "Coach says: read a job ad with a magnifying glass!",
+      "safe": true,
+      "level": "A2",
+      "lesson": 4
+    },
+    {
+      "text": "Coach says: dress for an interview and fix your tie!",
+      "safe": true,
+      "level": "A2",
+      "lesson": 4
+    },
+    {
+      "text": "Look for a job!",
+      "safe": false,
+      "level": "A2",
+      "lesson": 4
+    },
+    {
+      "text": "Coach says: collaborate and build a tower with your partner's hands!",
+      "safe": true,
+      "level": "B1",
+      "lesson": 4
+    },
+    {
+      "text": "Coach says: volunteer and raise your hand to help!",
+      "safe": true,
+      "level": "B1",
+      "lesson": 4
+    },
+    {
+      "text": "Evaluate your teammate with a thumbs up!",
+      "safe": false,
+      "level": "B1",
+      "lesson": 4
+    },
+    {
+      "text": "Coach says: act like an entrepreneur presenting an idea!",
+      "safe": true,
+      "level": "B2",
+      "lesson": 4
+    },
+    {
+      "text": "Coach says: expand your arms as wide as possible!",
+      "safe": true,
+      "level": "B2",
+      "lesson": 4
+    },
+    {
+      "text": "Count to approximately ten in silence!",
+      "safe": false,
+      "level": "B2",
+      "lesson": 4
+    },
+    {
+      "text": "Coach says: mime your dream job!",
+      "safe": true,
+      "level": "B2"
+    },
+    {
+      "text": "Coach says: if you'd rather work outdoors, point to the window!",
+      "safe": true,
+      "level": "B2"
+    },
+    {
+      "text": "Show us your future workplace!",
+      "safe": false,
+      "level": "B2"
     }
   ],
   "interview": {
@@ -521,9 +1428,151 @@
           "q": "Where do you see yourself in ten years?",
           "a": "In ten years, I will be {job} in a big city."
         }
+      ],
+      "B2": [
+        {
+          "q": "Can you tell me a little bit about yourself?",
+          "a": "I'm ___ and I'm really keen on sports."
+        },
+        {
+          "q": "Why do you want to be {job}?",
+          "a": "I'd like to be {job} because ___."
+        },
+        {
+          "q": "What are your strengths?",
+          "a": "I'm [[good at]] solving problems.",
+          "options": [
+            "good at",
+            "good in",
+            "good for"
+          ]
+        },
+        {
+          "q": "Where do you see yourself in five years?",
+          "a": "I hope I'll [[be]] {job}.",
+          "options": [
+            "be",
+            "being",
+            "to be"
+          ]
+        },
+        {
+          "q": "How do you cope with pressure?",
+          "a": "I [[stay]] calm and find practical solutions.",
+          "options": [
+            "stay",
+            "stays",
+            "staying"
+          ]
+        },
+        {
+          "q": "Why should we hire you?",
+          "a": "I'm a competent team player and I'm determined to ___."
+        }
       ]
     },
-    "perCandidate": 3
+    "perCandidate": 3,
+    "byLesson": {
+      "3": {
+        "A1": [
+          {
+            "q": "What's your name?",
+            "a": "My name is ___."
+          },
+          {
+            "q": "Can you work in a team?",
+            "a": "Yes, I [[can]].",
+            "options": [
+              "can",
+              "am",
+              "do"
+            ]
+          },
+          {
+            "q": "Are you good at sports?",
+            "a": "Yes, I [[am]].",
+            "options": [
+              "am",
+              "do",
+              "can"
+            ]
+          },
+          {
+            "q": "Is Monday a good time for you?",
+            "a": "Yes, [[sure]].",
+            "options": [
+              "sure",
+              "late",
+              "sorry"
+            ]
+          }
+        ],
+        "A2": [
+          {
+            "q": "What are your strengths?",
+            "a": "I'm good at ___."
+          },
+          {
+            "q": "What are your weaknesses?",
+            "a": "Sometimes I'm ___."
+          },
+          {
+            "q": "Why do you want this job?",
+            "a": "Because I like ___."
+          },
+          {
+            "q": "Can you start next week?",
+            "a": "Yes, I [[can]].",
+            "options": [
+              "can",
+              "am",
+              "will"
+            ]
+          }
+        ],
+        "B1": [
+          {
+            "q": "Can you tell me a little bit about yourself?",
+            "a": "I'm a student at a sports high school and I'm good at ___."
+          },
+          {
+            "q": "What are your strengths?",
+            "a": "I'm good at ___, and I can [[cope]] well with problems.",
+            "options": [
+              "cope",
+              "copy",
+              "hope"
+            ]
+          },
+          {
+            "q": "Why should we hire you?",
+            "a": "You should hire me because I'm ___."
+          },
+          {
+            "q": "Why do you want this job?",
+            "a": "I want this job because ___."
+          }
+        ],
+        "B2": [
+          {
+            "q": "Why do you want to leave your current job?",
+            "a": "I'm looking for a job where I can ___."
+          },
+          {
+            "q": "What are your weaknesses?",
+            "a": "I sometimes ___, but I'm working on it."
+          },
+          {
+            "q": "Why should we hire you?",
+            "a": "I'm a competent team player and I'm determined to ___."
+          },
+          {
+            "q": "Where do you see yourself in five years?",
+            "a": "I hope I'll be ___."
+          }
+        ]
+      }
+    }
   },
   "media": {
     "videos": [
@@ -699,6 +1748,176 @@
           "a": "I think … is better for me because …"
         }
       ]
+    },
+    {
+      "id": "b3",
+      "page": 11,
+      "audio": "audio/1.1.mp3",
+      "track": "Audio 1.1",
+      "title": "Career choices",
+      "instruction": "Kitabın 11. sayfasını açın: 6–8. etkinlikler. Önce sesi dinleyin (Audio 1.1), sonra takımlar yarışsın.",
+      "items": [
+        {
+          "text": "Jason is planning to become a statistician.",
+          "answer": true
+        },
+        {
+          "text": "Melanie thinks she'll study genetic engineering.",
+          "answer": false
+        },
+        {
+          "text": "Judy hopes she'll be a computer systems analyst.",
+          "answer": true
+        },
+        {
+          "q": "What is Jason keen on?",
+          "a": "Working with numbers."
+        },
+        {
+          "q": "What makes Melanie feel on top of the world?",
+          "a": "The idea of designing a new machine."
+        },
+        {
+          "q": "What is Judy crazy about?",
+          "a": "Computer science."
+        }
+      ]
+    },
+    {
+      "id": "b5",
+      "page": 14,
+      "audio": "audio/1.4.mp3",
+      "track": "Audio 1.4",
+      "title": "Short forms",
+      "instruction": "Kitabın 14. sayfasını açın: Pronunciation 3. etkinlik. Cümleleri dinleyip hep birlikte tekrar edin, sonra kısa biçim yarışı.",
+      "items": [
+        {
+          "q": "Short form: I am going to …",
+          "a": "I'm going to …"
+        },
+        {
+          "q": "Short form: will not",
+          "a": "won't"
+        },
+        {
+          "q": "Short form: they are not",
+          "a": "they aren't / they're not"
+        },
+        {
+          "q": "Short form: he is going to",
+          "a": "he's going to"
+        },
+        {
+          "text": "We use short forms like I'm and I'll in everyday speech.",
+          "answer": true
+        }
+      ]
+    },
+    {
+      "id": "b4",
+      "page": 12,
+      "audio": "audio/1.2.mp3",
+      "track": "Audio 1.2",
+      "title": "Jobs of the future",
+      "instruction": "Kitabın 12. sayfasını açın: 9–11. etkinlikler. Önce sesi dinleyin (Audio 1.2), sonra takımlar yarışsın.",
+      "items": [
+        {
+          "text": "The counselor talks about civil engineers.",
+          "answer": false
+        },
+        {
+          "text": "Digital content specialists will probably be in high demand.",
+          "answer": true
+        },
+        {
+          "text": "Nanotechnology is called the technology of the future.",
+          "answer": true
+        },
+        {
+          "q": "Most future jobs will come from today's scientific and technological ___.",
+          "a": "advances"
+        },
+        {
+          "q": "Biomedical engineers won't have difficulty in finding ___.",
+          "a": "employment"
+        },
+        {
+          "q": "Wind and solar power are ___ energy sources.",
+          "a": "renewable"
+        }
+      ]
+    },
+    {
+      "id": "b6",
+      "page": 16,
+      "audio": "audio/1.5.mp3",
+      "track": "Audio 1.5",
+      "title": "Phone call",
+      "instruction": "Kitabın 16. sayfasını açın: 4. etkinlik. Robin'in telefon konuşmasını dinleyin ve boşlukları doldurun; sonra takımlar yarışsın.",
+      "items": [
+        {
+          "q": "Blank 1: Robin applied for the ___ position.",
+          "a": "web designer"
+        },
+        {
+          "q": "Blank 2: Can Robin see Mr Taylor ___?",
+          "a": "next week"
+        },
+        {
+          "q": "Blank 3: 2 o'clock on ___",
+          "a": "Monday"
+        },
+        {
+          "q": "Blank 4: I'll be at the ___ then.",
+          "a": "dentist"
+        },
+        {
+          "q": "Blank 5: Can we meet at ___?",
+          "a": "four o'clock"
+        },
+        {
+          "q": "Blank 6: What about ___ morning?",
+          "a": "Wednesday"
+        },
+        {
+          "q": "Blank 7: The interview is at 11 o'clock on ___.",
+          "a": "the 19th of October"
+        }
+      ]
+    },
+    {
+      "id": "b7",
+      "page": 17,
+      "audio": "audio/1.6.mp3",
+      "track": "Audio 1.6",
+      "title": "Interview tips",
+      "instruction": "Kitabın 17. sayfasındaki mülakat sorularına bakın. Önce Simon'ın mülakat tavsiyelerini dinleyin (Audio 1.6), sonra takımlar yarışsın.",
+      "items": [
+        {
+          "text": "Simon says you should visit the company's website before the interview.",
+          "answer": true
+        },
+        {
+          "text": "You don't need to think about possible questions.",
+          "answer": false
+        },
+        {
+          "text": "You should dress properly.",
+          "answer": true
+        },
+        {
+          "text": "If you're late, you'll probably get the job.",
+          "answer": false
+        },
+        {
+          "q": "Name one question you should prepare for.",
+          "a": "What are your strengths? / What are your weaknesses? / Why do you want this job?"
+        },
+        {
+          "q": "What should you do with your body language?",
+          "a": "Smile and make eye contact."
+        }
+      ]
     }
   ],
   "songs": [
@@ -713,7 +1932,7 @@
   ],
   "lessons": [
     {
-      "title": "Ders 1 · Meet the words",
+      "title": "Ders 1 · Meet the jobs",
       "steps": [
         {
           "type": "attendance"
@@ -728,7 +1947,11 @@
         },
         {
           "type": "book",
-          "id": "b1"
+          "id": "b3"
+        },
+        {
+          "type": "book",
+          "id": "b5"
         },
         {
           "type": "exit"
@@ -736,7 +1959,7 @@
       ]
     },
     {
-      "title": "Ders 2 · Watch & talk",
+      "title": "Ders 2 · Future jobs & idioms",
       "steps": [
         {
           "type": "attendance"
@@ -746,11 +1969,20 @@
           "phase": "move"
         },
         {
-          "type": "video",
-          "id": "v1"
+          "type": "coach",
+          "phase": "speak"
         },
         {
-          "type": "mission"
+          "type": "book",
+          "id": "b4"
+        },
+        {
+          "type": "book",
+          "id": "b1"
+        },
+        {
+          "type": "video",
+          "id": "v1"
         },
         {
           "type": "exit"
@@ -758,14 +1990,18 @@
       ]
     },
     {
-      "title": "Ders 3 · Read, watch, sing",
+      "title": "Ders 3 · Apply & interview",
       "steps": [
         {
           "type": "attendance"
         },
         {
+          "type": "coach",
+          "phase": "move"
+        },
+        {
           "type": "book",
-          "id": "b2"
+          "id": "b6"
         },
         {
           "type": "video",
@@ -775,16 +2011,12 @@
           "type": "mission"
         },
         {
-          "type": "song",
-          "id": "s1"
-        },
-        {
           "type": "exit"
         }
       ]
     },
     {
-      "title": "Ders 4 · Boss day",
+      "title": "Ders 4 · Ads, CVs & Boss day",
       "steps": [
         {
           "type": "attendance"
@@ -792,6 +2024,14 @@
         {
           "type": "coach",
           "phase": "speak"
+        },
+        {
+          "type": "book",
+          "id": "b7"
+        },
+        {
+          "type": "book",
+          "id": "b2"
         },
         {
           "type": "boss"
@@ -805,5 +2045,524 @@
         }
       ]
     }
-  ]
+  ],
+  "idioms": [
+    {
+      "phrase": "make up your mind",
+      "meaning": "decide",
+      "tr": "karar vermek",
+      "lesson": 2
+    },
+    {
+      "phrase": "on top of the world",
+      "meaning": "extremely happy",
+      "tr": "çok mutlu, havalara uçmak",
+      "lesson": 2
+    },
+    {
+      "phrase": "think outside the box",
+      "meaning": "think creatively",
+      "tr": "yaratıcı düşünmek, kalıpların dışına çıkmak",
+      "lesson": 2
+    }
+  ],
+  "exits": {
+    "1": {
+      "A1": [
+        {
+          "word": "surgeon"
+        },
+        {
+          "word": "teacher"
+        },
+        {
+          "word": "doctor"
+        },
+        {
+          "word": "dentist"
+        },
+        {
+          "word": "vet"
+        },
+        {
+          "word": "technician"
+        },
+        {
+          "q": "What is your mother's or father's job?",
+          "a": "My mother / father is a/an …"
+        },
+        {
+          "q": "Which job is the most interesting for you?",
+          "a": "… is the most interesting."
+        }
+      ],
+      "A2": [
+        {
+          "word": "fashion designer"
+        },
+        {
+          "word": "civil engineer"
+        },
+        {
+          "word": "software engineer"
+        },
+        {
+          "word": "physical therapist"
+        },
+        {
+          "q": "What are you going to be in the future?",
+          "a": "I'm going to be a/an …"
+        },
+        {
+          "q": "Jason loves numbers. Which job is good for him?",
+          "a": "An accountant or a statistician."
+        },
+        {
+          "q": "Melanie wants to design new machines. What is she going to study?",
+          "a": "Mechatronics engineering."
+        },
+        {
+          "q": "Who works with animals?",
+          "a": "A vet."
+        }
+      ],
+      "B1": [
+        {
+          "word": "statistician"
+        },
+        {
+          "word": "biomedical engineer"
+        },
+        {
+          "word": "mechatronics engineer"
+        },
+        {
+          "word": "human resources manager"
+        },
+        {
+          "q": "Which job will be popular in the future? Why?",
+          "a": "I think … will be popular because …"
+        },
+        {
+          "q": "What is Judy's dream job?",
+          "a": "Computer systems analyst."
+        },
+        {
+          "q": "Which job needs creativity? Why?",
+          "a": "… needs creativity because …"
+        },
+        {
+          "q": "What will you do after high school?",
+          "a": "I'll … / I'm going to …"
+        }
+      ],
+      "B2": [
+        {
+          "word": "computer systems analyst"
+        },
+        {
+          "word": "digital content specialist"
+        },
+        {
+          "word": "information security analyst"
+        },
+        {
+          "word": "nanotechnologist"
+        },
+        {
+          "q": "Why will information security analysts be important?",
+          "a": "Because our lives are closely connected with computers."
+        },
+        {
+          "q": "Which future job would suit you best, and why?",
+          "a": "I think … would suit me because …"
+        },
+        {
+          "q": "What's the difference between a civil engineer and a mechanical engineer?",
+          "a": "A civil engineer builds roads and buildings; a mechanical engineer designs machines."
+        },
+        {
+          "q": "What do you hope you'll be doing in ten years?",
+          "a": "I hope I'll be working as …"
+        }
+      ]
+    },
+    "2": {
+      "A1": [
+        {
+          "word": "job"
+        },
+        {
+          "word": "computer"
+        },
+        {
+          "word": "office"
+        },
+        {
+          "idiom": "on top of the world",
+          "q": "Happy or tired?",
+          "a": "Very happy!"
+        },
+        {
+          "idiom": "make up your mind",
+          "q": "Decide or remember?",
+          "a": "Decide."
+        },
+        {
+          "idiom": "think outside the box",
+          "q": "Think creatively or think slowly?",
+          "a": "Think creatively."
+        },
+        {
+          "q": "Is wind energy good for the future?",
+          "a": "Yes, it is."
+        },
+        {
+          "q": "Do you use a computer every day?",
+          "a": "Yes, I do. / No, I don't."
+        }
+      ],
+      "A2": [
+        {
+          "word": "solar energy"
+        },
+        {
+          "word": "wind energy"
+        },
+        {
+          "word": "popular"
+        },
+        {
+          "word": "future"
+        },
+        {
+          "idiom": "on top of the world",
+          "q": "Sally won the tennis tournament. How did she feel?",
+          "a": "She felt on top of the world."
+        },
+        {
+          "idiom": "make up your mind",
+          "q": "Both dresses are nice. I can't …",
+          "a": "make up my mind."
+        },
+        {
+          "idiom": "think outside the box",
+          "q": "To solve this puzzle, you must …",
+          "a": "think outside the box."
+        },
+        {
+          "q": "Which jobs will be popular in the future?",
+          "a": "Wind energy technicians and solar energy technicians."
+        }
+      ],
+      "B1": [
+        {
+          "word": "demand"
+        },
+        {
+          "word": "employment"
+        },
+        {
+          "word": "renewable"
+        },
+        {
+          "q": "Which word means 'work, especially to earn money'?",
+          "a": "employment"
+        },
+        {
+          "q": "Which word means 'a need for something to be supplied'?",
+          "a": "demand"
+        },
+        {
+          "idiom": "on top of the world",
+          "q": "When do you feel on top of the world?",
+          "a": "I feel on top of the world when …"
+        },
+        {
+          "idiom": "make up your mind",
+          "q": "Have you made up your mind about your future job?",
+          "a": "Yes, I have. I'm going to …"
+        },
+        {
+          "idiom": "think outside the box",
+          "q": "Why do engineers need to think outside the box?",
+          "a": "Because they design new things."
+        }
+      ],
+      "B2": [
+        {
+          "word": "advances"
+        },
+        {
+          "word": "decline"
+        },
+        {
+          "word": "addition"
+        },
+        {
+          "q": "Which word means 'developments in a particular area'?",
+          "a": "advances"
+        },
+        {
+          "q": "Which word means 'to become smaller or fewer'?",
+          "a": "decline"
+        },
+        {
+          "q": "Why won't biomedical engineers have difficulty finding employment?",
+          "a": "Because of the rapid developments in biotechnology."
+        },
+        {
+          "idiom": "think outside the box",
+          "q": "Describe a time you had to think outside the box.",
+          "a": "Once, I …"
+        },
+        {
+          "idiom": "make up your mind",
+          "q": "Make a sentence with 'make up your mind'.",
+          "a": "I need to make up my mind about …"
+        }
+      ]
+    },
+    "3": {
+      "A1": [
+        {
+          "word": "interview"
+        },
+        {
+          "word": "salary"
+        },
+        {
+          "word": "phone"
+        },
+        {
+          "word": "appointment"
+        },
+        {
+          "q": "Hello, may I speak to Mr Taylor?",
+          "a": "Speaking. Who is calling?"
+        },
+        {
+          "q": "Is Monday a good time for you?",
+          "a": "Yes, sure. / Sorry, I'm not available."
+        },
+        {
+          "q": "Are you good at sports?",
+          "a": "Yes, I am."
+        },
+        {
+          "q": "What time is the interview?",
+          "a": "At 11 o'clock."
+        }
+      ],
+      "A2": [
+        {
+          "word": "apply"
+        },
+        {
+          "word": "hire"
+        },
+        {
+          "word": "CV"
+        },
+        {
+          "word": "skills"
+        },
+        {
+          "word": "strengths"
+        },
+        {
+          "word": "weaknesses"
+        },
+        {
+          "q": "What are your strengths?",
+          "a": "I'm good at …"
+        },
+        {
+          "q": "Which position did Robin apply for?",
+          "a": "Web designer."
+        }
+      ],
+      "B1": [
+        {
+          "word": "vacancy"
+        },
+        {
+          "word": "schedule"
+        },
+        {
+          "word": "achieve"
+        },
+        {
+          "word": "temporary"
+        },
+        {
+          "word": "determined"
+        },
+        {
+          "word": "ambitious"
+        },
+        {
+          "q": "Why should we hire you?",
+          "a": "You should hire me because I'm …"
+        },
+        {
+          "q": "Why couldn't Robin come on Monday at 2 o'clock?",
+          "a": "Because he had an appointment at the dentist."
+        }
+      ],
+      "B2": [
+        {
+          "word": "upgrade"
+        },
+        {
+          "word": "cope with"
+        },
+        {
+          "word": "competent"
+        },
+        {
+          "word": "essential"
+        },
+        {
+          "word": "letter of intent"
+        },
+        {
+          "q": "Tell me about a time you coped with a problem.",
+          "a": "Once, …, so I …"
+        },
+        {
+          "q": "What did Mr Taylor ask Robin to send?",
+          "a": "A letter of intent."
+        },
+        {
+          "q": "What are your weaknesses, and how are you improving them?",
+          "a": "Sometimes I …, but I'm …"
+        }
+      ]
+    },
+    "4": {
+      "A1": [
+        {
+          "word": "team player"
+        },
+        {
+          "word": "experience"
+        },
+        {
+          "q": "Do you like working in a team?",
+          "a": "Yes, I do. / No, I don't."
+        },
+        {
+          "q": "What do you send to a company: a CV or a ticket?",
+          "a": "A CV."
+        },
+        {
+          "q": "Where can you find a job?",
+          "a": "On a job website or in a newspaper."
+        },
+        {
+          "q": "What is your dream job?",
+          "a": "My dream job is …"
+        },
+        {
+          "q": "Is it good to smile in an interview?",
+          "a": "Yes, it is."
+        },
+        {
+          "q": "Is it OK to be late for an interview?",
+          "a": "No, it isn't."
+        }
+      ],
+      "A2": [
+        {
+          "word": "job ad"
+        },
+        {
+          "word": "unemployed"
+        },
+        {
+          "word": "responsibilities"
+        },
+        {
+          "word": "qualifications"
+        },
+        {
+          "q": "What should you wear to an interview?",
+          "a": "Clean and pressed clothes."
+        },
+        {
+          "q": "What should you learn before an interview?",
+          "a": "About the company and the position."
+        },
+        {
+          "q": "What degree does David have?",
+          "a": "An M.S. in Mechanical Engineering."
+        },
+        {
+          "q": "Where did Wendy Kopp study?",
+          "a": "At Princeton University."
+        }
+      ],
+      "B1": [
+        {
+          "word": "collaborate"
+        },
+        {
+          "word": "evaluate"
+        },
+        {
+          "word": "volunteer"
+        },
+        {
+          "word": "donation"
+        },
+        {
+          "q": "Would you hire Catherine? Why?",
+          "a": "Yes, because she has good leadership skills."
+        },
+        {
+          "q": "What did Wendy Kopp start?",
+          "a": "Teach For America."
+        },
+        {
+          "q": "Give two tips for a job interview.",
+          "a": "You should … and you ought to …"
+        },
+        {
+          "q": "Which vacant position would you apply for? Why?",
+          "a": "I'd apply for … because …"
+        }
+      ],
+      "B2": [
+        {
+          "word": "entrepreneur"
+        },
+        {
+          "word": "approximately"
+        },
+        {
+          "word": "expand"
+        },
+        {
+          "word": "recruitment agency"
+        },
+        {
+          "q": "Why is Wendy Kopp regarded as a successful entrepreneur?",
+          "a": "Because she started Teach For America and built a global network."
+        },
+        {
+          "q": "'No wind favors he who has no destined port.' What does it mean?",
+          "a": "If you have no goal, nothing can help you."
+        },
+        {
+          "q": "Would you choose a job search website or a recruitment agency? Why?",
+          "a": "I'd choose … because …"
+        },
+        {
+          "q": "What are the responsibilities of a Digital Advertising Manager?",
+          "a": "Planning and managing marketing campaigns and measuring website traffic."
+        }
+      ]
+    }
+  }
 }
