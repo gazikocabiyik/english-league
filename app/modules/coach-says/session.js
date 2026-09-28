@@ -15,7 +15,8 @@ export function createSession(unit, { pick = 8, rng = Math.random, review = [], 
   let words = chosen;
   if (!words.length) {
     // Önce dersin kendi kelimeleri, azsa önceki derslerinki (yakın dersten uzağa)
-    const own = shuffle(unit.vocab.filter(v => inLesson(v) && fits(v)), rng);
+    // Önce sınıfın kendi seviyesindeki kelimeler, sonra alt seviyeler (karışık sıra seviye içinde korunur)
+    const own = shuffle(unit.vocab.filter(v => inLesson(v) && fits(v)), rng).sort((x, y) => rank(y.level) - rank(x.level));
     const earlier = lesson === undefined ? [] : shuffle(unit.vocab.filter(v => v.lesson !== undefined && v.lesson < lesson && fits(v)), rng)
       .sort((x, y) => y.lesson - x.lesson);
     words = [...own, ...earlier].slice(0, pick);
@@ -25,7 +26,8 @@ export function createSession(unit, { pick = 8, rng = Math.random, review = [], 
   const atLevel = unit.commands.filter(c => c.level === level && inLesson(c));
   const commands = shuffle(atLevel.length ? atLevel : unit.commands, rng);
   // Çıkış bileti: dersin kendi maddeleri; yoksa dersin kelimeleri
-  const exitItems = unit.exits?.[lesson]?.[exitLevel] ?? unit.exits?.[lesson]?.B1 ?? null;
+  const exitSource = unit.exits?.[lesson]?.[exitLevel] ?? unit.exits?.[lesson]?.B1 ?? null;
+  const exitItems = exitSource ? shuffle(exitSource, rng) : null; // kelime ve sorular karışık gelsin
   const levels = { move: level, speak: level, exit: exitLevel };
   const deck = buildMixedDeck(words.length, review.length, rng);
   const lengths = { move: commands.length, speak: deck.length, exit: exitItems ? exitItems.length : words.length };

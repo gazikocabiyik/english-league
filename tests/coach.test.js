@@ -148,3 +148,9 @@ test('session: kelimenin kendi cümlesi (say) varsa kalıp yerine o kullanılır
   a2.setPhase('speak');
   eq(a2.current().frameText, 'There is a big ___.', 'o seviyede yoksa bir alttaki');
 });
+
+test('session: önce sınıfın kendi seviyesindeki kelimeler, sonra alt seviyeler', () => {
+  const s = createSession(byLesson, { lesson: 1, level: 'B2', pick: 5, rng: seeded(9) });
+  eq(s.words.slice(0, 3).map(w => w.level), ['B2', 'B2', 'B2']);
+  eq(s.words.slice(3).map(w => w.level), ['B1', 'B1']);
+});
