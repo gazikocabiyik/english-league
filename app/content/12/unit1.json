@@ -426,7 +426,7 @@
       "id": "b1",
       "page": 17,
       "title": "Three high school students",
-      "instruction": "Kitabın Theme 1 okuma sayfasını açın: 9. etkinlik (üç lise öğrencisi ve müzik). Öğretmen kitabında s.17 — öğrenci kitabındaki sayfayı kontrol edin. Okuyun, sonra takımlar yarışsın.",
+      "instruction": "Kitabın 17. sayfasını açın: 9. etkinlik (üç lise öğrencisi ve müzik). Okuyun, sonra takımlar yarışsın.",
       "items": [
         {
           "text": "Moaz listens to rap and hip hop.",
@@ -456,9 +456,9 @@
     },
     {
       "id": "b2",
-      "page": 12,
+      "page": 14,
       "title": "Music survey",
-      "instruction": "Kitabın Theme 1 başındaki müzik anketini açın (2. etkinlik). Öğretmen kitabında s.12 — öğrenci kitabındaki sayfayı kontrol edin. Soruları takımlar cevaplasın.",
+      "instruction": "Kitabın 14. sayfasını açın: 2. etkinlikteki müzik anketi. Soruları takımlar cevaplasın.",
       "items": [
         {
           "q": "How many hours a day do you listen to music?",
