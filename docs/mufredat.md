@@ -51,12 +51,13 @@ Format: 1 ünite ≈ 3-4 hafta × 4 saat. Her ünite = 1 **Mission** (takım) + 
 ## Sarmal tekrar (Faz 4)
 Her ünitenin kelimeleri sonraki ünitelerde bilgi yoklaması olarak geri gelir: bir sonraki ünite yeni kelime sayısının **%30**'u, iki sonraki **%10**'u, daha sonrakilerin her biri **%5**'i kadar (yeni kelimelerin üstüne eklenir; küçük %5 payları toplanıp rastgele eski ünitelere dağıtılır). Tekrar kartları Coach Says konuşma turunda bir kez gelir. Kod: `app/core/spiral.js`.
 
-## Uyarlanır seviye (Faz 4)
-- Her şube A1'den başlar. Ders içinde zorluk artar: **Coach Says (hareket + konuşma) = L**, **Mock Interview = L+1**, **çıkış bileti = L+2** (en fazla B1).
-- Doğru/yanlış: puan düğmesi = doğru; "Kimse bilemedi" / "Bilemedi" = yanlış. "Geri al" puana bağlı doğru kaydını da siler.
-- Gün değişince şube ilk açıldığında önceki dersin sonuçları değerlendirilir: bir seviyede en az 5 deneme ve %70 başarı = geçildi; yeni seviye geçilen en yüksek seviyedir (mevcut seviyenin altına inmez). Mevcut seviyede %40'ın altı bir alt seviyeye indirir.
-- Öğretmen Takımlar ekranından seviyeyi elle düzeltebilir. Kod: `app/core/levels.js`.
-- İçerik: her kalıbın A1/A2/B1 hâli (`frames`), her seviyede en az 4 hareket komutu, isteğe bağlı `interview` (şimdilik 11/Ü1).
+## Uyarlanır seviye (pilot geri bildirimiyle güncellendi)
+- Her şube A1'den başlar. Seviyeler: **A1 → A2 → B1 → B2**.
+- Seviye **her ders başında** hesaplanır (aynı gün birden çok ders yapılsa da): önceki dersteki sınıf doğruluğu **%80 ve üzeri** (en az 8 cevap) → bir üst seviye; altında kalırsa aynı seviye. Düşürme yok. Ders içinde seviye sabittir.
+- Dersteki bütün etkinlikler (hareket, konuşma, mülakat, çıkış bileti, Boss) sınıfın o dersteki seviyesindedir.
+- Aynı seviyede kalınan sonraki ders yine **yeni içerik** alır: kelimeler, komutlar, çıkış bileti ve mülakat soruları derse bağlıdır.
+- Doğru/yanlış: puan düğmesi = doğru; "Kimse bilemedi" / "Bilemedi" = yanlış. "Geri al" puana bağlı doğru kaydını da siler. Seviye elle değiştirilmez. Kod: `app/core/levels.js`, `store.ensureLessonLevel`.
+- İçerik: kalıpların A1/A2/B1 hâli zorunlu, B2 isteğe bağlı (yoksa B1 kullanılır). Kelimede `lesson` ve `level`; soyut kelimede foto yerine `def` + kendi cümlesi `say`; derse özel `exits` ve `interview.byLesson`.
 
 ## Sınıf içi akış kuralları
 - **Çıkış bileti — şanslı öğrenci:** her kelimede tahta bir öğrenci seçer (o gün seçilmemişler önce). Öğretmen yalnız **Doğru** (+1) ya da **Bilemedi**'ye basar; "Başka öğrenci" hiçbir şey kaydetmez. 20 kişilik sınıfta kelime başına 1 dokunuş.
@@ -65,8 +66,13 @@ Her ünitenin kelimeleri sonraki ünitelerde bilgi yoklaması olarak geri gelir:
 
 ## Ünite = 4 ders (Faz 4, pilot 1. üniteler)
 Panelde "Bugün: Ders n/4" kartı; "Derse başla" ile adımlar sırayla akar, her etkinlik bitince sıradakine geçilir (yalnız planın o anki adımı planı ilerletir; serbest etkinlikler planı etkilemez). "Dersi durdur" ile plan bekletilir; yarım kalan ders ertesi gün kendiliğinden devreye girmez.
-- **Ders 1 · Meet the words:** yoklama → Coach Says hareket → Coach Says konuşma → Kitap görevi 1 → çıkış bileti
-- **Ders 2 · Watch & talk:** yoklama → Coach Says hareket → Video 1 → ünite görevi → çıkış bileti
-- **Ders 3 · Read, watch, sing:** yoklama → Kitap görevi 2 → Video 2 → ünite görevi → şarkı molası → çıkış bileti
-- **Ders 4 · Boss day:** yoklama → Coach Says konuşma → Boss Round (+ ünite rozeti) → şarkı molası → çıkış bileti
-Onaylı içerik: 11/Ü1 videolar BBC Learning English "Present continuous and going to", English Panda "Future plans conversation"; şarkı *Hall of Fame*. 12/Ü1 videolar Caribou English "Music genres + guess the genre", Teacher Belen "Music genres — likes/dislikes"; şarkılar *We Will Rock You*, *Eye of the Tiger*. Videolar gömülür, sözler ve kitap metni kopyalanmaz. 12. sınıf kitap sayfaları öğrenci kitabına göre (öğretmen kitabı + 2): okuma s.17, anket s.14; kapak s.13 ile doğrulandı.
+**11/Ü1 (kitabın 1–7. bölümleri, sesler: Audio 1.1–1.6):**
+- **Ders 1 · Meet the jobs:** yoklama → hareket → konuşma (meslekler) → Kitap s.11 + Audio 1.1 → Kitap s.14 kısa biçimler + Audio 1.4 → çıkış bileti
+- **Ders 2 · Future jobs & idioms:** yoklama → hareket → konuşma (demand, employment…) → Kitap s.12 + Audio 1.2 → deyimler s.13 → Video 1 → çıkış bileti
+- **Ders 3 · Apply & interview:** yoklama → hareket → Kitap s.16 telefon + Audio 1.5 → Video 2 → Mock Interview (kitabın mülakat soruları) → çıkış bileti
+- **Ders 4 · Ads, CVs & Boss day:** yoklama → konuşma → Kitap s.17 + Audio 1.6 (mülakat tavsiyeleri) → Kitap s.22 CV'ler → Boss Round → şarkı → çıkış bileti
+
+**12/Ü1:** Ders 1 türler, Ders 2 çalgılar, Ders 3 loud/calm/song, Ders 4 instrument/lyrics; her dersin kendi çıkış bileti ve komutları var. Adımlar: Ders 1 hareket → konuşma → Kitap 1 → çıkış; Ders 2 hareket → Video 1 → Warm-up DJ → çıkış; Ders 3 Kitap 2 → Video 2 → DJ → şarkı → çıkış; Ders 4 konuşma → Boss → şarkı → çıkış.
+
+Kitap sesleri `scripts/fetch_audio.py <sınıf> <tema>` ile ingilizcehocam.net arşivinden 64 kbps olarak indirilir ve çevrimdışı hafızaya girer.
+Onaylı içerik: 11/Ü1 videolar BBC Learning English "Present continuous and going to", English Panda "Future plans conversation"; şarkı *Hall of Fame*. 12/Ü1 videolar Caribou English "Music genres + guess the genre", Teacher Belen "Music genres — likes/dislikes"; şarkılar *We Will Rock You*, *Eye of the Tiger*. Videolar gömülür, şarkı sözleri kopyalanmaz. 12. sınıf kitap sayfaları öğrenci kitabına göre (öğretmen kitabı + 2): okuma s.17, anket s.14; kapak s.13 ile doğrulandı.

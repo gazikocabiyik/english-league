@@ -33,11 +33,16 @@ def texts_of(unit):
     out = []
     for v in unit['vocab']:
         out.append((v['word'], v['word']))
-        out += [(fill_frame(fs[v['frame']], v['word']), v['word']) for fs in frames.values()]
+        if 'say' in v:  # kelimenin kendi cümlesi (soyut kelimeler)
+            says = [v['say']] if isinstance(v['say'], str) else list(v['say'].values())
+            out += [(fill_frame(t, v['word']), v['word']) for t in says]
+        else:
+            out += [(fill_frame(fs[v['frame']], v['word']), v['word']) for fs in frames.values()]
     out += [(c['text'], c['text']) for c in unit['commands']]
     iv = unit.get('interview')
     if iv:  # mülakat soruları; {job} içerenler her meslek için ayrı
-        for qs in iv['questions'].values():
+        sets = list(iv['questions'].values()) + [qs for lv in iv.get('byLesson', {}).values() for qs in lv.values()]
+        for qs in sets:
             for x in qs:
                 jobs = iv['jobs'] if '{job}' in x['q'] else [iv['jobs'][0]]
                 out += [(fill_job(x['q'], j), x['q']) for j in jobs]
@@ -52,6 +57,13 @@ def texts_of(unit):
         for it in b['items']:
             t = it.get('text') or it.get('q')
             out.append((t, t))
+    for lv in unit.get('exits', {}).values():  # derse özel çıkış bileti soruları ve deyimler
+        for items in lv.values():
+            for x in items:
+                if 'q' in x:
+                    out.append((x['q'], x['q']))
+                if 'idiom' in x:
+                    out.append((x['idiom'], x['idiom']))
     return list(dict.fromkeys(out))
 
 

@@ -383,7 +383,12 @@ button.wide { min-width: 320px; }
 .phase-exit .def-ex { color: #555; }
 .prompt-q { all: unset; cursor: pointer; font: 800 min(var(--step-2), calc(6.5 * var(--vh, 1vh)))/1.15 var(--font-body); text-wrap: balance; }
 .idiom { all: unset; cursor: pointer; font: 900 min(var(--step-3), calc(8 * var(--vh, 1vh)))/.95 var(--font-display); text-transform: uppercase; }
-.stage-prompt .word-side .hint { font-size: min(28px, calc(3.4 * var(--vh, 1vh))); }
+.stage-word.stage-prompt { grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); }
+.stage-prompt .prompt-panel { gap: var(--space-2); }
+.stage-prompt .idiom { font-size: min(var(--step-2), calc(6 * var(--vh, 1vh))); }
+.stage-prompt .idiom + .prompt-q { font-size: min(var(--step-1), calc(4.6 * var(--vh, 1vh))); font-weight: 700; }
+.stage-prompt .word-side .hint { font-size: min(28px, calc(3.4 * var(--vh, 1vh))); color: var(--tape-ink); opacity: .7; margin: 0; }
+.stage-prompt .review-tag { align-self: flex-start; }
 
 /* Kitap dinleme sesi çalar */
 .audio-bar { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); }

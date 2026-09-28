@@ -211,6 +211,7 @@ addEventListener('resize', fitScreen);
 router.start();
 
 // Çevrimdışı açılış: okul ağı siteyi engellese de tahta uygulamayı kendi hafızasından açar (bkz. ../sw.js)
-if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+// Yerelde yalnız ?sw ile (denemede eski dosya gelmesin)
+if ('serviceWorker' in navigator && (location.protocol === 'https:' || new URLSearchParams(location.search).has('sw'))) {
   navigator.serviceWorker.register('../sw.js', { scope: '../' }).catch(() => { /* desteklenmiyor: normal çalışır */ });
 }
