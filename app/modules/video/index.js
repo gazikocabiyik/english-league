@@ -25,7 +25,7 @@ export default {
       return;
     }
 
-    const level = lessonLevels(ctx.store.ensureDailyLevel(ctx.classId)).speak; // girdi etkinliği: sınıf seviyesi
+    const level = lessonLevels(ctx.store.classLevel(ctx.classId)).speak; // girdi etkinliği: sınıf seviyesi
     const questions = videoQuestions(video, level);
     const cls = ctx.store.getClass(ctx.classId);
     const picker = createPicker(ctx.store.presentStudents(ctx.classId));

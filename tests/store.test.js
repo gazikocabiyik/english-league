@@ -153,17 +153,23 @@ test('store: geri al, puana bağlı doğru kaydını da siler', () => {
   eq(s.attemptsOf('11-A').map(a => a.ok), [false]);
 });
 
-test('store: yeni şube A1; gün değişince önceki dersin sonuçlarıyla seviye güncellenir', () => {
+test('store: seviye her ders başında önceki dersin sonucuyla güncellenir (aynı gün de olsa)', () => {
   let t = new Date(2026, 8, 28, 9).getTime();
   const s = setup(() => t);
-  eq(s.ensureDailyLevel('11-A'), 'A1');
+  eq(s.ensureLessonLevel('11-A', '1:1'), { level: 'A1', changed: false });
   for (let i = 0; i < 10; i++) s.addAttempt({ classId: '11-A', level: 'A1', ok: i < 9, activity: 'speak' });
-  for (let i = 0; i < 10; i++) s.addAttempt({ classId: '11-A', level: 'A2', ok: i < 8, activity: 'interview' });
-  eq(s.ensureDailyLevel('11-A'), 'A1', 'aynı gün değişmez');
-  t = new Date(2026, 8, 30, 9).getTime();
-  eq(s.ensureDailyLevel('11-A'), 'A2');
+  t += 1000;
+  eq(s.ensureLessonLevel('11-A', '1:1'), { level: 'A1', changed: false }, 'aynı ders yeniden açılınca hesaplanmaz');
+  t += 1000;
+  const r = s.ensureLessonLevel('11-A', '1:2');
+  eq([r.level, r.changed, r.rate], ['A2', true, 90]);
   eq(s.classLevel('11-A'), 'A2');
-  eq(s.ensureDailyLevel('11-A'), 'A2', 'eski denemeler ikinci kez sayılmaz');
+  t += 1000;
+  for (let i = 0; i < 10; i++) s.addAttempt({ classId: '11-A', level: 'A2', ok: i < 7, activity: 'speak' });
+  t += 1000;
+  eq(s.ensureLessonLevel('11-A', '1:3').level, 'A2', '%70 → aynı seviye');
+  t += 1000;
+  eq(s.ensureLessonLevel('11-A', '1:4').level, 'A2', 'eski denemeler ikinci kez sayılmaz');
 });
 
 test('store: öğretmen seviyeyi elle değiştirebilir', () => {
@@ -181,17 +187,6 @@ test('store: denemesiz eski yedek yüklenir, yeni yedek denemeleri taşır', () 
   b.import(s.export());
   eq(b.attemptsOf('11-A').length, 1);
   throws(() => b.import('{"version":1,"classes":{},"events":[],"attempts":"x"}'));
-});
-
-test('store: öğretmenin elle seviyesi ertesi gün eski denemelerle bozulmaz (inceleme I3)', () => {
-  let t = new Date(2026, 8, 28, 9).getTime();
-  const s = setup(() => t);
-  s.ensureDailyLevel('11-A');
-  for (let i = 0; i < 7; i++) s.addAttempt({ classId: '11-A', level: 'A2', ok: i < 6, activity: 'interview' });
-  t += 1000;
-  s.setClassLevel('11-A', 'A1');
-  t = new Date(2026, 8, 29, 9).getTime();
-  eq(s.ensureDailyLevel('11-A'), 'A1');
 });
 
 test('store: tek geri al, aynı gruptaki olayları birlikte siler (inceleme I4)', () => {

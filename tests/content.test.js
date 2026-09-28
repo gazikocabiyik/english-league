@@ -175,3 +175,11 @@ test('content: çalışırken çökertecek içerik doğrulamada yakalanır (tara
   const errs = validateUnit(u).join(' | ');
   for (const key of ['lessons[0]: title', 'perCandidate', 'minutes', 'songs[0]: title', 'book[0]: title', 'A2', 'media.videos[0].questions']) ok(errs.includes(key), `eksik: ${key}`);
 });
+
+test('content: B2 yazılmamış ünite yüklenince B2 alanları B1\'den dolar', async () => {
+  const { withB2 } = await import('../app/core/content.js');
+  const u = withB2(good());
+  eq(u.frames.B2, u.frames.B1);
+  eq(u.commands.filter(c => c.level === 'B2').length, u.commands.filter(c => c.level === 'B1').length);
+  eq(good().frames.B2, undefined, 'asıl nesne değişmez');
+});

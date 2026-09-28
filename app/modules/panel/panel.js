@@ -15,7 +15,7 @@ export default {
     document.addEventListener('scores-changed', onChange);
     this.unmount = () => document.removeEventListener('scores-changed', onChange);
     const cls = ctx.store.getClass(ctx.classId);
-    const level = ctx.store.ensureDailyLevel(ctx.classId);
+    const level = ctx.store.classLevel(ctx.classId);
     const index = await loadIndex();
     const { unit } = await loadUnit(ctx.grade, ctx.unit);
     const visibleGames = games.filter(g => !g.hidden && (!UNIT_GAME[g.id] || unit?.[UNIT_GAME[g.id]]));
@@ -46,7 +46,7 @@ export default {
         h('div', { class: 'title-row' },
           h('h1', { class: 'display' }, ctx.classId),
           h('button', { class: 'today-btn', onclick: () => ctx.go('#/today') }, icon('users-three'), ` Bugün ${ctx.store.presentStudents(ctx.classId).length}/${cls.students.length}`),
-          h('span', { class: 'tape level-badge' }, level === 'B1' ? 'Seviye B1 · en üst seviye' : `Seviye ${level} · hedef ${levelUp(level)}`)),
+          h('span', { class: 'tape level-badge' }, level === 'B2' ? 'Seviye B2 · en üst seviye' : `Seviye ${level} · %80 ile ${levelUp(level)}`)),
         unit?.goals ? h('p', { class: 'goals' }, h('b', {}, `Unit ${ctx.unit} · ${unit.title} — hedef: `), unit.goals.join(' · ')) : null,
         h('div', { class: 'unit-row', role: 'group', 'aria-label': 'Ünite' },
           Array.from({ length: 10 }, (_, i) => i + 1).map(n => h('button', {

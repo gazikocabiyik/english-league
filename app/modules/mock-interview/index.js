@@ -38,7 +38,7 @@ export default {
 
     const cls = ctx.store.getClass(ctx.classId);
     // Uyarlanır seviye: Mock Interview sınıf seviyesinin bir üstünde oynar
-    const level = lessonLevels(ctx.store.ensureDailyLevel(ctx.classId)).interview;
+    const level = lessonLevels(ctx.store.classLevel(ctx.classId)).interview;
     const dayStart = new Date(); dayStart.setHours(0, 0, 0, 0);
     const candidatesToday = ctx.store.attemptsOf(ctx.classId, { since: dayStart.getTime() }).filter(a => a.activity === 'interview' && a.studentId).map(a => a.studentId);
     const iv = createInterview(unit, { level, students: ctx.store.presentStudents(ctx.classId), candidatesToday: [...new Set(candidatesToday)] }); // yalnız bugün gelenler

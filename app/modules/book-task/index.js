@@ -23,7 +23,7 @@ export default {
         h('button', { class: 'go', onclick: next }, 'Sonraki adım ', icon('caret-right'))));
       return;
     }
-    const level = lessonLevels(ctx.store.ensureDailyLevel(ctx.classId)).speak;
+    const level = lessonLevels(ctx.store.classLevel(ctx.classId)).speak;
     const cls = ctx.store.getClass(ctx.classId);
     let i = -1; // -1 = "kitabı açın" ekranı
     let reveal = false;

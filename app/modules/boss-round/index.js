@@ -23,7 +23,7 @@ export default {
         h('button', { class: 'go', onclick: next }, 'Sonraki adım ', icon('caret-right'))));
       return;
     }
-    const lv = lessonLevels(ctx.store.ensureDailyLevel(ctx.classId));
+    const lv = lessonLevels(ctx.store.classLevel(ctx.classId));
     const cards = buildBoss(unit, { levels: [lv.speak, lv.interview] });
     const cls = ctx.store.getClass(ctx.classId);
     const startTs = Date.now();

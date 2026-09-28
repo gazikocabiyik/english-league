@@ -62,6 +62,13 @@ const ctx = {
   },
   inLesson() { const r = store.getSetting(`lessonRun:${ctx.classId}`); return r?.unit === ctx.unit && r?.day === dayKey(Date.now()); },
   stopLesson() { store.setSetting(`lessonRun:${ctx.classId}`, null); },
+  // Ünitenin hangi dersindeyiz (1'den başlar); içerik ders ders değişir
+  async lessonNo() {
+    const { unit } = await loadUnit(ctx.grade, ctx.unit);
+    if (!unit?.lessons?.length) return 1;
+    const p = normalize(unit, ctx.lessonProgress());
+    return Math.min(p.lesson, unit.lessons.length - 1) + 1;
+  },
   lessonProgress() { return store.getSetting(`lesson:${ctx.classId}:${ctx.unit}`, { lesson: 0, step: 0 }); },
   async startLesson() {
     const { unit } = await loadUnit(ctx.grade, ctx.unit);
@@ -77,6 +84,10 @@ const ctx = {
       return;
     }
     store.setSetting(`lesson:${ctx.classId}:${ctx.unit}`, { lesson: p.lesson, step: p.step });
+    // Ders başında seviye: önceki dersin sınıf doğruluğu %80+ ise bir üst seviye
+    const lv = store.ensureLessonLevel(ctx.classId, `${ctx.unit}:${p.lesson + 1}`);
+    if (lv.changed) toast(`Seviye yükseldi: ${lv.level}${lv.rate !== undefined ? ` · geçen ders %${lv.rate}` : ''}`);
+    else if (lv.rate !== undefined) toast(`Seviye ${lv.level} · geçen ders %${lv.rate} (üst seviye için %80)`);
     store.setSetting(`lessonRun:${ctx.classId}`, { unit: ctx.unit, day: dayKey(Date.now()) });
     ctx.go(stepRoute(unit.lessons[p.lesson].steps[p.step], unit));
   },

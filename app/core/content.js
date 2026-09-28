@@ -1,4 +1,8 @@
-import { LEVELS } from './levels.js';
+import { LEVELS as ALL_LEVELS } from './levels.js';
+
+// Her ünitede zorunlu seviyeler; B2 isteğe bağlı (yoksa yüklerken B1'den doldurulur)
+const LEVELS = ['A1', 'A2', 'B1'];
+const levelsIn = obj => ALL_LEVELS.filter(L => obj?.[L] !== undefined);
 
 // Kelimenin kalıbı: seviyeli (nesne) ya da eski düz dizi biçimi
 export function frameFor(unit, index, level = 'A2') {
@@ -21,7 +25,8 @@ export function validateUnit(u) {
   if (!f || !LEVELS.every(L => Array.isArray(f[L]) && f[L].length > 0)) {
     errors.push('frames, A1/A2/B1 anahtarlı ve her biri en az 1 kalıp içeren bir nesne olmalı.');
   } else {
-    for (const L of LEVELS) {
+    for (const L of levelsIn(f)) {
+      if (!Array.isArray(f[L])) { errors.push(`frames.${L}: kalıp listesi olmalı.`); continue; }
       if (f[L].length !== count) errors.push(`frames.${L}: A2 ile aynı sayıda kalıp olmalı (${count}).`);
       f[L].forEach((t, i) => { if (blanks(t) !== 1) errors.push(`frames.${L}[${i}]: tek bir ___ boşluğu olmalı.`); });
     }
@@ -44,9 +49,9 @@ export function validateUnit(u) {
     u.commands.forEach((c, i) => {
       if (typeof c?.text !== 'string' || !c.text) errors.push(`commands[${i}]: text eksik ya da metin değil.`);
       if (typeof c?.safe !== 'boolean') errors.push(`commands[${i}]: safe true ya da false olmalı.`);
-      if (!LEVELS.includes(c?.level)) errors.push(`commands[${i}]: level A1, A2 ya da B1 olmalı.`);
+      if (!ALL_LEVELS.includes(c?.level)) errors.push(`commands[${i}]: level A1, A2, B1 ya da B2 olmalı.`);
     });
-    for (const L of LEVELS) {
+    for (const L of [...LEVELS, ...(u.commands.some(c => c?.level === 'B2') ? ['B2'] : [])]) {
       const mine = u.commands.filter(c => c?.level === L);
       if (mine.length < 4) errors.push(`commands: ${L} seviyesinde en az 4 komut olmalı.`);
       else if (!mine.some(c => c.safe === false)) errors.push(`commands: ${L} seviyesinde en az 1 tuzak komut (safe: false) olmalı.`);
@@ -58,7 +63,7 @@ export function validateUnit(u) {
     const words = new Set((u.vocab ?? []).map(v => v?.word));
     if (!Array.isArray(iv?.jobs) || !iv.jobs.length) errors.push('interview.jobs en az 1 meslek içermeli.');
     else iv.jobs.filter(j => !words.has(j)).forEach(j => errors.push(`interview.jobs: "${j}" kelime listesinde yok.`));
-    for (const L of LEVELS) {
+    for (const L of [...LEVELS, ...(iv?.questions?.B2 ? ['B2'] : [])]) {
       const qs = iv?.questions?.[L];
       if (!Array.isArray(qs) || qs.length < 3) { errors.push(`interview.questions.${L}: en az 3 soru olmalı.`); continue; }
       qs.forEach((x, i) => {
@@ -75,7 +80,7 @@ export function validateUnit(u) {
     if (!Array.isArray(dj?.genres) || !dj.genres.length) errors.push('dj.genres en az 1 tür içermeli.');
     else dj.genres.filter(g => !words.has(g)).forEach(g => errors.push(`dj.genres: "${g}" kelime listesinde yok.`));
     if (!Array.isArray(dj?.situations) || dj.situations.length < 3 || !dj.situations.every(x => typeof x?.text === 'string' && x.text)) errors.push('dj.situations en az 3 durum (text) içermeli.');
-    for (const L of LEVELS) {
+    for (const L of [...LEVELS, ...(dj?.lines?.B2 ? ['B2'] : [])]) {
       const l = dj?.lines?.[L];
       if (blanks(l?.choose) !== 1 || !Array.isArray(l?.reply) || !l.reply.length) errors.push(`dj.lines.${L}: choose tek ___ içermeli, reply en az 1 cümle olmalı.`);
     }
@@ -101,7 +106,7 @@ export function validateUnit(u) {
   });
   (u.media?.videos ?? []).forEach((v, i) => {
     if (!Array.isArray(v?.questions?.A2) || !v.questions.A2.length) errors.push(`media.videos[${i}]: A2 soruları gerekli (seviye bulunamazsa A2 kullanılır).`);
-    for (const L of LEVELS) (v?.questions?.[L] ?? []).forEach((x, k) => {
+    for (const L of ALL_LEVELS) (v?.questions?.[L] ?? []).forEach((x, k) => {
       if (typeof x?.q !== 'string' || typeof x?.a !== 'string') errors.push(`media.videos[${i}].questions.${L}[${k}]: q ve a metin olmalı.`);
     });
   });
@@ -124,6 +129,20 @@ export function validateUnit(u) {
   return errors;
 }
 
+// B2 içeriği yazılmamış ünitede B2'ye çıkan sınıf B1 içeriğiyle oynar
+export function withB2(u) {
+  const x = structuredClone(u);
+  const fill = obj => { if (obj && obj.B2 === undefined && obj.B1 !== undefined) obj.B2 = obj.B1; };
+  if (x.frames && !Array.isArray(x.frames)) fill(x.frames);
+  fill(x.interview?.questions);
+  fill(x.dj?.lines);
+  for (const v of x.media?.videos ?? []) fill(v.questions);
+  if (Array.isArray(x.commands) && !x.commands.some(c => c.level === 'B2')) {
+    x.commands.push(...x.commands.filter(c => c.level === 'B1').map(c => ({ ...c, level: 'B2' })));
+  }
+  return x;
+}
+
 export async function loadIndex(fetchFn = fetch) {
   try {
     const r = await fetchFn('content/index.json');
@@ -140,7 +159,7 @@ export async function loadUnit(grade, unit, fetchFn = fetch) {
     if (!r.ok) return { unit: null, errors: [`${path} bulunamadı.`] };
     const u = await r.json();
     const errors = validateUnit(u);
-    return { unit: errors.length ? null : u, errors };
+    return { unit: errors.length ? null : withB2(u), errors };
   } catch (e) {
     return { unit: null, errors: [`Ünite yüklenemedi: ${e.message}`] };
   }

@@ -43,7 +43,7 @@ export default {
     if (!alive) return;
     const unitsByNo = Object.fromEntries(loaded.filter(r => r.unit).map(r => [r.unit.unit, r.unit]));
     // Uyarlanır seviye: konuşma L, çıkış bileti L+2
-    const lv = lessonLevels(ctx.store.ensureDailyLevel(ctx.classId));
+    const lv = lessonLevels(ctx.store.classLevel(ctx.classId));
     const review = pickReview(plan, unitsByNo, { exclude: unit.vocab.map(v => v.word), level: lv.speak });
     // Günün kelimeleri: konuşma turu ve çıkış bileti aynı gün aynı kelimeleri kullanır
     const dayWordsKey = `words:${ctx.classId}:${ctx.unit}:${new Date().toLocaleDateString('sv-SE')}`;

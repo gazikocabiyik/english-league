@@ -44,7 +44,7 @@ export default {
     }
 
     // Uyarlanır seviye: ünite görevi sınıf seviyesinin bir üstünde (L+1)
-    const level = lessonLevels(ctx.store.ensureDailyLevel(ctx.classId)).interview;
+    const level = lessonLevels(ctx.store.classLevel(ctx.classId)).interview;
     const dayStart = new Date(); dayStart.setHours(0, 0, 0, 0);
     const pickedToday = ctx.store.attemptsOf(ctx.classId, { since: dayStart.getTime() }).filter(a => a.activity === 'dj' && a.studentId).map(a => a.studentId);
     const dj = createDJ(unit, { level, students: present, pickedToday });

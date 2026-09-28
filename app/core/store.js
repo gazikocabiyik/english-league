@@ -1,4 +1,4 @@
-import { nextLevel, dayKey, LEVELS } from './levels.js';
+import { levelAfterLesson, lessonRate, dayKey, LEVELS } from './levels.js';
 
 const KEY = 'okul.v1';
 
@@ -227,19 +227,24 @@ export function createStore(storage, now = () => Date.now()) {
       put(`levelDay:${classId}`, dayKey(now()));
       save();
     },
-    // Gün değişince önceki dersin denemeleriyle sınıf seviyesi yeniden hesaplanır.
-    ensureDailyLevel(classId, today = dayKey(now())) {
-      const dayKeyName = `levelDay:${classId}`;
-      if (state.settings[dayKeyName] !== today) {
-        const since = state.settings[`levelSince:${classId}`];
-        if (since !== undefined) {
-          put(`level:${classId}`, nextLevel(this.classLevel(classId), this.attemptsOf(classId, { since })));
-        }
-        put(`levelSince:${classId}`, now());
-        put(dayKeyName, today);
-        save();
+    // Her ders başında: önceki dersin sınıf doğruluğu %80+ ise bir üst seviye (aynı gün olsa da).
+    // lessonKey "<ünite>:<ders no>"; aynı ders yeniden açılınca hesaplanmaz.
+    ensureLessonLevel(classId, lessonKey) {
+      const before = this.classLevel(classId);
+      if (state.settings[`levelLesson:${classId}`] === lessonKey) return { level: before, changed: false };
+      const since = state.settings[`levelSince:${classId}`];
+      let rate;
+      if (since !== undefined) {
+        const tries = this.attemptsOf(classId, { since });
+        rate = tries.length ? Math.round(lessonRate(tries) * 100) : undefined;
+        const L = levelAfterLesson(before, tries);
+        if (L !== before) put(`level:${classId}`, L);
       }
-      return this.classLevel(classId);
+      put(`levelSince:${classId}`, now());
+      put(`levelLesson:${classId}`, lessonKey);
+      save();
+      const level = this.classLevel(classId);
+      return { level, changed: level !== before, rate };
     },
     // Günlük yoklama: gelmeyenler yalnız o gün için tutulur
     setAbsent(classId, ids, day = dayKey(now())) {
