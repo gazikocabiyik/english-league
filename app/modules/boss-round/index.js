@@ -49,7 +49,7 @@ export default {
         h('p', { class: 'playlist-title', lang: 'en' }, `UNIT ${ctx.unit} · ${unit.title.toLocaleUpperCase('en')}`),
         h('p', { class: 'hired-line' }, `Ünite tamam! Boss Round doğru oranı %${rate}`),
         h('ol', { class: 'playlist-list' }, top.map(t => h('li', {}, h('span', { class: 'pl-situation' }, t.name), h('span', { class: 'pl-genre' }, `${t.points} puan`), h('span')))),
-        h('button', { class: 'go wide', onclick: next }, icon('trophy'), ' Lige git'));
+        h('button', { class: 'go wide', onclick: next }, icon('trophy'), ctx.inLesson() ? ' Devam et' : ' Lige git'));
     }
 
     function render(announce) {

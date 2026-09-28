@@ -70,7 +70,7 @@ export default {
           h('iframe', { src, title: video.title, allow: 'autoplay; encrypted-media; fullscreen', allowfullscreen: true }),
           h('div', { class: 'today-actions' },
             h('span', { class: 'hint' }, 'Video açılmazsa (internet yoksa) sorulara geçebilirsin.'),
-            h('button', { class: 'go', onclick: () => { stage = 'questions'; render(true); } }, 'İzledik: sorular ', icon('caret-right'))));
+            h('button', { class: 'go', onclick: () => { if (!questions.length) { next(); return; } stage = 'questions'; render(true); } }, questions.length ? 'İzledik: sorular ' : 'İzledik ', icon('caret-right'))));
       } else {
         const q = questions[qi];
         const team = who && cls.teams.find(t => t.id === who.teamId);
@@ -88,7 +88,6 @@ export default {
       }
       el.replaceChildren(h('section', { class: 'screen coach video' }, head, body));
     }
-    if (!questions.length) stage = 'predict';
     render(true);
   },
 };

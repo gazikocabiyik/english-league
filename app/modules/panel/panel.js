@@ -30,6 +30,7 @@ export default {
       : h('div', { class: 'lesson-card' },
         h('div', { class: 'lesson-head' },
           h('span', { class: 'lesson-title' }, `Bugün: Ders ${info.number}/${info.total} · ${info.title.replace(/^Ders \d+ · /, '')}`),
+          ctx.inLesson() ? h('button', { class: 'ghost', onclick: () => { ctx.stopLesson(); ctx.rerender(); } }, 'Dersi durdur') : null,
           h('button', { class: 'go lesson-go', onclick: () => ctx.startLesson() }, icon('play'), info.stepIndex > 0 ? ' Devam et' : ' Derse başla')),
         h('ol', { class: 'lesson-steps' }, info.steps.map((s, k) => h('li', { class: k < info.stepIndex ? 'is-done' : k === info.stepIndex ? 'is-now' : '' }, stepName(s)))));
     const available = index[ctx.grade] ?? [];

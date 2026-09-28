@@ -90,6 +90,11 @@ export function validateUnit(u) {
   });
   (u.book ?? []).forEach((b, i) => {
     if (!Number.isInteger(b?.page) || !Array.isArray(b?.items) || !b.items.length) errors.push(`book[${i}]: page (sayı) ve items gerekli.`);
+    else b.items.forEach((it, k) => {
+      const tf = typeof it?.text === 'string' && typeof it?.answer === 'boolean';
+      const qa = typeof it?.q === 'string' && typeof it?.a === 'string';
+      if (!tf && !qa) errors.push(`book[${i}].items[${k}]: {text, answer: true/false} ya da {q, a} olmalı.`);
+    });
   });
   (u.songs ?? []).forEach((x, i) => {
     if (!String(x?.lyricsTrainingUrl ?? '').startsWith('https://lyricstraining.com/')) errors.push(`songs[${i}]: lyricsTrainingUrl https://lyricstraining.com/ ile başlamalı.`);

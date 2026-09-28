@@ -47,3 +47,11 @@ test('ders planı: panel bilgisi', () => {
   eq(lessonInfo(unit, { lesson: 2, step: 0 }).unitDone, true);
   eq(lessonInfo({}, { lesson: 0, step: 0 }), null);
 });
+
+import { currentRoute } from '../app/core/lesson-plan.js';
+
+test('ders planı: şu anki adımın adresi (yalnız bu ekran planı ilerletebilir) (inceleme)', () => {
+  eq(currentRoute(unit, { lesson: 0, step: 1 }), '#/game/coach-says/move');
+  eq(currentRoute(unit, { lesson: 1, step: 1 }), '#/game/mock-interview');
+  eq(currentRoute(unit, { lesson: 5, step: 0 }), null);
+});

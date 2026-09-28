@@ -3,6 +3,7 @@ import { loadIndex, loadUnit } from '../../core/content.js';
 import { reviewPlan, pickReview } from '../../core/spiral.js';
 import { fillFrame } from '../../core/speech-map.js';
 import { lessonLevels } from '../../core/levels.js';
+import { currentRoute } from '../../core/lesson-plan.js';
 import { createSession, PHASES } from './session.js';
 import { createPicker } from './picker.js';
 import { award } from '../league/award.js';
@@ -83,7 +84,9 @@ export default {
       if (moved) { render(true); return; }
       if (dir < 0) return;
       // Ders planı çalışıyorsa bu tur bir adımdır: plandaki sıradaki adıma geç
-      if (ctx.inLesson()) { ctx.finishActivity(); return; }
+      // Yalnız ders planının şu anki adımı olarak açılmış bu tur planı ilerletir; serbest oyun ya da sekme değişikliği ilerletmez
+      const myRoute = `#/game/coach-says/${session.phase}`;
+      if (ctx.inLesson() && location.hash === myRoute && currentRoute(unit, ctx.lessonProgress()) === myRoute) { ctx.finishActivity('#/panel', myRoute); return; }
       const i = PHASES.indexOf(session.phase);
       // Serbest akış: konuşma turundan sonra ünitenin görev oyunu (L+1), sonra çıkış bileti (L+2)
       const mission = unit.interview ? 'mock-interview' : unit.dj ? 'warmup-dj' : null;

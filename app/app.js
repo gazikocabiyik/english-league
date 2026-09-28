@@ -10,7 +10,10 @@ import today from './modules/panel/today.js';
 import league from './modules/league/league.js';
 import { games } from './modules/registry.js';
 import { loadUnit } from './core/content.js';
-import { advance, normalize, stepRoute } from './core/lesson-plan.js';
+import { advance, normalize, stepRoute, currentRoute } from './core/lesson-plan.js';
+import { dayKey } from './core/levels.js';
+
+let finishing = false; // aynı adım için ikinci "bitti" sinyali yok sayılır; ekran değişince sıfırlanır
 
 const store = createStore();
 const view = document.getElementById('view');
@@ -26,7 +29,9 @@ const ctx = {
   get grade() { return Number(String(store.getSetting('lastClass') ?? '').slice(0, 2)); },
   get unit() { return store.getSetting(`unit:${store.getSetting('lastClass')}`, 1); },
   // Ders planı: "Derse başla" ile başlar; her etkinlik bitince finishActivity plandaki sıradaki adıma gider
-  inLesson() { return store.getSetting(`lessonRun:${ctx.classId}`)?.unit === ctx.unit; },
+  // Ders yalnız başladığı gün ve aynı ünitede "çalışıyor" sayılır (yarım kalan ders ertesi gün devreye girmez)
+  inLesson() { const r = store.getSetting(`lessonRun:${ctx.classId}`); return r?.unit === ctx.unit && r?.day === dayKey(Date.now()); },
+  stopLesson() { store.setSetting(`lessonRun:${ctx.classId}`, null); },
   lessonProgress() { return store.getSetting(`lesson:${ctx.classId}:${ctx.unit}`, { lesson: 0, step: 0 }); },
   async startLesson() {
     const { unit } = await loadUnit(ctx.grade, ctx.unit);
@@ -34,15 +39,19 @@ const ctx = {
     const p = normalize(unit, ctx.lessonProgress());
     if (p.unitDone) return;
     store.setSetting(`lesson:${ctx.classId}:${ctx.unit}`, { lesson: p.lesson, step: p.step });
-    store.setSetting(`lessonRun:${ctx.classId}`, { unit: ctx.unit });
+    store.setSetting(`lessonRun:${ctx.classId}`, { unit: ctx.unit, day: dayKey(Date.now()) });
     ctx.go(stepRoute(unit.lessons[p.lesson].steps[p.step], unit));
   },
   // fallback: ders planı dışında (serbest etkinlik) gidilecek yer
-  async finishActivity(fallback = '#/panel') {
+  // route: bu sinyali gönderen adımın adresi (varsayılan: şu anki sayfa). Planın şu anki adımı değilse plan ilerlemez.
+  async finishActivity(fallback = '#/panel', route = location.hash) {
+    if (finishing) return;
     if (!ctx.inLesson()) { ctx.go(fallback); return; }
+    finishing = true;
+    const progress = ctx.lessonProgress(); // beklemeden önce oku
     const { unit } = await loadUnit(ctx.grade, ctx.unit);
-    if (!unit?.lessons) { ctx.go(fallback); return; }
-    const next = advance(unit, ctx.lessonProgress());
+    if (!unit?.lessons || currentRoute(unit, progress) !== route) { finishing = false; ctx.go(fallback); return; }
+    const next = advance(unit, progress);
     store.setSetting(`lesson:${ctx.classId}:${ctx.unit}`, { lesson: next.lesson, step: next.step });
     if (next.lessonDone || next.unitDone) {
       store.setSetting(`lessonRun:${ctx.classId}`, null);
@@ -76,6 +85,7 @@ const routes = {
 
 let active = null;
 const router = createRouter(routes, (screen, args) => {
+  finishing = false;
   active?.unmount?.();
   const host = h('div', { class: 'screen-host' });
   view.replaceChildren(host);

@@ -34,8 +34,9 @@ export default {
       done = true;
       clearInterval(tick);
       const g = `song-${Date.now()}`;
-      for (const t of cls.teams) award(ctx, 'team', t, 1, `Şarkı molası · ${song.title}`, g);
-      toast('Her takıma +1 katılım puanı');
+      const present = new Set(ctx.store.presentStudents(ctx.classId).map(s => s.teamId));
+      for (const t of cls.teams.filter(t => present.has(t.id))) award(ctx, 'team', t, 1, `Şarkı molası · ${song.title}`, g); // yalnız bugün derste olan takımlar
+      toast('Derste olan her takıma +1 katılım puanı');
       next();
     }
 

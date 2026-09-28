@@ -43,3 +43,10 @@ export function lessonInfo(unit, progress) {
   const ls = L[p.lesson];
   return { unitDone: false, number: p.lesson + 1, total: L.length, title: ls.title, steps: ls.steps, stepIndex: p.step, route: stepRoute(ls.steps[p.step], unit) };
 }
+
+// Planın şu anki adımının adresi; yalnız bu adresteki ekran planı ilerletebilir
+export function currentRoute(unit, progress) {
+  const p = normalize(unit, progress);
+  if (p.unitDone) return null;
+  return stepRoute(unit.lessons[p.lesson].steps[p.step], unit);
+}
