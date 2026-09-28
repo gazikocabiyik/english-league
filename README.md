@@ -16,3 +16,12 @@ Akıllı tahta için sınıf ligi, zamanlayıcı ve Coach Says oyunu. 11. ve 12.
 - Yeni oyun: `app/modules/<oyun>/index.js` dosyasını `{ id, title, mount, unmount }` biçiminde yaz, sonra `app/modules/registry.js`'e ekle.
 - Puanlar tahtanın tarayıcısında durur. Her hafta Takımlar → **Yedeği indir**.
 - Tasarım: `PRODUCT.md`, `DESIGN.md`. Görsel kaynakları: `app/content/media/CREDITS.md`.
+
+## Bulut: 5 tahta tek lig (Faz 5a)
+Tahtalar önce kendi hafızasıyla çalışır; giriş yapılmış tahta her değişikliği Supabase'e gönderir ve diğer tahtaların kayıtlarını çeker.
+1. Supabase'te proje aç (bölge Frankfurt) → SQL Editor'e `supabase/schema.sql` yapıştır → Run.
+2. Authentication → Users → Add user (Auto Confirm) ile öğretmen hesabı aç.
+3. Project Settings → API'deki **Project URL** ve **anon public** anahtarını `app/config.js`'e yaz (ya da tahtada Ayarlar → Bulut ekranına bir kez gir). **service_role anahtarı asla kullanılmaz.**
+4. Her tahtada Ayarlar → Bulut → e-posta ve şifre ile bir kez giriş yap. İlk girişte o tahtadaki mevcut veri buluta yüklenir.
+- Üst çubuktaki bulut: yeşil eşitlendi, sarı kayıt bekliyor, gri çevrimdışı ya da giriş yok.
+- Ücretsiz proje 7 gün kullanılmazsa uyur; tahta yerel çalışmaya devam eder, panelden "Restore" ile uyandırılınca bekleyen kayıtlar gider.

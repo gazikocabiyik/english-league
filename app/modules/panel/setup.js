@@ -87,6 +87,7 @@ export default {
         h('button', { class: 'ghost', onclick: () => ctx.go('#/panel') }, 'Vazgeç')),
       h('div', { class: 'backup' },
         h('span', {}, 'Ayarlar · Yedek'),
+        h('button', { onclick: () => ctx.go('#/cloud') }, icon('cloud-check'), ' Bulut (5 tahta tek lig)'),
         h('button', { onclick: download }, icon('download-simple'), ' Yedeği indir'),
         h('button', { onclick: () => fileInput.click() }, icon('upload-simple'), ' Yedeği yükle'),
         fileInput)));

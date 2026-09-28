@@ -367,3 +367,6 @@ button.wide { min-width: 320px; }
 .boss-card .question { font-size: min(var(--step-3), 7vh); }
 .boss-card.type-question { grid-template-columns: 0 1fr; }
 .stage-move .go, .stage-move .go:hover:not(:disabled) { background: var(--accent-ink); color: var(--accent); }
+.cloud-btn.is-ok { color: var(--team-3); }
+.cloud-btn.is-wait { color: var(--accent); }
+.cloud-btn.is-off { color: var(--ink-muted); }

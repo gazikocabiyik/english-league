@@ -7,6 +7,10 @@ import classSelect from './modules/panel/class-select.js';
 import panel from './modules/panel/panel.js';
 import setup from './modules/panel/setup.js';
 import today from './modules/panel/today.js';
+import cloudScreen from './modules/panel/cloud.js';
+import { CLOUD } from './config.js';
+import { connectCloud } from './core/cloud-client.js';
+import { createSync } from './core/sync.js';
 import league from './modules/league/league.js';
 import { games } from './modules/registry.js';
 import { loadUnit } from './core/content.js';
@@ -30,6 +34,32 @@ const ctx = {
   get unit() { return store.getSetting(`unit:${store.getSetting('lastClass')}`, 1); },
   // Ders planı: "Derse başla" ile başlar; her etkinlik bitince finishActivity plandaki sıradaki adıma gider
   // Ders yalnız başladığı gün ve aynı ünitede "çalışıyor" sayılır (yarım kalan ders ertesi gün devreye girmez)
+  // Bulut (Faz 5a): bağlantı bilgisi koddaki config.js'ten ya da bu tahtada bir kez girilen değerden
+  cloud: { client: null, sync: null, status: 'off' },
+  cloudConfig() {
+    if (CLOUD.url && CLOUD.anonKey) return CLOUD;
+    try { return JSON.parse(localStorage.getItem('okul.cloud') || 'null'); } catch { return null; }
+  },
+  saveCloudConfig(conf) { try { conf ? localStorage.setItem('okul.cloud', JSON.stringify(conf)) : localStorage.removeItem('okul.cloud'); } catch { /* yok */ } },
+  async startCloud() {
+    const conf = ctx.cloudConfig();
+    if (!conf?.url) { ctx.cloud.status = 'off'; renderTopbar(); return; }
+    try {
+      ctx.cloud.client ??= await connectCloud(conf);
+      if (!(await ctx.cloud.client.session())) { ctx.cloud.status = 'login'; renderTopbar(); return; }
+      if (!ctx.cloud.sync) {
+        const sync = createSync({ store, cloud: ctx.cloud.client });
+        ctx.cloud.sync = sync;
+        sync.seed(); // buluttan önce biriken veri bir kez yüklenir
+        sync.onStatus(() => renderTopbar());
+        sync.start({ onRemote: () => document.dispatchEvent(new CustomEvent('scores-changed')) });
+      }
+      ctx.cloud.status = 'on';
+    } catch {
+      ctx.cloud.status = 'offline'; // CDN ya da internet yok: tahta yerel çalışır
+    }
+    renderTopbar();
+  },
   inLesson() { const r = store.getSetting(`lessonRun:${ctx.classId}`); return r?.unit === ctx.unit && r?.day === dayKey(Date.now()); },
   stopLesson() { store.setSetting(`lessonRun:${ctx.classId}`, null); },
   lessonProgress() { return store.getSetting(`lesson:${ctx.classId}:${ctx.unit}`, { lesson: 0, step: 0 }); },
@@ -89,6 +119,7 @@ const routes = {
   panel,
   setup,
   today,
+  cloud: cloudScreen,
   league,
   game: gameRoute,
 };
@@ -119,7 +150,19 @@ function renderTopbar() {
     h('span', { class: 'spacer' }),
     document.getElementById('timer-dock'),
     cls ? h('button', { class: 'ghost', onclick: undo }, icon('arrow-counter-clockwise'), ' Geri al') : null,
+    cloudButton(),
     h('button', { class: 'ghost', 'aria-label': 'Tam ekran', onclick: toggleFullscreen }, icon('arrows-out')));
+}
+
+// Bulut simgesi: yeşil eşitlendi, sarı bekleyen kayıt, gri çevrimdışı ya da giriş yok
+function cloudButton() {
+  const c = ctx.cloud;
+  if (c.status === 'off' && !ctx.cloudConfig()) return null;
+  const s = c.sync;
+  const state = c.status !== 'on' ? 'off' : s?.status === 'offline' ? 'off' : s?.pending ? 'wait' : 'ok';
+  const label = { ok: 'Bulut: eşitlendi', wait: `Bulut: ${s?.pending} kayıt bekliyor`, off: c.status === 'login' ? 'Bulut: giriş yapılmadı' : 'Bulut: çevrimdışı' }[state];
+  return h('button', { class: `ghost cloud-btn is-${state}`, 'aria-label': label, title: label, onclick: () => ctx.go('#/cloud') },
+    icon(state === 'ok' ? 'cloud-check' : state === 'wait' ? 'cloud-arrow-up' : 'cloud-slash'));
 }
 
 function undo() {
@@ -143,4 +186,5 @@ document.addEventListener('scores-changed', checkPersistence);
 checkPersistence();
 
 mountTimerDock(document.getElementById('timer-dock'), ctx);
+ctx.startCloud();
 router.start();

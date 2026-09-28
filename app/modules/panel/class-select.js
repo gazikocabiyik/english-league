@@ -15,6 +15,7 @@ export default {
         const id = makeClassId(grade, section);
         if (list().includes(id)) { toast(`${id} zaten var`); return; }
         saveList([...list(), id]);
+        ctx.store.setSetting('removedClasses', ctx.store.getSetting('removedClasses', []).filter(x => x !== id));
         adding = false;
         // Yeni şube: önce öğrenciler, sonra gruplar
         ctx.store.setSetting('lastClass', id);
@@ -27,6 +28,8 @@ export default {
     function remove(id) {
       if (!confirm(`${id} listeden kaldırılsın mı? Puanlar silinmez; aynı adla yeniden eklenirse geri gelir.`)) return;
       saveList(list().filter(x => x !== id));
+      // Diğer tahtalar da bu şubeyi göstermesin
+      ctx.store.setSetting('removedClasses', [...new Set([...ctx.store.getSetting('removedClasses', []), id])]);
       if (ctx.classId === id) ctx.store.setSetting('lastClass', null);
       render();
       ctx.refreshTopbar();
