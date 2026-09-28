@@ -2,7 +2,7 @@
 # Phosphor (MIT) bold ikonlarını app/assets/icons/ içine indirir ve icons.css üretir.
 set -euo pipefail
 cd "$(dirname "$0")/.."
-ICONS="users-three trophy timer play pause arrow-counter-clockwise arrows-out speaker-high gear caret-left caret-right x download-simple upload-simple person-simple-run chat-circle-text ticket plus trash pencil-simple check microphone-stage music-notes cloud-check cloud-arrow-up cloud-slash"
+ICONS="users-three trophy timer play pause arrow-counter-clockwise arrows-out speaker-high gear caret-left caret-right x download-simple upload-simple person-simple-run chat-circle-text ticket plus trash pencil-simple check microphone-stage music-notes cloud-check cloud-arrow-up cloud-slash pause"
 mkdir -p app/assets/icons app/styles
 : > app/styles/icons.css
 for n in $ICONS; do

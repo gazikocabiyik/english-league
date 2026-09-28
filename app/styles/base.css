@@ -384,3 +384,9 @@ button.wide { min-width: 320px; }
 .prompt-q { all: unset; cursor: pointer; font: 800 min(var(--step-2), calc(6.5 * var(--vh, 1vh)))/1.15 var(--font-body); text-wrap: balance; }
 .idiom { all: unset; cursor: pointer; font: 900 min(var(--step-3), calc(8 * var(--vh, 1vh)))/.95 var(--font-display); text-transform: uppercase; }
 .stage-prompt .word-side .hint { font-size: min(28px, calc(3.4 * var(--vh, 1vh))); }
+
+/* Kitap dinleme sesi çalar */
+.audio-bar { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); }
+.audio-play { min-width: 7em; display: inline-flex; align-items: center; gap: 8px; }
+.audio-time { position: relative; font: 700 min(28px, calc(3.4 * var(--vh, 1vh)))/1 var(--font-stencil); padding: 10px 16px; border-radius: var(--radius); overflow: hidden; background: rgb(0 0 0 / .12); }
+.audio-time::before { content: ''; position: absolute; inset: 0; width: calc(var(--p, 0) * 100%); background: rgb(0 0 0 / .18); }
