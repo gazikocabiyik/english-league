@@ -12,3 +12,4 @@ import './picker.test.js';
 import './dj.test.js';
 import './lesson-plan.test.js';
 import './boss.test.js';
+import './sync.test.js';

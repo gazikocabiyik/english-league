@@ -14,7 +14,11 @@ export function weekStart(ts) {
   return d.getTime();
 }
 
-const emptyState = () => ({ version: 1, classes: {}, events: [], attempts: [], settings: {}, archive: null });
+const emptyState = () => ({ version: 1, classes: {}, events: [], attempts: [], settings: {}, archive: null, meta: { classTs: {}, settingTs: {} }, tombs: [] });
+
+// Tahtaya özel ayarlar buluta gönderilmez (hangi şubenin açık olduğu, o tahtada süren ders)
+const PRIVATE_SETTINGS = [/^lastClass$/, /^lessonRun:/, /^resumeLesson:/];
+export const isSharedSetting = key => !PRIVATE_SETTINGS.some(r => r.test(key));
 const KEEP_WEEKS = 8; // bu kadar haftadan eski kayıtlar özetlenir (depo dolmasın)
 
 const isObj = v => !!v && typeof v === 'object' && !Array.isArray(v);
@@ -51,6 +55,24 @@ export function createStore(storage, now = () => Date.now()) {
     try { if (raw) backend.setItem(`${KEY}.bak`, raw); } catch { /* yer yok */ }
   }
 
+  // Eşitleme kancası: yerel değişiklikler kayıt olarak dinleyicilere gider (buluttan gelenler gitmez)
+  const listeners = [];
+  let applying = false;
+  const emit = rec => { if (!applying) for (const fn of listeners) fn(rec); };
+  const meta = () => (state.meta ??= { classTs: {}, settingTs: {} });
+  function put(key, value) {
+    state.settings[key] = value;
+    if (!isSharedSetting(key)) return;
+    const ts = now();
+    meta().settingTs[key] = ts;
+    // Şube listeleri şube başına ayrı kayıt: iki tahta aynı anda şube eklese de biri diğerini silmez
+    if ((key === 'classList' || key === 'removedClasses') && Array.isArray(value)) {
+      for (const id of value) emit({ id: `s:${key}:${id}`, kind: 'setting', key: `${key}+`, payload: { value: id }, ts });
+      return;
+    }
+    emit({ id: `s:${key}`, kind: 'setting', key, payload: { value }, ts });
+  }
+
   let size = 0;
   function save() {
     if (!persistent) return;
@@ -63,7 +85,8 @@ export function createStore(storage, now = () => Date.now()) {
   }
 
   function classIds() {
-    return state.settings.classList ?? Object.keys(state.classes); // eski yedeklerde classList yok
+    const removed = new Set(state.settings.removedClasses ?? []);
+    return (state.settings.classList ?? Object.keys(state.classes)).filter(id => !removed.has(id)); // eski yedeklerde classList yok
   }
 
   // Eski olayları ve denemeleri özetle: puan toplamları ve doğru/deneme sayıları arşivde kalır
@@ -113,10 +136,17 @@ export function createStore(storage, now = () => Date.now()) {
     // Depo ~5 MB; 4 MB üstünde uyarı gösterilir
     get nearlyFull() { return size > 4e6; },
     getClass,
-    saveClass(classId, { teams, students }) { state.classes[classId] = { teams, students }; save(); },
+    saveClass(classId, { teams, students }) {
+      state.classes[classId] = { teams, students };
+      const ts = now();
+      meta().classTs[classId] = ts;
+      emit({ id: `c:${classId}`, kind: 'class', class_id: classId, payload: { teams, students }, ts });
+      save();
+    },
     addEvent({ classId, targetType, targetId, points, reason = '', groupId }) {
       const e = { id: uid(), classId, targetType, targetId, points, reason, ts: now(), ...(groupId ? { groupId } : {}) };
       state.events.push(e);
+      emit({ id: `e:${e.id}`, kind: 'event', class_id: classId, payload: e, ts: e.ts });
       save();
       return e;
     },
@@ -132,7 +162,11 @@ export function createStore(storage, now = () => Date.now()) {
               return true;
             });
           }
+          const gone = state.attempts.filter(a => removed.has(a.eventId));
           state.attempts = state.attempts.filter(a => !removed.has(a.eventId));
+          // Geri al diğer tahtalara mezar kaydıyla iletilir
+          for (const id of removed) emit({ id: `t:e:${id}`, kind: 'tomb', class_id: classId, payload: { target: `e:${id}` }, ts: now() });
+          for (const a of gone) emit({ id: `t:a:${a.id}`, kind: 'tomb', class_id: classId, payload: { target: `a:${a.id}` }, ts: now() });
           save();
           return e;
         }
@@ -174,6 +208,7 @@ export function createStore(storage, now = () => Date.now()) {
     addAttempt({ classId, level, ok, activity, eventId, studentId }) {
       const a = { id: uid(), classId, level, ok: !!ok, activity, eventId, studentId, ts: now() };
       state.attempts.push(a);
+      emit({ id: `a:${a.id}`, kind: 'attempt', class_id: classId, payload: a, ts: a.ts });
       save();
       return a;
     },
@@ -186,10 +221,10 @@ export function createStore(storage, now = () => Date.now()) {
     },
     setClassLevel(classId, L) {
       if (!LEVELS.includes(L)) throw new Error(`Bilinmeyen seviye: ${L}`);
-      state.settings[`level:${classId}`] = L;
+      put(`level:${classId}`, L);
       // Elle ayar: önceki denemeler bir sonraki hesapta sayılmasın
-      state.settings[`levelSince:${classId}`] = now();
-      state.settings[`levelDay:${classId}`] = dayKey(now());
+      put(`levelSince:${classId}`, now());
+      put(`levelDay:${classId}`, dayKey(now()));
       save();
     },
     // Gün değişince önceki dersin denemeleriyle sınıf seviyesi yeniden hesaplanır.
@@ -198,17 +233,17 @@ export function createStore(storage, now = () => Date.now()) {
       if (state.settings[dayKeyName] !== today) {
         const since = state.settings[`levelSince:${classId}`];
         if (since !== undefined) {
-          state.settings[`level:${classId}`] = nextLevel(this.classLevel(classId), this.attemptsOf(classId, { since }));
+          put(`level:${classId}`, nextLevel(this.classLevel(classId), this.attemptsOf(classId, { since })));
         }
-        state.settings[`levelSince:${classId}`] = now();
-        state.settings[dayKeyName] = today;
+        put(`levelSince:${classId}`, now());
+        put(dayKeyName, today);
         save();
       }
       return this.classLevel(classId);
     },
     // Günlük yoklama: gelmeyenler yalnız o gün için tutulur
     setAbsent(classId, ids, day = dayKey(now())) {
-      state.settings[`absent:${classId}`] = { day, ids: [...ids] };
+      put(`absent:${classId}`, { day, ids: [...ids] });
       save();
     },
     absentIds(classId, day = dayKey(now())) {
@@ -223,7 +258,71 @@ export function createStore(storage, now = () => Date.now()) {
       return getClass(classId).students.filter(s => !absent.has(s.id));
     },
     getSetting(key, fallback = null) { return key in state.settings ? state.settings[key] : fallback; },
-    setSetting(key, value) { state.settings[key] = value; save(); },
+    setSetting(key, value) { put(key, value); save(); },
+    onChange(fn) { listeners.push(fn); },
+    // Bu tahtadaki mevcut veri kayıt olarak (buluta ilk yükleme için)
+    snapshotRecords() {
+      const out = [];
+      for (const [id, c] of Object.entries(state.classes)) out.push({ id: `c:${id}`, kind: 'class', class_id: id, payload: c, ts: meta().classTs[id] ?? now() });
+      for (const e of state.events) out.push({ id: `e:${e.id}`, kind: 'event', class_id: e.classId, payload: e, ts: e.ts });
+      for (const a of state.attempts) out.push({ id: `a:${a.id}`, kind: 'attempt', class_id: a.classId, payload: a, ts: a.ts });
+      for (const [key, value] of Object.entries(state.settings)) {
+        if (!isSharedSetting(key)) continue;
+        const ts = meta().settingTs[key] ?? now();
+        if ((key === 'classList' || key === 'removedClasses') && Array.isArray(value)) value.forEach(v => out.push({ id: `s:${key}:${v}`, kind: 'setting', key: `${key}+`, payload: { value: v }, ts }));
+        else out.push({ id: `s:${key}`, kind: 'setting', key, payload: { value }, ts });
+      }
+      return out;
+    },
+    // Buluttan gelen kayıtları birleştir: tekil kimlik, mezarlara uy, kadro ve ayarlarda son yazan kazanır
+    applyRemote(records) {
+      applying = true;
+      let changed = 0;
+      try {
+        const tombs = new Set(state.tombs ?? []);
+        const evIds = new Set(state.events.map(e => e.id));
+        const atIds = new Set(state.attempts.map(a => a.id));
+        for (const r of records) {
+          if (r.kind === 'tomb') {
+            const t = r.payload?.target ?? '';
+            if (tombs.has(t)) continue;
+            tombs.add(t);
+            const [k, id] = [t.slice(0, 2), t.slice(2)];
+            if (k === 'e:') state.events = state.events.filter(e => e.id !== id);
+            if (k === 'a:') state.attempts = state.attempts.filter(a => a.id !== id);
+            changed++;
+          } else if (r.kind === 'event') {
+            const e = r.payload;
+            if (!e?.id || evIds.has(e.id) || tombs.has(`e:${e.id}`)) continue;
+            state.events.push(e); evIds.add(e.id); changed++;
+          } else if (r.kind === 'attempt') {
+            const a = r.payload;
+            if (!a?.id || atIds.has(a.id) || tombs.has(`a:${a.id}`)) continue;
+            state.attempts.push(a); atIds.add(a.id); changed++;
+          } else if (r.kind === 'class') {
+            if (r.ts < (meta().classTs[r.class_id] ?? 0) || !Array.isArray(r.payload?.teams)) continue;
+            state.classes[r.class_id] = { teams: r.payload.teams, students: r.payload.students ?? [] };
+            meta().classTs[r.class_id] = r.ts; changed++;
+          } else if (r.kind === 'setting' && isSharedSetting(r.key)) {
+            if (r.key === 'classList+' || r.key === 'removedClasses+') {
+              const k = r.key.slice(0, -1);
+              if (!(state.settings[k] ?? []).includes(r.payload?.value)) { state.settings[k] = [...(state.settings[k] ?? []), r.payload.value]; changed++; }
+            } else if (r.key === 'classList' || r.key === 'removedClasses') {
+              // Şube listeleri birleşir: iki tahtanın açtığı şubeler korunur
+              const merged = [...new Set([...(state.settings[r.key] ?? []), ...(r.payload?.value ?? [])])];
+              state.settings[r.key] = merged; changed++;
+            } else if (r.ts >= (meta().settingTs[r.key] ?? 0)) {
+              state.settings[r.key] = r.payload?.value;
+              meta().settingTs[r.key] = r.ts; changed++;
+            }
+          }
+        }
+        state.events.sort((a, b) => a.ts - b.ts);
+        state.tombs = [...tombs];
+        if (changed) save();
+      } finally { applying = false; }
+      return changed;
+    },
     export() { return JSON.stringify(state, null, 2); },
     import(json) {
       let parsed;
