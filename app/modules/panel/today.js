@@ -1,7 +1,7 @@
 import { h, icon, toast } from '../../core/dom.js';
-import { balanceTeams, moveStudent } from '../league/roster.js';
+import { balanceTeams, setTeam } from '../league/roster.js';
 
-// Ders başı: son dersin grupları hazır gelir. Gelmeyene dokun → "yok"; ok ile başka gruba geçir; "Dengele" eşitler.
+// Ders başı: son dersin grupları hazır gelir. Gelmeyene dokun → "yok"; takım düğmesiyle istenen gruba al; "Dengele" eşitler.
 export default {
   mount(el, ctx) {
     const cls = ctx.store.getClass(ctx.classId);
@@ -21,13 +21,31 @@ export default {
       ctx.finishActivity('#/panel'); // ders planındaysa sıradaki adıma
     }
 
+    // Yeni eklenen öğrenciler (Grupları düzenle'den gelince) "yeni" etiketiyle görünür
+    const fresh = new Set(ctx.newStudents?.[ctx.classId] ?? []);
+
+    // Takım seçimi: öğrenci istenen takıma tek dokunuşla alınır
+    function chooseTeam(s) {
+      const close = () => sheet.remove();
+      const sheet = h('div', { class: 'sheet-backdrop', onclick: e => { if (e.target === sheet) close(); } },
+        h('div', { class: 'sheet' },
+          h('p', { class: 'sheet-title' }, `${s.name} hangi takımda?`),
+          h('div', { class: 'team-buttons' }, cls.teams.map(t => h('button', {
+            class: `team-btn${t.id === s.teamId ? ' is-current' : ''}`, style: { '--team': `var(--${t.color})` },
+            onclick: () => { students = setTeam(students, cls.teams, s.id, t.id); persist(); close(); render(); },
+          }, t.name))),
+          h('button', { class: 'ghost', onclick: close }, 'Vazgeç')));
+      document.body.append(sheet);
+    }
+
     function card(s) {
       const away = absent.has(s.id);
       return h('div', { class: `kid${away ? ' is-away' : ''}` },
+        fresh.has(s.id) ? h('span', { class: 'tape kid-new' }, 'yeni') : null,
         h('button', { class: 'kid-name', 'aria-pressed': String(!away), onclick: () => { away ? absent.delete(s.id) : absent.add(s.id); ctx.store.setAbsent(ctx.classId, [...absent]); render(); } }, // dokunuş anında kaydedilir
           s.name, away ? h('span', { class: 'kid-away' }, 'yok') : null),
         cls.teams.length > 1 && !away
-          ? h('button', { class: 'kid-move', 'aria-label': `${s.name} başka gruba`, onclick: () => { students = moveStudent(students, cls.teams, s.id); persist(); render(); } }, icon('caret-right'))
+          ? h('button', { class: 'kid-move', 'aria-label': `${s.name} için takım seç`, onclick: () => chooseTeam(s) }, icon('users-three'))
           : null);
     }
 
@@ -43,7 +61,7 @@ export default {
           h('span', { class: 'tape level-badge' }, `${here} / ${students.length} burada`),
           h('span', { class: 'spacer' }),
           actions),
-        h('p', { class: 'hint' }, 'Gelmeyen öğrenciye dokun. Başka gruba almak için yanındaki oka dokun.'),
+        h('p', { class: 'hint' }, 'Gelmeyen öğrenciye dokun. Takımını değiştirmek için yanındaki takım düğmesine dokun.'),
         h('div', { class: 'groups' }, cls.teams.map(t => {
           const mine = students.filter(s => s.teamId === t.id);
           const present = mine.filter(s => !absent.has(s.id)).length;

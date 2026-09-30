@@ -11,6 +11,7 @@ import cloudScreen from './modules/panel/cloud.js';
 import { CLOUD } from './config.js';
 import { connectCloud } from './core/cloud-client.js';
 import { createSync } from './core/sync.js';
+import { offlineStatus } from './core/offline.js';
 import league from './modules/league/league.js';
 import { games } from './modules/registry.js';
 import { loadUnit } from './core/content.js';
@@ -36,6 +37,7 @@ const ctx = {
   // Ders yalnız başladığı gün ve aynı ünitede "çalışıyor" sayılır (yarım kalan ders ertesi gün devreye girmez)
   // Bulut (Faz 5a): bağlantı bilgisi koddaki config.js'ten ya da bu tahtada bir kez girilen değerden
   cloud: { client: null, sync: null, status: 'off' },
+  offline: { state: 'off' }, // tahtaya kaç dosya indi (çevrimdışı açılış)
   cloudConfig() {
     if (CLOUD.url && CLOUD.anonKey) return { ...CLOUD, fromCode: true };
     try { return JSON.parse(localStorage.getItem('okul.cloud') || 'null'); } catch { return null; }
@@ -161,9 +163,18 @@ function renderTopbar() {
     h('span', { class: 'spacer' }),
     document.getElementById('timer-dock'),
     cls ? h('button', { class: 'ghost', onclick: undo }, icon('arrow-counter-clockwise'), ' Geri al') : null,
+    offlineChip(),
     cloudButton(),
     h('button', { class: 'ghost', 'aria-label': 'Tam ekran', onclick: toggleFullscreen }, icon('arrows-out')),
   ].filter(Boolean)); // boş öğe "null" yazısı olarak görünmesin
+}
+
+// İndirme sürerken üst çubukta sayaç; bitince kaybolur (durum Bulut ekranında da görünür)
+function offlineChip() {
+  const o = ctx.offline;
+  if (o.state !== 'loading' || !o.total) return null;
+  return h('button', { class: 'ghost offline-chip', title: 'Uygulama tahtaya iniyor', onclick: () => ctx.go('#/cloud') },
+    icon('download-simple'), ` ${Math.round((o.cached / o.total) * 100)}%`);
 }
 
 // Bulut simgesi: yeşil eşitlendi, sarı bekleyen kayıt, gri çevrimdışı ya da giriş yok
@@ -211,7 +222,17 @@ addEventListener('resize', fitScreen);
 router.start();
 
 // Çevrimdışı açılış: okul ağı siteyi engellese de tahta uygulamayı kendi hafızasından açar (bkz. ../sw.js)
+// Çevrimdışı durumunu izle: iniyorsa 3 sn'de bir sor, bitince bir kez haber ver
+async function watchOffline() {
+  const before = ctx.offline.state;
+  ctx.offline = await offlineStatus().catch(() => ({ state: 'off' }));
+  if (before === 'loading' && ctx.offline.state === 'ready') toast('Çevrimdışı hazır: bütün dosyalar tahtaya indi ✓');
+  renderTopbar();
+  document.dispatchEvent(new CustomEvent('offline-changed'));
+  if (ctx.offline.state !== 'ready') setTimeout(watchOffline, 3000);
+}
+
 // Yerelde yalnız ?sw ile (denemede eski dosya gelmesin)
 if ('serviceWorker' in navigator && (location.protocol === 'https:' || new URLSearchParams(location.search).has('sw'))) {
-  navigator.serviceWorker.register('../sw.js', { scope: '../' }).catch(() => { /* desteklenmiyor: normal çalışır */ });
+  navigator.serviceWorker.register('../sw.js', { scope: '../' }).then(() => watchOffline()).catch(() => { /* desteklenmiyor: normal çalışır */ });
 }

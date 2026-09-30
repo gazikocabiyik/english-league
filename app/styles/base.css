@@ -395,3 +395,10 @@ button.wide { min-width: 320px; }
 .audio-play { min-width: 7em; display: inline-flex; align-items: center; gap: 8px; }
 .audio-time { position: relative; font: 700 min(28px, calc(3.4 * var(--vh, 1vh)))/1 var(--font-stencil); padding: 10px 16px; border-radius: var(--radius); overflow: hidden; background: rgb(0 0 0 / .12); }
 .audio-time::before { content: ''; position: absolute; inset: 0; width: calc(var(--p, 0) * 100%); background: rgb(0 0 0 / .18); }
+
+/* Yoklama: takım seçimi ve yeni öğrenci etiketi */
+.team-btn.is-current { outline: 6px solid var(--ink); outline-offset: 3px; }
+.kid-new { font-size: 18px; padding: 2px 8px; align-self: center; margin-right: 6px; }
+.sheet .team-buttons { min-width: min(80vw, 900px); }
+.offline-chip { color: var(--accent); font-variant-numeric: tabular-nums; }
+.offline-line.is-ready { background: var(--team-3); color: #fff; }

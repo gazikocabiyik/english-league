@@ -58,3 +58,9 @@ export function moveStudent(students, teams, id) {
     return { ...s, teamId: teams[(i + 1) % teams.length].id };
   });
 }
+
+// Öğrenciyi seçilen takıma al (yeni gelen öğrenciyi istenen takıma yerleştirmek için)
+export function setTeam(students, teams, id, teamId) {
+  if (!teams.some(t => t.id === teamId)) return students;
+  return students.map(s => (s.id === id && s.teamId !== teamId ? { ...s, teamId } : s));
+}

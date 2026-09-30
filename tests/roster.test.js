@@ -81,3 +81,21 @@ test('kadro: aynı satırdaki isim değişirse öğrenci kimliği ve puanı koru
   const dup = buildRoster('Mehmet\nMehmet\nAli', 2, undefined, ids());
   eq(dup.students.map(s => s.name), ['Mehmet', 'Mehmet (2)', 'Ali']);
 });
+
+test('roster: öğrenci istenen takıma doğrudan alınır, diğerleri ve kimlikler değişmez', async () => {
+  const { setTeam } = await import('../app/modules/league/roster.js');
+  const teams = [{ id: 't1' }, { id: 't2' }, { id: 't3' }];
+  const students = [{ id: 'a', name: 'Ali', teamId: 't1' }, { id: 'b', name: 'Berk', teamId: 't2' }];
+  const out = setTeam(students, teams, 'a', 't3');
+  eq(out.map(s => [s.id, s.teamId]), [['a', 't3'], ['b', 't2']]);
+  ok(out[1] === students[1], 'dokunulmayan öğrenci aynı nesne');
+  eq(setTeam(students, teams, 'a', 'yok'), students, 'olmayan takım yok sayılır');
+});
+
+test('roster: listeye eklenen yeni öğrenciler mevcutların kimliğini ve takımını bozmaz', () => {
+  const prev = buildRoster('Ali\nBerk\nCan', 3, undefined, (() => { let n = 0; return () => `id${n++}`; })());
+  prev.students[0].teamId = 't3';
+  const next = buildRoster('Ali\nBerk\nCan\nDeniz\nEce', 3, prev, (() => { let n = 10; return () => `id${n++}`; })());
+  eq(next.students.slice(0, 3), prev.students);
+  eq(next.students.slice(3).map(s => s.id), ['id10', 'id11']);
+});

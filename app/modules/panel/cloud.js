@@ -2,6 +2,7 @@ import { h, icon, toast } from '../../core/dom.js';
 
 // Ayarlar → Bulut: 5 tahta tek lig. Bağlantı bilgisi, öğretmen girişi, eşitleme durumu.
 export default {
+  unmount() {},
   async mount(el, ctx) {
     const c = ctx.cloud;
     const conf = ctx.cloudConfig();
@@ -56,6 +57,19 @@ export default {
           h('button', { class: 'ghost', onclick: async () => { await c.client.signOut(); location.reload(); } }, 'Çıkış yap')),
       ];
     }
-    el.append(h('section', { class: 'screen setup one' }, h('h1', { class: 'display' }, 'Bulut · 5 tahta tek lig'), ...body, back));
+    // Çevrimdışı açılış: okul ağı engellese de tahta uygulamayı hafızasından açar
+    const offlineLine = h('p', { class: 'tape callout offline-line' });
+    const showOffline = () => {
+      const o = ctx.offline ?? { state: 'off' };
+      offlineLine.className = `tape callout offline-line is-${o.state}`;
+      offlineLine.textContent = o.state === 'ready' ? `Çevrimdışı hazır ✓ · ${o.total} dosyanın hepsi bu tahtada${o.update ? ' · yeni sürüm Chrome kapanıp açılınca gelir' : ''}`
+        : o.state === 'loading' ? `Tahtaya iniyor: ${o.cached} / ${o.total || '…'} dosya · sayfayı açık bırak`
+          : 'Çevrimdışı açılış bu adreste kapalı (yalnız yayındaki sitede çalışır)';
+    };
+    showOffline();
+    // Yalnız bu satır güncellenir; form yeniden çizilmez (yazılan e-posta silinmesin)
+    document.addEventListener('offline-changed', showOffline);
+    this.unmount = () => document.removeEventListener('offline-changed', showOffline);
+    el.append(h('section', { class: 'screen setup one' }, h('h1', { class: 'display' }, 'Bulut · 5 tahta tek lig'), offlineLine, ...body, back));
   },
 };

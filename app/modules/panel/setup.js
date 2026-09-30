@@ -27,8 +27,16 @@ export default {
       if (count !== cls.teams.length) roster.students = balanceTeams(roster.students, roster.teams);
       roster.teams.forEach((t, i) => { t.name = teamNames[i]?.trim() || t.name; });
       if (!roster.students.length) { toast('En az bir öğrenci adı yaz'); return; }
+      const added = roster.students.filter(x => !cls.students.some(o => o.id === x.id));
       ctx.store.saveClass(ctx.classId, roster);
       document.dispatchEvent(new CustomEvent('scores-changed'));
+      // Var olan şubeye yeni öğrenci eklendiyse takımlarını seçmek için doğrudan "Bugün" ekranına
+      if (added.length && cls.students.length && roster.teams.length > 1) {
+        ctx.newStudents = { ...ctx.newStudents, [ctx.classId]: added.map(x => x.id) };
+        toast(`${added.length} yeni öğrenci eklendi · takımlarını seç`);
+        ctx.go('#/today');
+        return;
+      }
       toast(`${roster.students.length} öğrenci, ${roster.teams.length} grup kaydedildi`);
       ctx.go(next);
     }
