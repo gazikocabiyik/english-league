@@ -1,4 +1,5 @@
 import { h, icon, toast } from '../../core/dom.js';
+import { applyUpdate } from '../../core/offline.js';
 
 // Ayarlar → Bulut: 5 tahta tek lig. Bağlantı bilgisi, öğretmen girişi, eşitleme durumu.
 export default {
@@ -59,17 +60,21 @@ export default {
     }
     // Çevrimdışı açılış: okul ağı engellese de tahta uygulamayı hafızasından açar
     const offlineLine = h('p', { class: 'tape callout offline-line' });
-    const showOffline = () => {
+    let showOffline = () => {
       const o = ctx.offline ?? { state: 'off' };
       offlineLine.className = `tape callout offline-line is-${o.state}`;
-      offlineLine.textContent = o.state === 'ready' ? `Çevrimdışı hazır ✓ · ${o.total} dosyanın hepsi bu tahtada${o.update ? ' · yeni sürüm Chrome kapanıp açılınca gelir' : ''}`
+      offlineLine.textContent = o.state === 'ready' ? `Çevrimdışı hazır ✓ · ${o.total} dosyanın hepsi bu tahtada${o.update ? ' · yeni sürüm hazır' : ''}`
         : o.state === 'loading' ? `Tahtaya iniyor: ${o.cached} / ${o.total || '…'} dosya · sayfayı açık bırak`
           : 'Çevrimdışı açılış bu adreste kapalı (yalnız yayındaki sitede çalışır)';
     };
+    // Yeni sürüm indiyse tek dokunuşla geç (Chrome'u kapatıp açmaya gerek yok)
+    const updateBtn = h('button', { class: 'go', hidden: true, onclick: () => applyUpdate() }, icon('arrow-counter-clockwise'), ' Şimdi güncelle');
+    const baseShow = showOffline;
+    showOffline = () => { baseShow(); updateBtn.hidden = !(ctx.offline?.state === 'ready' && ctx.offline?.update); };
     showOffline();
     // Yalnız bu satır güncellenir; form yeniden çizilmez (yazılan e-posta silinmesin)
     document.addEventListener('offline-changed', showOffline);
     this.unmount = () => document.removeEventListener('offline-changed', showOffline);
-    el.append(h('section', { class: 'screen setup one' }, h('h1', { class: 'display' }, 'Bulut · 5 tahta tek lig'), offlineLine, ...body, back));
+    el.append(h('section', { class: 'screen setup one' }, h('h1', { class: 'display' }, 'Bulut · 5 tahta tek lig'), offlineLine, updateBtn, ...body, back));
   },
 };

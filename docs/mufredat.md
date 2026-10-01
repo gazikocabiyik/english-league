@@ -79,7 +79,9 @@ Onaylı içerik: 11/Ü1 videolar BBC Learning English "Present continuous and go
 
 ## Kitap görevi: anlam merdiveni ve takım oylaması (pilot geri bildirimi)
 - **Anlam merdiveni:** her kitap maddesinde 🔑 anahtar kelimeler (Türkçeleriyle; ünite kelimeleri otomatik, diğerleri `keys`) ve 🇹🇷 cümlenin Türkçe anlamı (`tr`). A1'de anahtar kelimeler açık gelir; B1–B2'de Türkçe anlam yok. Formül: *Anahtar kelimeyi bul → anlamı kur → karar ver.*
-- **True/False:** her takım TRUE/FALSE işaretler, "Cevabı aç" ile doğru bilen bütün takımlar +1 (tek "Geri al" hepsini siler). Kısa cevap maddelerinde ilk doğru söyleyen takım +1.
+- **True/False:** her takım TRUE/FALSE işaretler, "Cevabı aç" ile doğru bilen bütün takımlar +1 (tek "Geri al" hepsini siler).
+- **Kısa cevap:** her takım ✓ Doğru / ✗ Yanlış işaretlenir, "Puanları ver" ile ✓ alanların hepsi +1.
+- **Karaoke metin:** kitap sesi çalarken dinleme metni büyük harfle görünür, okunan kelime sarı ilerler; kelimeye dokununca oradan çalar; "Metin açık/kapalı" ile gizlenir. Metin ve kelime zamanları `scripts/transcribe_audio.py` (Whisper large-v3) ile üretilir, özel adlar elle düzeltilir (`content/11/audio/1.x.json`).
 
 ## Ön Kamp (ünite başı hazırbulunuşluk)
 Ünitenin 1. dersinde yoklamadan hemen sonra bir kez açılır (panelde de kutusu var):

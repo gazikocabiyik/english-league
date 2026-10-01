@@ -17,3 +17,11 @@ export async function offlineStatus(timeout = 3000) {
   // update: yeni sürüm inmiş, Chrome kapanıp açılınca geçilecek
   return { state: ready ? 'ready' : 'loading', cached: reply.cached, total: reply.total, update: ready && worker === reg.waiting };
 }
+
+// Yeni sürüm tahtaya inmişse hemen geç: bekleyen Service Worker devralır, sayfa yenilenir
+export async function applyUpdate() {
+  const reg = await navigator.serviceWorker?.getRegistration();
+  if (!reg?.waiting) { location.reload(); return; }
+  navigator.serviceWorker.addEventListener('controllerchange', () => location.reload(), { once: true });
+  reg.waiting.postMessage('skip-waiting');
+}

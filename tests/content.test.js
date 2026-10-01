@@ -235,3 +235,14 @@ test('content 11/1 ve 12/1: bütün kitap maddelerinde Türkçe anlam var', asyn
     ok(u.camp && u.camp.words.length === 8, `${g} camp`);
   }
 });
+
+test('content 11/1: her kitap sesinin karaoke metni var, zamanlar artan', async () => {
+  const { readFileSync } = await import('node:fs');
+  const u = JSON.parse(readFileSync(new URL('../app/content/11/unit1.json', import.meta.url), 'utf8'));
+  for (const b of u.book.filter(b => b.audio)) {
+    const { lines } = JSON.parse(readFileSync(new URL(`../app/content/11/${b.audio.replace('.mp3', '.json')}`, import.meta.url), 'utf8'));
+    ok(lines.length > 2, b.audio);
+    let t = -1;
+    for (const l of lines) for (const w of l.words) { ok(w.s >= t && w.e >= w.s, `${b.audio} ${w.w} ${w.s}`); t = w.s; }
+  }
+});

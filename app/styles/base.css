@@ -475,3 +475,20 @@ button.wide { min-width: 320px; }
 .camp-tr { padding-left: 0; }
 .camp-en { font-size: min(var(--step-0), calc(4 * var(--vh, 1vh))); }
 .camp .stage { min-height: 0; overflow: hidden; }
+
+/* Karaoke: kitap sesi çalarken metin, okunan kelime sarı */
+.karaoke { display: grid; gap: 6px; padding: min(var(--space-3), calc(2 * var(--vh, 1vh))) var(--space-3); background: #0e1114; border-radius: var(--radius); box-shadow: inset 0 0 0 2px var(--line); text-align: left; }
+.karaoke[hidden] { display: none; }
+.stage-move .karaoke { width: 100%; max-width: 1400px; }
+.k-now { display: flex; flex-wrap: wrap; gap: .12em .32em; font: 900 min(var(--step-2), calc(6.2 * var(--vh, 1vh)))/1.05 var(--font-display); text-transform: uppercase; color: rgb(242 239 230 / .38); }
+.kw { all: unset; cursor: pointer; padding: 0 .08em; border-radius: 4px; transition: color .08s, background-color .08s; }
+.kw.is-done { color: var(--ink); }
+.kw.is-now { color: var(--accent-ink); background: var(--accent); }
+.k-next { margin: 0; font: 700 min(26px, calc(3 * var(--vh, 1vh)))/1.2 var(--font-body); color: var(--ink-muted); text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.karaoke.is-intro .k-now { font-size: min(var(--step-1), calc(4.4 * var(--vh, 1vh))); }
+.vote.is-no { background: var(--danger); color: #fff; }
+.reveal-row { min-height: 0; }
+.reveal-row .frame { margin: 0; }
+.book-q .karaoke { padding-block: 8px; }
+.book-q .k-now { font-size: min(var(--step-1), calc(4.2 * var(--vh, 1vh))); max-height: calc(2.3em); overflow: hidden; }
+.book-q .k-next { display: none; }
