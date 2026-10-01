@@ -1,0 +1,25 @@
+{
+  "source": "Avrupa Ortak Başvuru Metni (CEFR) A2 düzeyi iletişim hedeflerinden özetlenmiştir; yüzdeler yaklaşık bir göstergedir.",
+  "functions": [
+    { "id": "introduce", "tr": "Kendini ve başkalarını tanıtma" },
+    { "id": "personal-info", "tr": "Kişisel bilgi sorma ve verme" },
+    { "id": "routines", "tr": "Günlük rutinleri anlatma" },
+    { "id": "likes", "tr": "Sevdiğini ve sevmediğini söyleme" },
+    { "id": "abilities", "tr": "Yeteneklerini anlatma" },
+    { "id": "plans", "tr": "Plan ve tahminlerden bahsetme" },
+    { "id": "past", "tr": "Geçmiş olayları anlatma" },
+    { "id": "experiences", "tr": "Deneyimlerini anlatma" },
+    { "id": "people", "tr": "İnsanları tarif etme" },
+    { "id": "places", "tr": "Yerleri tarif etme ve yol sorma" },
+    { "id": "appointments", "tr": "Randevu alma ve zaman ayarlama" },
+    { "id": "phone", "tr": "Telefonda kısa konuşma" },
+    { "id": "services", "tr": "Alışveriş yapma ve hizmet isteme" },
+    { "id": "requests", "tr": "Rica etme ve teklifte bulunma" },
+    { "id": "suggestions", "tr": "Öneride bulunma, kabul ve ret" },
+    { "id": "opinions", "tr": "Fikir bildirme, katılma ve katılmama" },
+    { "id": "advice", "tr": "Tavsiye isteme ve verme" },
+    { "id": "feelings", "tr": "Duygularını ifade etme" },
+    { "id": "compare", "tr": "Karşılaştırma ve tercih bildirme" },
+    { "id": "reasons", "tr": "Sebep ve açıklama bildirme" }
+  ]
+}

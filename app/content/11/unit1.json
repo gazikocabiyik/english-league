@@ -1693,27 +1693,93 @@
       "items": [
         {
           "text": "The career counselor says choosing a career is easy.",
-          "answer": false
+          "answer": false,
+          "tr": "Kariyer danışmanı meslek seçmenin kolay olduğunu söylüyor.",
+          "keys": [
+            {
+              "w": "career counselor",
+              "tr": "kariyer danışmanı"
+            },
+            {
+              "w": "choosing",
+              "tr": "seçmek"
+            },
+            {
+              "w": "easy",
+              "tr": "kolay"
+            }
+          ]
         },
         {
           "text": "Some students are going to be teachers or doctors.",
-          "answer": true
+          "answer": true,
+          "tr": "Bazı öğrenciler öğretmen ya da doktor olacak.",
+          "keys": [
+            {
+              "w": "some",
+              "tr": "bazı"
+            },
+            {
+              "w": "going to be",
+              "tr": "olacak"
+            }
+          ]
         },
         {
           "text": "Melanie wants to study mechatronics engineering.",
-          "answer": true
+          "answer": true,
+          "tr": "Melanie mekatronik mühendisliği okumak istiyor.",
+          "keys": [
+            {
+              "w": "wants",
+              "tr": "istiyor"
+            },
+            {
+              "w": "study",
+              "tr": "okumak, eğitim almak"
+            }
+          ]
         },
         {
           "text": "'On top of the world' means 'very tired'.",
-          "answer": false
+          "answer": false,
+          "tr": "'On top of the world' çok yorgun demek.",
+          "keys": [
+            {
+              "w": "means",
+              "tr": "demek, anlamına gelir"
+            },
+            {
+              "w": "very tired",
+              "tr": "çok yorgun"
+            }
+          ]
         },
         {
           "text": "'Think outside the box' means 'think creatively'.",
-          "answer": true
+          "answer": true,
+          "tr": "'Think outside the box' yaratıcı düşünmek demek.",
+          "keys": [
+            {
+              "w": "means",
+              "tr": "demek"
+            },
+            {
+              "w": "think creatively",
+              "tr": "yaratıcı düşünmek"
+            }
+          ]
         },
         {
           "q": "What are YOU going to be? Use 'going to'.",
-          "a": "I'm going to be a/an …"
+          "a": "I'm going to be a/an …",
+          "tr": "SEN ne olacaksın? 'going to' kullan.",
+          "keys": [
+            {
+              "w": "going to",
+              "tr": "-acak/-ecek (plan)"
+            }
+          ]
         }
       ]
     },
@@ -1725,27 +1791,79 @@
       "items": [
         {
           "text": "Catherine works in public relations.",
-          "answer": true
+          "answer": true,
+          "tr": "Catherine halkla ilişkiler alanında çalışıyor.",
+          "keys": [
+            {
+              "w": "works",
+              "tr": "çalışıyor"
+            },
+            {
+              "w": "public relations",
+              "tr": "halkla ilişkiler"
+            }
+          ]
         },
         {
           "text": "David is a teacher.",
-          "answer": false
+          "answer": false,
+          "tr": "David bir öğretmen."
         },
         {
           "text": "Catherine studied at Cambridge University.",
-          "answer": true
+          "answer": true,
+          "tr": "Catherine Cambridge Üniversitesi'nde okudu.",
+          "keys": [
+            {
+              "w": "studied",
+              "tr": "okudu"
+            }
+          ]
         },
         {
           "text": "David likes table tennis.",
-          "answer": true
+          "answer": true,
+          "tr": "David masa tenisini seviyor.",
+          "keys": [
+            {
+              "w": "likes",
+              "tr": "seviyor"
+            },
+            {
+              "w": "table tennis",
+              "tr": "masa tenisi"
+            }
+          ]
         },
         {
           "text": "David has no computer skills.",
-          "answer": false
+          "answer": false,
+          "tr": "David'in hiç bilgisayar becerisi yok.",
+          "keys": [
+            {
+              "w": "has no",
+              "tr": "hiç … yok"
+            },
+            {
+              "w": "computer skills",
+              "tr": "bilgisayar becerileri"
+            }
+          ]
         },
         {
           "q": "Which job is better for you: Catherine's or David's? Why?",
-          "a": "I think … is better for me because …"
+          "a": "I think … is better for me because …",
+          "tr": "Hangi iş sana daha uygun: Catherine'inki mi David'inki mi? Neden?",
+          "keys": [
+            {
+              "w": "better for you",
+              "tr": "sana daha uygun"
+            },
+            {
+              "w": "why",
+              "tr": "neden"
+            }
+          ]
         }
       ]
     },
@@ -1759,27 +1877,93 @@
       "items": [
         {
           "text": "Jason is planning to become a statistician.",
-          "answer": true
+          "answer": true,
+          "tr": "Jason istatistikçi olmayı planlıyor.",
+          "keys": [
+            {
+              "w": "is planning",
+              "tr": "planlıyor"
+            },
+            {
+              "w": "to become",
+              "tr": "olmayı"
+            }
+          ]
         },
         {
           "text": "Melanie thinks she'll study genetic engineering.",
-          "answer": false
+          "answer": false,
+          "tr": "Melanie genetik mühendisliği okuyacağını düşünüyor.",
+          "keys": [
+            {
+              "w": "thinks",
+              "tr": "düşünüyor"
+            },
+            {
+              "w": "she'll study",
+              "tr": "okuyacak"
+            },
+            {
+              "w": "genetic",
+              "tr": "genetik"
+            }
+          ]
         },
         {
           "text": "Judy hopes she'll be a computer systems analyst.",
-          "answer": true
+          "answer": true,
+          "tr": "Judy bilgisayar sistemleri analisti olmayı umuyor.",
+          "keys": [
+            {
+              "w": "hopes",
+              "tr": "umuyor"
+            },
+            {
+              "w": "she'll be",
+              "tr": "olacak"
+            }
+          ]
         },
         {
           "q": "What is Jason keen on?",
-          "a": "Working with numbers."
+          "a": "Working with numbers.",
+          "tr": "Jason neye meraklı?",
+          "keys": [
+            {
+              "w": "keen on",
+              "tr": "meraklı, hevesli"
+            }
+          ]
         },
         {
           "q": "What makes Melanie feel on top of the world?",
-          "a": "The idea of designing a new machine."
+          "a": "The idea of designing a new machine.",
+          "tr": "Melanie'yi ne çok mutlu ediyor?",
+          "keys": [
+            {
+              "w": "makes",
+              "tr": "yapıyor, -tiriyor"
+            },
+            {
+              "w": "feel",
+              "tr": "hissetmek"
+            },
+            {
+              "w": "on top of the world",
+              "tr": "çok mutlu"
+            }
+          ]
         },
         {
           "q": "What is Judy crazy about?",
-          "a": "Computer science."
+          "a": "Computer science.",
+          "tr": "Judy neye bayılıyor?",
+          "keys": [
+            {
+              "w": "crazy about",
+              "tr": "… -e bayılmak"
+            }
+          ]
         }
       ]
     },
@@ -1793,23 +1977,66 @@
       "items": [
         {
           "q": "Short form: I am going to …",
-          "a": "I'm going to …"
+          "a": "I'm going to …",
+          "tr": "Kısa biçim: I am going to …",
+          "keys": [
+            {
+              "w": "short form",
+              "tr": "kısa biçim"
+            }
+          ]
         },
         {
           "q": "Short form: will not",
-          "a": "won't"
+          "a": "won't",
+          "tr": "Kısa biçim: will not",
+          "keys": [
+            {
+              "w": "short form",
+              "tr": "kısa biçim"
+            },
+            {
+              "w": "will not",
+              "tr": "-meyecek"
+            }
+          ]
         },
         {
           "q": "Short form: they are not",
-          "a": "they aren't / they're not"
+          "a": "they aren't / they're not",
+          "tr": "Kısa biçim: they are not",
+          "keys": [
+            {
+              "w": "short form",
+              "tr": "kısa biçim"
+            }
+          ]
         },
         {
           "q": "Short form: he is going to",
-          "a": "he's going to"
+          "a": "he's going to",
+          "tr": "Kısa biçim: he is going to",
+          "keys": [
+            {
+              "w": "short form",
+              "tr": "kısa biçim"
+            }
+          ]
         },
         {
           "text": "We use short forms like I'm and I'll in everyday speech.",
-          "answer": true
+          "answer": true,
+          "tr": "Günlük konuşmada I'm ve I'll gibi kısa biçimleri kullanırız.",
+          "keys": [
+            {
+              "w": "short forms",
+              "tr": "kısa biçimler"
+            },
+            {
+              "w": "everyday speech",
+              "tr": "günlük konuşma"
+            }
+          ]
         }
       ]
     },
@@ -1823,27 +2050,97 @@
       "items": [
         {
           "text": "The counselor talks about civil engineers.",
-          "answer": false
+          "answer": false,
+          "tr": "Danışman inşaat mühendislerinden bahsediyor.",
+          "keys": [
+            {
+              "w": "counselor",
+              "tr": "danışman"
+            },
+            {
+              "w": "talks about",
+              "tr": "bahsediyor"
+            }
+          ]
         },
         {
           "text": "Digital content specialists will probably be in high demand.",
-          "answer": true
+          "answer": true,
+          "tr": "Dijital içerik uzmanlarına muhtemelen çok talep olacak.",
+          "keys": [
+            {
+              "w": "probably",
+              "tr": "muhtemelen"
+            },
+            {
+              "w": "high demand",
+              "tr": "çok talep, çok aranan"
+            }
+          ]
         },
         {
           "text": "Nanotechnology is called the technology of the future.",
-          "answer": true
+          "answer": true,
+          "tr": "Nanoteknolojiye geleceğin teknolojisi deniyor.",
+          "keys": [
+            {
+              "w": "is called",
+              "tr": "denir, adlandırılır"
+            },
+            {
+              "w": "future",
+              "tr": "gelecek"
+            }
+          ]
         },
         {
           "q": "Most future jobs will come from today's scientific and technological ___.",
-          "a": "advances"
+          "a": "advances",
+          "tr": "Geleceğin mesleklerinin çoğu bugünün bilimsel ve teknolojik ___ ortaya çıkacak.",
+          "keys": [
+            {
+              "w": "most",
+              "tr": "çoğu"
+            },
+            {
+              "w": "scientific",
+              "tr": "bilimsel"
+            },
+            {
+              "w": "technological",
+              "tr": "teknolojik"
+            }
+          ]
         },
         {
           "q": "Biomedical engineers won't have difficulty in finding ___.",
-          "a": "employment"
+          "a": "employment",
+          "tr": "Biyomedikal mühendisleri ___ bulmakta zorlanmayacak.",
+          "keys": [
+            {
+              "w": "difficulty",
+              "tr": "zorluk"
+            },
+            {
+              "w": "finding",
+              "tr": "bulmak"
+            }
+          ]
         },
         {
           "q": "Wind and solar power are ___ energy sources.",
-          "a": "renewable"
+          "a": "renewable",
+          "tr": "Rüzgâr ve güneş enerjisi ___ enerji kaynaklarıdır.",
+          "keys": [
+            {
+              "w": "solar power",
+              "tr": "güneş enerjisi"
+            },
+            {
+              "w": "sources",
+              "tr": "kaynaklar"
+            }
+          ]
         }
       ]
     },
@@ -1857,31 +2154,92 @@
       "items": [
         {
           "q": "Blank 1: Robin applied for the ___ position.",
-          "a": "web designer"
+          "a": "web designer",
+          "tr": "1. boşluk: Robin ___ pozisyonuna başvurdu.",
+          "keys": [
+            {
+              "w": "applied for",
+              "tr": "başvurdu"
+            },
+            {
+              "w": "position",
+              "tr": "pozisyon, iş"
+            }
+          ]
         },
         {
           "q": "Blank 2: Can Robin see Mr Taylor ___?",
-          "a": "next week"
+          "a": "next week",
+          "tr": "2. boşluk: Robin, Bay Taylor'ı ___ görebilir mi?",
+          "keys": [
+            {
+              "w": "see",
+              "tr": "görmek, görüşmek"
+            }
+          ]
         },
         {
           "q": "Blank 3: 2 o'clock on ___",
-          "a": "Monday"
+          "a": "Monday",
+          "tr": "3. boşluk: ___ günü saat 2'de",
+          "keys": [
+            {
+              "w": "o'clock",
+              "tr": "saat"
+            }
+          ]
         },
         {
           "q": "Blank 4: I'll be at the ___ then.",
-          "a": "dentist"
+          "a": "dentist",
+          "tr": "4. boşluk: O saatte ___ olacağım.",
+          "keys": [
+            {
+              "w": "I'll be",
+              "tr": "olacağım"
+            },
+            {
+              "w": "then",
+              "tr": "o zaman"
+            }
+          ]
         },
         {
           "q": "Blank 5: Can we meet at ___?",
-          "a": "four o'clock"
+          "a": "four o'clock",
+          "tr": "5. boşluk: ___ buluşabilir miyiz?",
+          "keys": [
+            {
+              "w": "meet",
+              "tr": "buluşmak"
+            }
+          ]
         },
         {
           "q": "Blank 6: What about ___ morning?",
-          "a": "Wednesday"
+          "a": "Wednesday",
+          "tr": "6. boşluk: ___ sabahı nasıl?",
+          "keys": [
+            {
+              "w": "what about",
+              "tr": "… nasıl?"
+            },
+            {
+              "w": "morning",
+              "tr": "sabah"
+            }
+          ]
         },
         {
           "q": "Blank 7: The interview is at 11 o'clock on ___.",
-          "a": "the 19th of October"
+          "a": "the 19th of October",
+          "tr": "7. boşluk: Mülakat ___ saat 11'de.",
+          "keys": [
+            {
+              "w": "is at",
+              "tr": "… -de"
+            }
+          ]
         }
       ]
     },
@@ -1895,27 +2253,105 @@
       "items": [
         {
           "text": "Simon says you should visit the company's website before the interview.",
-          "answer": true
+          "answer": true,
+          "tr": "Simon mülakattan önce şirketin web sitesini ziyaret etmen gerektiğini söylüyor.",
+          "keys": [
+            {
+              "w": "should",
+              "tr": "-meli"
+            },
+            {
+              "w": "visit",
+              "tr": "ziyaret etmek"
+            },
+            {
+              "w": "company",
+              "tr": "şirket"
+            },
+            {
+              "w": "before",
+              "tr": "önce"
+            }
+          ]
         },
         {
           "text": "You don't need to think about possible questions.",
-          "answer": false
+          "answer": false,
+          "tr": "Olası sorular hakkında düşünmene gerek yok.",
+          "keys": [
+            {
+              "w": "don't need",
+              "tr": "gerek yok"
+            },
+            {
+              "w": "possible",
+              "tr": "olası"
+            }
+          ]
         },
         {
           "text": "You should dress properly.",
-          "answer": true
+          "answer": true,
+          "tr": "Düzgün giyinmelisin.",
+          "keys": [
+            {
+              "w": "should",
+              "tr": "-meli"
+            },
+            {
+              "w": "dress properly",
+              "tr": "düzgün giyinmek"
+            }
+          ]
         },
         {
           "text": "If you're late, you'll probably get the job.",
-          "answer": false
+          "answer": false,
+          "tr": "Geç kalırsan muhtemelen işi alırsın.",
+          "keys": [
+            {
+              "w": "if",
+              "tr": "eğer"
+            },
+            {
+              "w": "late",
+              "tr": "geç"
+            },
+            {
+              "w": "probably",
+              "tr": "muhtemelen"
+            },
+            {
+              "w": "get the job",
+              "tr": "işi almak"
+            }
+          ]
         },
         {
           "q": "Name one question you should prepare for.",
-          "a": "What are your strengths? / What are your weaknesses? / Why do you want this job?"
+          "a": "What are your strengths? / What are your weaknesses? / Why do you want this job?",
+          "tr": "Hazırlanman gereken bir soru söyle.",
+          "keys": [
+            {
+              "w": "name",
+              "tr": "söyle, belirt"
+            },
+            {
+              "w": "prepare for",
+              "tr": "… için hazırlanmak"
+            }
+          ]
         },
         {
           "q": "What should you do with your body language?",
-          "a": "Smile and make eye contact."
+          "a": "Smile and make eye contact.",
+          "tr": "Beden dilinle ne yapmalısın?",
+          "keys": [
+            {
+              "w": "body language",
+              "tr": "beden dili"
+            }
+          ]
         }
       ]
     }
@@ -2564,5 +3000,80 @@
         }
       ]
     }
+  },
+  "camp": {
+    "mission": "Bu ünitenin sonunda gelecek planlarını anlatacak, telefonla randevu alacak ve bir iş mülakatında kendini tanıtacaksın.",
+    "examples": [
+      {
+        "en": "I'm going to be a PE teacher.",
+        "tr": "Beden eğitimi öğretmeni olacağım."
+      },
+      {
+        "en": "I'm going to be a professional coach.",
+        "tr": "Profesyonel antrenör olacağım."
+      },
+      {
+        "en": "What are your strengths?",
+        "tr": "Güçlü yönlerin neler?"
+      },
+      {
+        "en": "I'm good at teamwork and I never give up.",
+        "tr": "Takım çalışmasında iyiyim ve asla pes etmem."
+      },
+      {
+        "en": "I hope I'll play for the national team.",
+        "tr": "Umarım milli takımda oynarım."
+      },
+      {
+        "en": "Can we meet on Monday at ten?",
+        "tr": "Pazartesi saat onda buluşabilir miyiz?"
+      }
+    ],
+    "functions": [
+      "introduce",
+      "personal-info",
+      "abilities",
+      "plans",
+      "appointments",
+      "phone",
+      "reasons"
+    ],
+    "words": [
+      "engineer",
+      "surgeon",
+      "accountant",
+      "coach",
+      "pilot",
+      "interview",
+      "salary",
+      "degree"
+    ],
+    "check": [
+      {
+        "q": "What is 'mühendis' in English?",
+        "a": "engineer",
+        "tr": "'Mühendis' İngilizcede ne?"
+      },
+      {
+        "q": "I'm going to be a pilot.",
+        "a": "Pilot olacağım.",
+        "tr": "Bu cümle ne anlatıyor?"
+      },
+      {
+        "q": "I'm good ___ teamwork.",
+        "a": "at",
+        "tr": "Boşluğa hangi kelime gelir?"
+      },
+      {
+        "q": "Which one is a job: salary or surgeon?",
+        "a": "surgeon",
+        "tr": "Hangisi bir meslek: salary mi surgeon mı?"
+      },
+      {
+        "q": "Can we meet on Monday?",
+        "a": "Pazartesi buluşmak istiyor (randevu).",
+        "tr": "Konuşan kişi ne istiyor?"
+      }
+    ]
   }
 }

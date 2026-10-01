@@ -5,9 +5,9 @@ import { games } from '../registry.js';
 import { weekStart } from '../../core/store.js';
 import { levelUp } from '../../core/levels.js';
 
-const GAME_ICONS = { 'coach-says': 'person-simple-run', 'mock-interview': 'microphone-stage', 'warmup-dj': 'music-notes' };
+const GAME_ICONS = { 'pre-season': 'trophy', 'coach-says': 'person-simple-run', 'mock-interview': 'microphone-stage', 'warmup-dj': 'music-notes' };
 // Ünitenin görev oyunu yalnız ilgili ünitede görünür
-const UNIT_GAME = { 'mock-interview': 'interview', 'warmup-dj': 'dj' };
+const UNIT_GAME = { 'mock-interview': 'interview', 'warmup-dj': 'dj', 'pre-season': 'camp' };
 
 export default {
   async mount(el, ctx) {
@@ -58,7 +58,7 @@ export default {
       lessonCard,
       h('p', { class: 'free-label' }, 'Serbest etkinlikler'),
       h('div', { class: 'tiles' },
-        visibleGames.map((g, i) => h('button', { class: `tile game${i === 0 ? ' primary' : ''}`, onclick: () => ctx.go(`#/game/${g.id}`) }, icon(GAME_ICONS[g.id] ?? 'play'), h('span', { lang: 'en' }, g.title.toLocaleUpperCase('en')))),
+        visibleGames.map((g, i) => h('button', { class: `tile game${g.id === 'coach-says' ? ' primary' : ''}`, onclick: () => ctx.go(`#/game/${g.id}`) }, icon(GAME_ICONS[g.id] ?? 'play'), h('span', { lang: 'en' }, g.title.toLocaleUpperCase('en')))),
         h('button', { class: 'tile', onclick: () => ctx.go('#/league') }, icon('trophy'), 'Lig'),
         h('button', { class: 'tile', onclick: () => ctx.go('#/setup') }, icon('users-three'), 'Takımlar')),
       week.length ? h('button', { class: 'mini-league', 'aria-label': 'Bu haftanın takım ligi', onclick: () => ctx.go('#/league') },

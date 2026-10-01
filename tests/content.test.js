@@ -215,3 +215,23 @@ test('content 11/1: her ders × A1–B2 için ≥ 8 çıkış maddesi, kelime ve
   }
   for (const b of u.book.filter(b => b.audio)) ok(existsSync(new URL(`../app/content/11/${b.audio}`, import.meta.url)), b.audio);
 });
+
+test('content: Ön Kamp ve kitap anlam alanları doğrulanır', () => {
+  const u = good();
+  u.camp = { mission: 'Hedef', examples: [{ en: 'Hi.', tr: 'Merhaba.' }], functions: ['plans'], words: ['coach'], check: [{ q: 'Q?', a: 'A', tr: 'S?' }] };
+  u.book = [{ id: 'b1', page: 1, title: 't', instruction: 'i', items: [{ text: 'X.', answer: true, tr: 'X.', keys: [{ w: 'x', tr: 'iks' }] }] }];
+  eq(validateUnit(u), []);
+  u.camp = { mission: '', examples: [{ en: 'Hi.' }], functions: [], words: ['nope'], check: [] };
+  u.book[0].items[0].keys = [{ w: 'x' }];
+  const e = validateUnit(u).join(' | ');
+  for (const part of ['camp.mission', 'camp.examples', 'camp.words', 'camp.check', 'keys']) ok(e.includes(part), `${part}: ${e}`);
+});
+
+test('content 11/1 ve 12/1: bütün kitap maddelerinde Türkçe anlam var', async () => {
+  const { readFileSync } = await import('node:fs');
+  for (const g of ['11', '12']) {
+    const u = JSON.parse(readFileSync(new URL(`../app/content/${g}/unit1.json`, import.meta.url), 'utf8'));
+    for (const b of u.book) for (const it of b.items) ok(typeof it.tr === 'string' && it.tr, `${g} ${b.id}: ${it.text ?? it.q}`);
+    ok(u.camp && u.camp.words.length === 8, `${g} camp`);
+  }
+});

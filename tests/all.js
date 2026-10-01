@@ -14,3 +14,5 @@ import './lesson-plan.test.js';
 import './boss.test.js';
 import './sync.test.js';
 import './offline.test.js';
+import './booktask.test.js';
+import './camp.test.js';

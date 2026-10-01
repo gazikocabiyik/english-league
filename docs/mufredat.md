@@ -76,3 +76,14 @@ Panelde "Bugün: Ders n/4" kartı; "Derse başla" ile adımlar sırayla akar, he
 
 Kitap sesleri `scripts/fetch_audio.py <sınıf> <tema>` ile ingilizcehocam.net arşivinden 64 kbps olarak indirilir ve çevrimdışı hafızaya girer.
 Onaylı içerik: 11/Ü1 videolar BBC Learning English "Present continuous and going to", English Panda "Future plans conversation"; şarkı *Hall of Fame*. 12/Ü1 videolar Caribou English "Music genres + guess the genre", Teacher Belen "Music genres — likes/dislikes"; şarkılar *We Will Rock You*, *Eye of the Tiger*. Videolar gömülür, şarkı sözleri kopyalanmaz. 12. sınıf kitap sayfaları öğrenci kitabına göre (öğretmen kitabı + 2): okuma s.17, anket s.14; kapak s.13 ile doğrulandı.
+
+## Kitap görevi: anlam merdiveni ve takım oylaması (pilot geri bildirimi)
+- **Anlam merdiveni:** her kitap maddesinde 🔑 anahtar kelimeler (Türkçeleriyle; ünite kelimeleri otomatik, diğerleri `keys`) ve 🇹🇷 cümlenin Türkçe anlamı (`tr`). A1'de anahtar kelimeler açık gelir; B1–B2'de Türkçe anlam yok. Formül: *Anahtar kelimeyi bul → anlamı kur → karar ver.*
+- **True/False:** her takım TRUE/FALSE işaretler, "Cevabı aç" ile doğru bilen bütün takımlar +1 (tek "Geri al" hepsini siler). Kısa cevap maddelerinde ilk doğru söyleyen takım +1.
+
+## Ön Kamp (ünite başı hazırbulunuşluk)
+Ünitenin 1. dersinde yoklamadan hemen sonra bir kez açılır (panelde de kutusu var):
+1. Hedef + kariyer cümleleri (sesli, Türkçeli) + pasta grafiği: A2 iletişim hedeflerinin (20 işlev, `content/functions.json`) yaklaşık yüzde kaçı karşılanıyor; önceki ünitelerin payı ayrı dilim.
+2. Ne biliyoruz: 8 anahtar kelime Türkçesinden İngilizcesi, takım yarışı.
+3. Hazırlık ölçer: 5 soru; başlangıç oranı Boss Round rozetinde "Ünite başı %X → şimdi %Y" olarak görünür. Bu denemeler seviye hesabına girmez.
+

@@ -7,5 +7,6 @@ import video from './video/index.js';
 import bookTask from './book-task/index.js';
 import songBreak from './song-break/index.js';
 import bossRound from './boss-round/index.js';
+import preSeason from './pre-season/index.js';
 
-export const games = [coachSays, mockInterview, warmupDj, video, bookTask, songBreak, bossRound];
+export const games = [preSeason, coachSays, mockInterview, warmupDj, video, bookTask, songBreak, bossRound];

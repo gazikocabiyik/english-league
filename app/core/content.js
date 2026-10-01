@@ -121,6 +121,20 @@ export function validateUnit(u) {
   (u.book ?? []).forEach((b, i) => {
     if (b?.audio !== undefined && !/^audio\/[\w.-]+\.mp3$/.test(b.audio)) errors.push(`book[${i}].audio: "audio/…mp3" biçiminde ünite klasöründeki dosya olmalı.`);
   });
+  // Ön Kamp (ünite başı hazırbulunuşluk)
+  if (u.camp !== undefined) {
+    const c = u.camp;
+    const photoWords = new Set((u.vocab ?? []).filter(v => v?.img).map(v => v.word));
+    if (typeof c?.mission !== 'string' || !c.mission) errors.push('camp.mission: ünitenin hedefi (Türkçe) gerekli.');
+    if (!Array.isArray(c?.examples) || !c.examples.length || !c.examples.every(x => x?.en && x?.tr)) errors.push('camp.examples: {en, tr} örnek cümleler gerekli.');
+    if (!Array.isArray(c?.functions) || !c.functions.length) errors.push('camp.functions: ünitenin karşıladığı iletişim işlevleri gerekli.');
+    if (!Array.isArray(c?.words) || !c.words.length) errors.push('camp.words: anahtar kelimeler gerekli.');
+    else c.words.filter(w => !photoWords.has(w)).forEach(w => errors.push(`camp.words: "${w}" fotoğraflı kelime listesinde yok.`));
+    if (!Array.isArray(c?.check) || !c.check.length || !c.check.every(x => x?.q && x?.a)) errors.push('camp.check: {q, a} sorular gerekli.');
+  }
+  (u.book ?? []).forEach((b, i) => (b?.items ?? []).forEach((it, k) => {
+    if (it?.keys !== undefined && !(Array.isArray(it.keys) && it.keys.every(x => x?.w && x?.tr))) errors.push(`book[${i}].items[${k}].keys: {w, tr} listesi olmalı.`);
+  }));
   // Ders planı ve ek içerik (video, kitap görevi, şarkı)
   const ids = key => new Set((Array.isArray(u[key]) ? u[key] : []).map(x => x?.id));
   const videos = new Set((u.media?.videos ?? []).map(v => v?.id));
@@ -153,7 +167,7 @@ export function validateUnit(u) {
   });
   (u.lessons ?? []).forEach((l, i) => { if (typeof l?.title !== 'string' || !l.title) errors.push(`lessons[${i}]: title gerekli.`); });
   if (u.interview && u.interview.perCandidate !== undefined && !(Number.isInteger(u.interview.perCandidate) && u.interview.perCandidate > 0)) errors.push('interview.perCandidate pozitif tam sayı olmalı.');
-  const TYPES = ['attendance', 'coach', 'mission', 'video', 'book', 'song', 'boss', 'exit'];
+  const TYPES = ['attendance', 'coach', 'mission', 'video', 'book', 'song', 'boss', 'exit', 'camp'];
   (u.lessons ?? []).forEach((l, li) => (l?.steps ?? []).forEach((st, si) => {
     const at = `lessons[${li}].steps[${si}]`;
     if (!TYPES.includes(st?.type)) errors.push(`${at}: bilinmeyen adım "${st?.type}".`);

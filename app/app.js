@@ -91,7 +91,15 @@ const ctx = {
     if (lv.changed) toast(`Seviye yükseldi: ${lv.level}${lv.rate !== undefined ? ` · geçen ders %${lv.rate}` : ''}`);
     else if (lv.rate !== undefined) toast(`Seviye ${lv.level} · geçen ders %${lv.rate} (üst seviye için %80)`);
     store.setSetting(`lessonRun:${ctx.classId}`, { unit: ctx.unit, day: dayKey(Date.now()) });
+    if (campPending(unit, p)) { ctx.go('#/game/pre-season'); return; }
     ctx.go(stepRoute(unit.lessons[p.lesson].steps[p.step], unit));
+  },
+  // Ön Kamp bitince: ders sürüyorsa planın şu anki adımına, değilse panele
+  async continueLesson() {
+    if (!ctx.inLesson()) { ctx.go('#/panel'); return; }
+    const { unit } = await loadUnit(ctx.grade, ctx.unit);
+    const route = unit ? currentRoute(unit, ctx.lessonProgress()) : null;
+    ctx.go(route ?? '#/panel');
   },
   // fallback: ders planı dışında (serbest etkinlik) gidilecek yer
   // route: bu sinyali gönderen adımın adresi (varsayılan: şu anki sayfa). Planın şu anki adımı değilse plan ilerlemez.
@@ -112,9 +120,15 @@ const ctx = {
       ctx.go('#/league');
       return;
     }
+    if (campPending(unit, next)) { ctx.go('#/game/pre-season'); return; } // ünitenin ilk dersi: yoklamadan sonra Ön Kamp
     ctx.go(stepRoute(unit.lessons[next.lesson].steps[next.step], unit));
   },
 };
+
+// Ön Kamp yalnız ünitenin 1. dersinde, yoklamadan hemen sonra ve bir kez (plan adımları kaymaz)
+function campPending(unit, p) {
+  return !!unit?.camp && p.lesson === 0 && p.step === 1 && !store.getSetting(`campDone:${ctx.classId}:${ctx.unit}`);
+}
 
 // Sonraki görevler bu tabloya satır ekler.
 const gameRoute = {

@@ -402,3 +402,76 @@ button.wide { min-width: 320px; }
 .sheet .team-buttons { min-width: min(80vw, 900px); }
 .offline-chip { color: var(--accent); font-variant-numeric: tabular-nums; }
 .offline-line.is-ready { background: var(--team-3); color: #fff; }
+
+/* Kitap görevi: anlam merdiveni ve True/False takım oylaması */
+.book-q { gap: min(var(--space-2), calc(1.6 * var(--vh, 1vh))); }
+.book-q .question { font-size: min(var(--step-2), calc(6 * var(--vh, 1vh))); }
+.formula { margin: 0; justify-self: start; font: 700 min(22px, calc(2.8 * var(--vh, 1vh)))/1 var(--font-body); color: var(--accent); letter-spacing: .02em; }
+.meaning { display: grid; gap: var(--space-1); }
+.meaning-btns { display: flex; gap: var(--space-1); flex-wrap: wrap; }
+.meaning-btns .is-on { background: var(--surface-2); box-shadow: inset 0 0 0 2px var(--accent); }
+.glosses { display: flex; flex-wrap: wrap; gap: var(--space-1); }
+.gloss { display: inline-flex; flex-direction: column; padding: 6px 12px; border-radius: var(--radius); background: var(--surface-2); border-bottom: 4px solid var(--accent); }
+.gloss b { font: 800 min(26px, calc(3.4 * var(--vh, 1vh)))/1.1 var(--font-body); }
+.gloss span { font-size: min(22px, calc(2.8 * var(--vh, 1vh))); color: var(--ink-muted); }
+.meaning-tr { justify-self: start; font-size: min(28px, calc(3.6 * var(--vh, 1vh))); }
+.votes { display: grid; gap: var(--space-1); }
+.vote-row { display: grid; grid-template-columns: minmax(8ch, 1fr) 1fr 1fr auto; gap: var(--space-1); align-items: center; padding-left: var(--space-2); border-left: 10px solid var(--team); border-radius: var(--radius); background: var(--surface); }
+.vote-team { font: 900 min(var(--step-1), calc(4.4 * var(--vh, 1vh)))/1 var(--font-display); }
+.vote { min-height: min(64px, calc(7 * var(--vh, 1vh))); font: 900 min(var(--step-1), calc(4 * var(--vh, 1vh)))/1 var(--font-display); background: var(--surface-2); }
+.vote.is-on { background: var(--team); color: var(--team-ink); }
+.vote:disabled { opacity: 1; }
+.vote-row.is-wrong { opacity: .55; box-shadow: inset 0 0 0 3px var(--danger); }
+.vote-row.is-right { box-shadow: inset 0 0 0 3px var(--accent); }
+.vote-pt { font: 900 min(var(--step-1), calc(4.4 * var(--vh, 1vh)))/1 var(--font-stencil); color: var(--accent); padding: 0 var(--space-2); }
+.vote-end { display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); }
+.stamp-answer { margin: 0; font: 900 min(var(--step-2), calc(7 * var(--vh, 1vh)))/1 var(--font-display); padding: 4px 18px; border: 6px solid currentColor; transform: rotate(-4deg); }
+.stamp-answer.is-true { color: var(--team-3); }
+.stamp-answer.is-false { color: var(--danger); }
+.book .coach-head .audio-bar { margin-left: var(--space-2); }
+.book .coach-head .audio-play { min-height: 52px; }
+.q-top { display: flex; justify-content: space-between; align-items: baseline; gap: var(--space-2); flex-wrap: wrap; }
+.meaning { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-1); }
+.meaning-tr { margin: 0; }
+.vote-row { min-height: 0; }
+.vote { min-height: min(56px, calc(6 * var(--vh, 1vh))); padding-block: 4px; }
+.book-q.is-tf { align-content: start; }
+.book-q .question { font-size: min(var(--step-2), calc(7 * var(--vh, 1vh))); }
+.vote { min-height: min(72px, calc(8 * var(--vh, 1vh))); }
+
+/* Ön Kamp */
+.camp-part { font: 700 min(24px, calc(3 * var(--vh, 1vh)))/1 var(--font-body); color: var(--ink-muted); }
+.camp-intro { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: var(--space-4); align-items: center; }
+.camp-left { display: grid; gap: var(--space-2); align-content: center; }
+.camp-mission { margin: 0; justify-self: start; font-size: min(var(--step-0), calc(3.8 * var(--vh, 1vh))); line-height: 1.25; transform: rotate(-.6deg); }
+.camp-examples { list-style: none; margin: 0; padding: 0; display: grid; gap: min(10px, calc(1.2 * var(--vh, 1vh))); }
+.camp-examples li { display: grid; gap: 2px; }
+.camp-en { all: unset; cursor: pointer; font: 800 min(var(--step-1), calc(4.4 * var(--vh, 1vh)))/1.1 var(--font-body); }
+.camp-en .icon { color: var(--accent); }
+.camp-tr { color: var(--ink-muted); font-size: min(24px, calc(3 * var(--vh, 1vh))); padding-left: 1.4em; }
+.camp-right { display: grid; justify-items: center; gap: var(--space-1); text-align: center; }
+.donut-wrap { position: relative; width: min(320px, calc(38 * var(--vh, 1vh))); aspect-ratio: 1; }
+.donut { width: 100%; height: 100%; }
+.donut circle { fill: none; stroke-width: 26; }
+.donut .d-rest { stroke: var(--surface-2); }
+.donut .d-before { stroke: #8a929b; }
+.donut .d-added { stroke: var(--accent); animation: donut-in 1.4s var(--ease-out) both .3s; }
+@keyframes donut-in { from { stroke-dasharray: 0 1000; } }
+@media (prefers-reduced-motion: reduce) { .donut .d-added { animation: none; } }
+.donut-label { position: absolute; inset: 0; display: grid; place-items: center; }
+.donut-pct { font-size: min(var(--step-3), calc(9 * var(--vh, 1vh))); color: var(--accent); }
+.camp-cov { margin: 0; font-size: min(26px, calc(3.2 * var(--vh, 1vh))); max-width: 26ch; }
+.camp-cov b { color: var(--accent); }
+.camp-legend { margin: 0; display: flex; gap: var(--space-2); font-size: min(22px, calc(2.8 * var(--vh, 1vh))); }
+.lg::before { content: ''; display: inline-block; width: .8em; height: .8em; margin-right: 6px; border-radius: 2px; vertical-align: -1px; }
+.lg-before::before { background: #8a929b; }
+.lg-added::before { background: var(--accent); }
+.camp-fns, .camp-src { margin: 0; color: var(--ink-muted); font-size: min(18px, calc(2.4 * var(--vh, 1vh))); max-width: 34ch; }
+.camp-ask { margin: 0; font: 900 min(var(--step-2), calc(7 * var(--vh, 1vh)))/1 var(--font-display); color: var(--accent); }
+.camp-nav { justify-content: flex-end; }
+.camp-growth { justify-self: start; font-size: min(var(--step-1), calc(4.4 * var(--vh, 1vh))); }
+.camp .coach-head .go { min-height: 56px; }
+.camp-examples li { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: var(--space-2); }
+.camp-tr { padding-left: 0; }
+.camp-en { font-size: min(var(--step-0), calc(4 * var(--vh, 1vh))); }
+.camp .stage { min-height: 0; overflow: hidden; }

@@ -57,6 +57,10 @@ def texts_of(unit):
         for it in b['items']:
             t = it.get('text') or it.get('q')
             out.append((t, t))
+    camp = unit.get('camp')
+    if camp:  # Ön Kamp: kariyer cümleleri ve hazırlık soruları
+        out += [(x['en'], x['en']) for x in camp['examples']]
+        out += [(x['q'], x['q']) for x in camp['check']]
     for lv in unit.get('exits', {}).values():  # derse özel çıkış bileti soruları ve deyimler
         for items in lv.values():
             for x in items:

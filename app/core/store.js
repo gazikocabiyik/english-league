@@ -235,7 +235,8 @@ export function createStore(storage, now = () => Date.now()) {
       const since = state.settings[`levelSince:${classId}`];
       let rate;
       if (since !== undefined) {
-        const tries = this.attemptsOf(classId, { since });
+        // Ön Kamp başlangıç ölçümü seviyeyi etkilemez
+        const tries = this.attemptsOf(classId, { since }).filter(x => x.activity !== 'camp');
         rate = tries.length ? Math.round(lessonRate(tries) * 100) : undefined;
         const L = levelAfterLesson(before, tries);
         if (L !== before) put(`level:${classId}`, L);

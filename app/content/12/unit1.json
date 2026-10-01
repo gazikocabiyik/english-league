@@ -602,27 +602,101 @@
       "items": [
         {
           "text": "Moaz listens to rap and hip hop.",
-          "answer": true
+          "answer": true,
+          "tr": "Moaz rap ve hip hop dinliyor.",
+          "keys": [
+            {
+              "w": "listens to",
+              "tr": "dinliyor"
+            }
+          ]
         },
         {
           "text": "Moaz thinks all rap songs have bad words.",
-          "answer": false
+          "answer": false,
+          "tr": "Moaz bütün rap şarkılarında kötü sözler olduğunu düşünüyor.",
+          "keys": [
+            {
+              "w": "thinks",
+              "tr": "düşünüyor"
+            },
+            {
+              "w": "all",
+              "tr": "bütün"
+            },
+            {
+              "w": "bad words",
+              "tr": "kötü sözler"
+            }
+          ]
         },
         {
           "text": "Yasemin listens to ethnic music because it makes her calm.",
-          "answer": true
+          "answer": true,
+          "tr": "Yasemin etnik müzik dinliyor çünkü onu sakinleştiriyor.",
+          "keys": [
+            {
+              "w": "ethnic",
+              "tr": "etnik, yöresel"
+            },
+            {
+              "w": "because",
+              "tr": "çünkü"
+            },
+            {
+              "w": "makes her calm",
+              "tr": "onu sakinleştiriyor"
+            }
+          ]
         },
         {
           "text": "One student plays the electric guitar.",
-          "answer": true
+          "answer": true,
+          "tr": "Öğrencilerden biri elektro gitar çalıyor.",
+          "keys": [
+            {
+              "w": "one student",
+              "tr": "öğrencilerden biri"
+            },
+            {
+              "w": "plays",
+              "tr": "çalıyor"
+            },
+            {
+              "w": "electric",
+              "tr": "elektro"
+            }
+          ]
         },
         {
           "text": "The violin player loves loud music.",
-          "answer": false
+          "answer": false,
+          "tr": "Keman çalan öğrenci gürültülü müziğe bayılıyor.",
+          "keys": [
+            {
+              "w": "violin player",
+              "tr": "keman çalan"
+            },
+            {
+              "w": "loves",
+              "tr": "bayılıyor"
+            }
+          ]
         },
         {
           "q": "Which student are you most like? Why?",
-          "a": "I'm like … because I also …"
+          "a": "I'm like … because I also …",
+          "tr": "En çok hangi öğrenciye benziyorsun? Neden?",
+          "keys": [
+            {
+              "w": "most like",
+              "tr": "en çok benzeyen"
+            },
+            {
+              "w": "why",
+              "tr": "neden"
+            }
+          ]
         }
       ]
     },
@@ -634,27 +708,97 @@
       "items": [
         {
           "q": "How many hours a day do you listen to music?",
-          "a": "I listen to music for about … hours."
+          "a": "I listen to music for about … hours.",
+          "tr": "Günde kaç saat müzik dinliyorsun?",
+          "keys": [
+            {
+              "w": "how many hours",
+              "tr": "kaç saat"
+            },
+            {
+              "w": "a day",
+              "tr": "günde"
+            }
+          ]
         },
         {
           "q": "What kind of music do you prefer?",
-          "a": "I prefer … music."
+          "a": "I prefer … music.",
+          "tr": "Ne tür müziği tercih ediyorsun?",
+          "keys": [
+            {
+              "w": "what kind of",
+              "tr": "ne tür"
+            },
+            {
+              "w": "prefer",
+              "tr": "tercih etmek"
+            }
+          ]
         },
         {
           "q": "Can you play an instrument?",
-          "a": "Yes, I can play the … / No, I can't."
+          "a": "Yes, I can play the … / No, I can't.",
+          "tr": "Bir çalgı çalabiliyor musun?",
+          "keys": [
+            {
+              "w": "can you play",
+              "tr": "çalabilir misin"
+            }
+          ]
         },
         {
           "text": "Most students listen to music while they study.",
-          "answer": true
+          "answer": true,
+          "tr": "Öğrencilerin çoğu ders çalışırken müzik dinliyor.",
+          "keys": [
+            {
+              "w": "most students",
+              "tr": "öğrencilerin çoğu"
+            },
+            {
+              "w": "while",
+              "tr": "-ken"
+            },
+            {
+              "w": "study",
+              "tr": "ders çalışmak"
+            }
+          ]
         },
         {
           "q": "What music do you listen to before a match?",
-          "a": "Before a match, I listen to …"
+          "a": "Before a match, I listen to …",
+          "tr": "Maçtan önce ne müzik dinliyorsun?",
+          "keys": [
+            {
+              "w": "before",
+              "tr": "önce"
+            },
+            {
+              "w": "match",
+              "tr": "maç"
+            }
+          ]
         },
         {
           "q": "Do you agree: 'Music makes us better athletes'?",
-          "a": "I agree / I disagree because …"
+          "a": "I agree / I disagree because …",
+          "tr": "Katılıyor musun: 'Müzik bizi daha iyi sporcu yapar'?",
+          "keys": [
+            {
+              "w": "agree",
+              "tr": "katılmak"
+            },
+            {
+              "w": "better",
+              "tr": "daha iyi"
+            },
+            {
+              "w": "athletes",
+              "tr": "sporcular"
+            }
+          ]
         }
       ]
     }
@@ -1147,5 +1291,74 @@
         }
       ]
     }
+  },
+  "camp": {
+    "mission": "Bu ünitenin sonunda müzik zevkini anlatacak, bir duruma uygun müziği seçecek ve fikrini savunacaksın.",
+    "examples": [
+      {
+        "en": "I prefer rock music before a match.",
+        "tr": "Maçtan önce rock müziği tercih ederim."
+      },
+      {
+        "en": "Calm music helps me relax after training.",
+        "tr": "Sakin müzik antrenmandan sonra rahatlamama yardım ediyor."
+      },
+      {
+        "en": "I'd rather listen to pop because it motivates me.",
+        "tr": "Pop dinlemeyi tercih ederim çünkü beni motive ediyor."
+      },
+      {
+        "en": "I see your point, but I disagree.",
+        "tr": "Ne demek istediğini anlıyorum ama katılmıyorum."
+      },
+      {
+        "en": "I can play the guitar a little.",
+        "tr": "Biraz gitar çalabilirim."
+      }
+    ],
+    "functions": [
+      "likes",
+      "opinions",
+      "reasons",
+      "feelings",
+      "compare"
+    ],
+    "words": [
+      "rock",
+      "pop",
+      "rap",
+      "classical",
+      "guitar",
+      "drums",
+      "piano",
+      "violin"
+    ],
+    "check": [
+      {
+        "q": "What is 'davul' in English?",
+        "a": "drums",
+        "tr": "'Davul' İngilizcede ne?"
+      },
+      {
+        "q": "I prefer rap music.",
+        "a": "Rap müziği tercih ederim.",
+        "tr": "Bu cümle ne anlatıyor?"
+      },
+      {
+        "q": "Is classical music loud or calm?",
+        "a": "calm",
+        "tr": "Klasik müzik gürültülü mü sakin mi?"
+      },
+      {
+        "q": "I can play ___ guitar.",
+        "a": "the",
+        "tr": "Boşluğa hangi kelime gelir?"
+      },
+      {
+        "q": "I disagree.",
+        "a": "Katılmıyorum.",
+        "tr": "Bu cümle ne demek?"
+      }
+    ]
   }
 }

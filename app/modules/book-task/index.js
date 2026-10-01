@@ -2,8 +2,11 @@ import { h, icon, toast } from '../../core/dom.js';
 import { loadUnit } from '../../core/content.js';
 import { lessonLevels } from '../../core/levels.js';
 import { award } from '../league/award.js';
+import { keyGlosses } from './help.js';
+import { scoreVotes } from './vote.js';
 
-// Kitap sayfası görevi: "Kitap s.X'i açın"; Doğru/Yanlış kartları takım yarışı, kısa cevaplar takım yarışı.
+// Kitap sayfası görevi: "Kitap s.X'i açın". True/False: her takım oy verir, cevap açılınca doğru bilenlerin hepsi +1.
+// Kısa cevap: ilk doğru söyleyen takım +1. Anlam merdiveni: anahtar kelimelerin Türkçesi + cümlenin Türkçe anlamı.
 // Kitap metni kopyalanmaz: maddeler kendi cümlelerimizle yazılır.
 export default {
   id: 'book-task',
@@ -56,6 +59,13 @@ export default {
     const cls = ctx.store.getClass(ctx.classId);
     let i = -1; // -1 = "kitabı açın" ekranı
     let reveal = false;
+    let votes = {};       // True/False: takımId → true/false
+    let opened = false;   // True/False cevabı açıldı mı
+    // Anlam merdiveni: A1'de anahtar kelimeler hazır açık; Türkçe anlam B1–B2'de yok
+    const lowLevel = ['A1', 'A2'].includes(level);
+    let showKeys = level === 'A1';
+    let showTr = false;
+    const resetItem = () => { reveal = false; votes = {}; opened = false; showKeys = level === 'A1'; showTr = false; };
     let last = 0;
     const once = () => { if (Date.now() - last < 500) return false; last = Date.now(); return true; };
     const answerText = it => ('answer' in it ? (it.answer ? 'TRUE' : 'FALSE') : it.a);
@@ -66,9 +76,41 @@ export default {
       if (team) eventId = award(ctx, 'team', team, 1, 'Kitap')?.id;
       ctx.store.addAttempt({ classId: ctx.classId, level, ok: !!team, activity: 'book', eventId });
       if (!team) toast('Kimse bilemedi');
-      reveal = false;
+      resetItem();
       i++;
       if (i >= task.items.length) next(); else render(true);
+    }
+
+    // True/False: doğru bilen bütün takımlara +1 (aynı grup: "Geri al" hepsini birlikte siler)
+    function openAnswer(it) {
+      if (!once() || opened) return;
+      opened = true;
+      const { attempts } = scoreVotes(votes, it.answer);
+      const groupId = `book-${Date.now().toString(36)}`;
+      for (const a of attempts) {
+        const team = cls.teams.find(t => t.id === a.teamId);
+        const eventId = a.ok && team ? award(ctx, 'team', team, 1, 'Kitap', groupId)?.id : undefined;
+        ctx.store.addAttempt({ classId: ctx.classId, level, ok: a.ok, activity: 'book', eventId });
+      }
+      if (!attempts.some(a => a.ok)) toast('Doğru bilen takım yok');
+      render(false);
+    }
+    function nextItem() {
+      if (!once()) return;
+      resetItem();
+      i++;
+      if (i >= task.items.length) next(); else render(true);
+    }
+
+    // Anlam merdiveni: anahtar kelimeler ve cümlenin Türkçe anlamı
+    function meaningHelp(it, text) {
+      const glosses = keyGlosses(text, unit, it);
+      return h('div', { class: 'meaning' },
+        h('div', { class: 'meaning-btns' },
+          glosses.length ? h('button', { class: `ghost small${showKeys ? ' is-on' : ''}`, onclick: () => { showKeys = !showKeys; render(false); } }, '🔑 Anahtar kelimeler') : null,
+          lowLevel && it.tr ? h('button', { class: `ghost small${showTr ? ' is-on' : ''}`, onclick: () => { showTr = !showTr; render(false); } }, '🇹🇷 Cümlenin anlamı') : null),
+        showKeys && glosses.length ? h('div', { class: 'glosses' }, glosses.map(g => h('span', { class: 'gloss' }, h('b', { lang: 'en' }, g.w), h('span', {}, g.tr)))) : null,
+        showTr && it.tr ? h('p', { class: 'tape meaning-tr' }, it.tr) : null);
     }
 
     function render(announce) {
@@ -77,6 +119,7 @@ export default {
         h('span', { class: 'spacer' }),
         h('span', { class: 'level-chip' }, level),
         i >= 0 ? h('span', { class: 'progress' }, `${i + 1} / ${task.items.length}`) : null,
+        i >= 0 ? player() : null, // soru ekranında ses çalar başlıkta: soruya yer kalsın
         h('button', { class: 'ghost', onclick: next }, 'Etkinliği atla'));
       let body;
       if (i < 0) {
@@ -88,14 +131,38 @@ export default {
       } else {
         const it = task.items[i];
         const text = it.text ?? it.q;
-        body = h('div', { class: 'stage video-q' },
-          player(),
-          h('p', { class: 'small-label' }, 'answer' in it ? 'True or false?' : 'Answer the question'),
+        const isTF = 'answer' in it;
+        const formula = h('p', { class: 'formula' }, 'Anahtar kelimeyi bul → anlamı kur → karar ver');
+        let answerArea;
+        if (isTF) {
+          // Her takım TRUE ya da FALSE işaretler; sonra cevap açılır
+          answerArea = h('div', { class: 'votes' },
+            cls.teams.map(t => {
+              const v = votes[t.id];
+              const verdict = opened && v !== undefined ? (v === it.answer ? ' is-right' : ' is-wrong') : '';
+              const pick = val => () => { if (opened) return; votes = { ...votes, [t.id]: val }; render(false); };
+              return h('div', { class: `vote-row${verdict}`, style: { '--team': `var(--${t.color})` } },
+                h('span', { class: 'vote-team' }, t.name),
+                h('button', { class: `vote${v === true ? ' is-on' : ''}`, disabled: opened, onclick: pick(true) }, 'TRUE'),
+                h('button', { class: `vote${v === false ? ' is-on' : ''}`, disabled: opened, onclick: pick(false) }, 'FALSE'),
+                opened && v === it.answer ? h('span', { class: 'vote-pt' }, '+1') : null);
+            }),
+            opened
+              ? h('div', { class: 'vote-end' }, h('p', { class: `stamp-answer ${it.answer ? 'is-true' : 'is-false'}`, lang: 'en' }, it.answer ? 'TRUE' : 'FALSE'),
+                h('button', { class: 'go', onclick: nextItem }, i + 1 < task.items.length ? 'Sonraki ' : 'Bitir ', icon('caret-right')))
+              : h('button', { class: 'go wide', disabled: !Object.keys(votes).length, onclick: () => openAnswer(it) }, icon('check'), ' Cevabı aç'));
+        } else {
+          answerArea = h('div', {},
+            reveal ? h('p', { class: 'frame', lang: 'en' }, answerText(it)) : h('button', { class: 'ghost small', onclick: () => { reveal = true; render(false); } }, 'Cevabı göster'),
+            h('div', { class: 'team-buttons' },
+              cls.teams.map(t => h('button', { class: 'team-btn', style: { '--team': `var(--${t.color})` }, onclick: () => mark(t) }, t.name)),
+              h('button', { class: 'nobody', onclick: () => mark(null) }, 'Kimse bilemedi')));
+        }
+        body = h('div', { class: `stage video-q book-q${isTF ? ' is-tf' : ''}` },
+          h('div', { class: 'q-top' }, h('p', { class: 'small-label' }, isTF ? 'True or false? Her takım oy versin.' : 'Answer the question'), formula),
           h('button', { class: 'question', lang: 'en', onclick: () => ctx.sound.speak(text) }, text),
-          reveal ? h('p', { class: 'frame', lang: 'en' }, answerText(it)) : h('button', { class: 'ghost small', onclick: () => { reveal = true; render(false); } }, 'Cevabı göster'),
-          h('div', { class: 'team-buttons' },
-            cls.teams.map(t => h('button', { class: 'team-btn', style: { '--team': `var(--${t.color})` }, onclick: () => mark(t) }, t.name)),
-            h('button', { class: 'nobody', onclick: () => mark(null) }, 'Kimse bilemedi')));
+          meaningHelp(it, text),
+          answerArea);
         if (announce && (!audio || audio.paused)) ctx.sound.speak(text); // kitap sesi çalarken okuma yapma
       }
       el.replaceChildren(h('section', { class: 'screen coach book' }, head, body));

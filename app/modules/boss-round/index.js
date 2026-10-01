@@ -45,10 +45,13 @@ export default {
     function badge() {
       const tries = ctx.store.attemptsOf(ctx.classId, { since: startTs }).filter(a => a.activity === 'boss');
       const rate = tries.length ? Math.round((tries.filter(a => a.ok).length / tries.length) * 100) : 0;
+      const start = ctx.store.getSetting(`campRate:${ctx.classId}:${ctx.unit}`, null);
       const top = ctx.store.standings(ctx.classId, { since: weekStart(Date.now()) }).slice(0, 3);
       return h('div', { class: 'stage playlist boss-badge' },
         h('p', { class: 'playlist-title', lang: 'en' }, `UNIT ${ctx.unit} · ${unit.title.toLocaleUpperCase('en')}`),
         h('p', { class: 'hired-line' }, `Ünite tamam! Boss Round doğru oranı %${rate}`),
+        // Ön Kamp başlangıç ölçümüyle karşılaştırma: sınıf kendi gelişimini görür
+        start !== null ? h('p', { class: 'tape camp-growth' }, `Ünite başı %${start} → şimdi %${rate}`) : null,
         h('ol', { class: 'playlist-list' }, top.map(t => h('li', {}, h('span', { class: 'pl-situation' }, t.name), h('span', { class: 'pl-genre' }, `${t.points} puan`), h('span')))),
         h('button', { class: 'go wide', onclick: next }, icon('trophy'), ctx.inLesson() ? ' Devam et' : ' Lige git'));
     }

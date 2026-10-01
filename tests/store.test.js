@@ -303,3 +303,14 @@ test('depo: adı olmayan öğrenci ya da takım içeren yedek reddedilir (tarama
   throws(() => s.import('{"version":1,"classes":{"11-L":{"teams":[{"id":"t1"}],"students":[]}},"events":[]}'));
   throws(() => s.import('{"version":1,"classes":{"11-L":{"teams":[],"students":[{"name":"Ali"}]}},"events":[]}'));
 });
+
+test('store: Ön Kamp (başlangıç ölçümü) denemeleri seviye hesabına girmez', () => {
+  let t = new Date(2026, 9, 1, 9).getTime();
+  const s = setup(() => t);
+  s.ensureLessonLevel('11-A', '1:1');
+  for (let i = 0; i < 10; i++) s.addAttempt({ classId: '11-A', level: 'A1', ok: false, activity: 'camp' });
+  for (let i = 0; i < 10; i++) s.addAttempt({ classId: '11-A', level: 'A1', ok: i < 9, activity: 'speak' });
+  t += 1000;
+  const r = s.ensureLessonLevel('11-A', '1:2');
+  eq([r.level, r.rate], ['A2', 90]);
+});
