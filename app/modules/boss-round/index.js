@@ -4,6 +4,7 @@ import { lessonLevels } from '../../core/levels.js';
 import { weekStart } from '../../core/store.js';
 import { award } from '../league/award.js';
 import { buildBoss } from './boss.js';
+import { confetti, countUp, enter } from '../../core/fx.js';
 
 // Boss Round: ünite sonu 10 hızlı kart, ilk doğru takım +2; sonunda ünite rozeti.
 export default {
@@ -49,7 +50,7 @@ export default {
       const top = ctx.store.standings(ctx.classId, { since: weekStart(Date.now()) }).slice(0, 3);
       return h('div', { class: 'stage playlist boss-badge' },
         h('p', { class: 'playlist-title', lang: 'en' }, `UNIT ${ctx.unit} · ${unit.title.toLocaleUpperCase('en')}`),
-        h('p', { class: 'hired-line' }, `Ünite tamam! Boss Round doğru oranı %${rate}`),
+        h('p', { class: 'hired-line' }, 'Ünite tamam! Boss Round doğru oranı ', h('span', { class: 'boss-rate' }, `%${rate}`)),
         // Ön Kamp başlangıç ölçümüyle karşılaştırma: sınıf kendi gelişimini görür
         start !== null ? h('p', { class: 'tape camp-growth' }, `Ünite başı %${start} → şimdi %${rate}`) : null,
         h('ol', { class: 'playlist-list' }, top.map(t => h('li', {}, h('span', { class: 'pl-situation' }, t.name), h('span', { class: 'pl-genre' }, `${t.points} puan`), h('span')))),
@@ -59,6 +60,11 @@ export default {
     function render(announce) {
       if (i >= cards.length) {
         el.replaceChildren(h('section', { class: 'screen coach boss' }, badge()));
+        // Zafer anı: konfeti, oran sayar, ilk üç sırayla gelir
+        const rateEl = el.querySelector('.boss-rate');
+        countUp(rateEl, parseInt(rateEl?.textContent.slice(1), 10) || 0, { prefix: '%' });
+        enter([...el.querySelectorAll('.playlist-list li')], { x: -40, y: 0, stagger: 0.12 });
+        confetti();
         return;
       }
       const c = cards[i];

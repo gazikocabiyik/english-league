@@ -5,6 +5,7 @@ import { award } from '../league/award.js';
 import { keyGlosses } from './help.js';
 import { scoreVotes, scoreMarks } from './vote.js';
 import { lineAt, wordAt } from './karaoke.js';
+import { slam } from '../../core/fx.js';
 
 // Kitap sayfası görevi: "Kitap s.X'i açın". True/False: her takım oy verir, cevap açılınca doğru bilenlerin hepsi +1.
 // Kısa cevap: ilk doğru söyleyen takım +1. Anlam merdiveni: anahtar kelimelerin Türkçesi + cümlenin Türkçe anlamı.
@@ -134,6 +135,7 @@ export default {
       }
       if (!attempts.some(a => a.ok)) toast('Doğru bilen takım yok');
       render(false);
+      slam(el.querySelector('.stamp-answer'), [...el.querySelectorAll('.vote-pt')]);
     }
     // Kısa cevap: ✓ alan bütün takımlara +1 (tek "Geri al" hepsini siler)
     function giveMarks() {
@@ -149,6 +151,7 @@ export default {
       }
       if (!attempts.some(a => a.ok)) toast('Doğru söyleyen takım yok');
       render(false);
+      slam(el.querySelector('.reveal-row .frame'), [...el.querySelectorAll('.vote-pt')]);
     }
     function nextItem() {
       if (!once()) return;

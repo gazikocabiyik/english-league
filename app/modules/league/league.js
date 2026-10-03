@@ -1,6 +1,7 @@
 import { h, seg } from '../../core/dom.js';
 import { weekStart } from '../../core/store.js';
 import { openScoreSheet } from './score-sheet.js';
+import { enter, slide } from '../../core/fx.js';
 
 const reduceMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 const TEAM_COLORS = ['team-1', 'team-2', 'team-3', 'team-4'];
@@ -73,10 +74,13 @@ export default {
           : h('p', { class: 'tape callout' }, scope === 'class' ? 'Henüz takım yok. ' : 'Henüz şube yok. ', h('a', { href: scope === 'class' ? '#/setup' : '#/' }, scope === 'class' ? 'Takımları kur' : 'Şube ekle'))));
 
       if (reduceMotion()) return;
-      for (const n of el.querySelectorAll('[data-id]')) {
+      const rowsNow = [...el.querySelectorAll('[data-id]')];
+      // Ekrana ilk giriş ya da sekme değişimi (önceki satırlardan hiçbiri yok): sırayla gelir
+      if (!rowsNow.some(n => before.has(n.dataset.id))) { enter(rowsNow, { x: -50, y: 0, stagger: 0.07 }); return; }
+      for (const n of rowsNow) {
         const old = before.get(n.dataset.id);
         const dy = old === undefined ? 0 : old - n.getBoundingClientRect().top;
-        if (dy) n.animate([{ transform: `translateY(${dy}px)` }, { transform: 'none' }], { duration: 420, easing: 'cubic-bezier(.16,1,.3,1)' });
+        if (dy) slide(n, dy); // sıra değişti: eski yerinden kayar, yükselen satır parlar
       }
     }
     render();

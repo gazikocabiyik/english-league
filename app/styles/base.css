@@ -492,3 +492,8 @@ button.wide { min-width: 320px; }
 .book-q .karaoke { padding-block: 8px; }
 .book-q .k-now { font-size: min(var(--step-1), calc(4.2 * var(--vh, 1vh))); max-height: calc(2.3em); overflow: hidden; }
 .book-q .k-next { display: none; }
+
+/* GSAP oyun anları */
+.fx-points { position: fixed; z-index: 50; pointer-events: none; font: 900 min(var(--step-2), calc(7 * var(--vh, 1vh)))/1 var(--font-stencil); color: var(--accent); text-shadow: 0 4px 0 rgb(0 0 0 / .45), 0 0 24px rgb(255 210 31 / .5); visibility: hidden; }
+.fx-confetti { position: fixed; inset: 0; z-index: 60; pointer-events: none; overflow: hidden; }
+.fx-confetti i { position: absolute; left: 0; top: 0; width: 12px; height: 18px; border-radius: 2px; }

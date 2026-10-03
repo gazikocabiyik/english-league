@@ -8,6 +8,7 @@ test.describe('11-L · ünite 1', () => {
     await go(page, '');
     await expect(page.getByRole('heading', { name: /hangi sınıf/i })).toBeVisible();
     await expectFits(page);
+    expect(await page.evaluate(() => typeof window.gsap), 'animasyon kütüphanesi yerel dosyadan yüklenmeli').toBe('object');
   });
 
   test('panel: ders kartı ve Derse başla', async ({ page }) => {

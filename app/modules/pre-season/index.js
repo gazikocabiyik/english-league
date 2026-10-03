@@ -2,6 +2,7 @@ import { h, icon, toast } from '../../core/dom.js';
 import { loadIndex, loadUnit } from '../../core/content.js';
 import { award } from '../league/award.js';
 import { coverage } from './coverage.js';
+import { countUp, enter } from '../../core/fx.js';
 
 // Ön Kamp: ünitenin 1. dersinin başında hazırbulunuşluk.
 // 1) Bu ünite ne kazandırır (hedef, kariyer cümleleri, iletişim payı grafiği)
@@ -134,7 +135,7 @@ export default {
 
     function result() {
       return h('div', { class: 'stage playlist camp-result' },
-        h('p', { class: 'playlist-title' }, `Başlangıç: %${rate}`),
+        h('p', { class: 'playlist-title' }, 'Başlangıç: ', h('span', { class: 'camp-rate' }, `%${rate}`)),
         h('p', { class: 'hired-line' }, 'Ünitenin sonunda Boss Round\'da bu oranla karşılaştıracağız.'),
         h('button', { class: 'go wide', onclick: finish }, 'Derse devam ', icon('caret-right')));
     }
@@ -168,6 +169,8 @@ export default {
           part < 3 ? h('button', { class: 'ghost', onclick: () => { if (part < 3) { saveRate(); part = 3; render(); toast('Ön Kamp kısaltıldı'); } } }, 'Atla') : null,
           nav), // ilerleme düğmesi başlıkta: içeriğe yer kalsın
         body));
+      if (part === 3) countUp(el.querySelector('.camp-rate'), rate, { prefix: '%' });
+      if (part === 0) enter([...el.querySelectorAll('.camp-examples li')], { x: -30, y: 0, stagger: 0.08 });
     }
     render();
   },

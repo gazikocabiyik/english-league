@@ -12,6 +12,7 @@ import { CLOUD } from './config.js';
 import { connectCloud } from './core/cloud-client.js';
 import { createSync } from './core/sync.js';
 import { offlineStatus } from './core/offline.js';
+import { floatPoints } from './core/fx.js';
 import league from './modules/league/league.js';
 import { games } from './modules/registry.js';
 import { loadUnit } from './core/content.js';
@@ -236,6 +237,15 @@ addEventListener('resize', fitScreen);
 router.start();
 
 // Çevrimdışı açılış: okul ağı siteyi engellese de tahta uygulamayı kendi hafızasından açar (bkz. ../sw.js)
+// Puan verilince dokunulan düğmenin üstünden "+N" yükselir (geri alma ve eksi puanda değil)
+let lastTap = { el: null, t: 0 };
+document.addEventListener('pointerdown', e => { lastTap = { el: e.target.closest('button'), t: Date.now() }; }, true);
+document.addEventListener('scores-changed', e => {
+  const pts = e.detail?.points;
+  // Toplu puanda (ör. doğru bilen bütün takımlar) yükseliş satırlarda gösterilir, düğmeden değil
+  if (pts > 0 && !e.detail?.groupId && lastTap.el && Date.now() - lastTap.t < 1500) floatPoints(lastTap.el, `+${pts}`);
+});
+
 // Çevrimdışı durumunu izle: iniyorsa 3 sn'de bir sor, bitince bir kez haber ver
 async function watchOffline() {
   const before = ctx.offline.state;

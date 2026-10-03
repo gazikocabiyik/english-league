@@ -10,6 +10,6 @@ export function award(ctx, targetType, target, points, source, groupId) {
   last = { key, t };
   const e = ctx.store.addEvent({ classId: ctx.classId, targetType, targetId: target.id, points, reason: `${target.name} · ${source}`, groupId });
   toast(`${target.name} ${points > 0 ? '+' : ''}${points}`);
-  document.dispatchEvent(new CustomEvent('scores-changed', { detail: { targetId: target.id } }));
+  document.dispatchEvent(new CustomEvent('scores-changed', { detail: { targetId: target.id, points, groupId } }));
   return e; // olay: seviye denemesi buna bağlanır (geri al ikisini birlikte siler)
 }

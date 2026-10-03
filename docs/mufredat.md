@@ -89,3 +89,11 @@ Onaylı içerik: 11/Ü1 videolar BBC Learning English "Present continuous and go
 2. Ne biliyoruz: 8 anahtar kelime Türkçesinden İngilizcesi, takım yarışı.
 3. Hazırlık ölçer: 5 soru; başlangıç oranı Boss Round rozetinde "Ünite başı %X → şimdi %Y" olarak görünür. Bu denemeler seviye hesabına girmez.
 
+## Oyun anları (GSAP)
+`app/core/fx.js`, GSAP yerel dosyadan (`app/vendor/gsap.min.js`, çevrimdışı çalışır):
+- Puan verilen düğmenin üstünden "+1" yükselir.
+- Kitap görevinde cevap damgası çarparak gelir, doğru bilen takımların "+1"leri sırayla belirir.
+- Boss Round zaferinde konfeti, doğru oranı sayarak gelir.
+- Ön Kamp başlangıç oranı sayar; ligde satırlar sırayla girer, sıra değişince kayar ve yükselen satır parlar.
+- "Hareketi azalt" tercihi açıksa ya da GSAP yüklenemezse animasyon olmaz, ekran yine doğrudur.
+
