@@ -42,3 +42,11 @@ Ayrıca takım oylaması puanları ve internet yokken açılış da test edilir.
 - Çalıştırma: `npm run test:e2e`. Yayından önce hepsi için: `npm run check` (birim testleri + tahta testleri).
 - Başarısız testin ekran görüntüsü ve izi: `npx playwright show-report`.
 - Yeni ekran eklenince `e2e/screens.spec.js`'e bir test eklenir; deneme verisi `e2e/fixtures.js` içinde.
+
+## Veri güvenliği (güncellemelerde veri kaybolmaz)
+- Veri her tahtanın tarayıcısında (`okul.v1`) durur. Güncellemeler bu veriyi silmez; yeni alanlar yalnız eklenir.
+- Testler eski biçimdeki bir sınıf kaydının yeni sürümde aynen açıldığını sınar (`tests/store.test.js`, `e2e/flows.spec.js`). Biçim değişikliği gerekirse önce bu testler güncellenir.
+- **Günlük otomatik yedek** (`okul.v1.gunluk`): günün ilk açılışında, hiçbir şey değişmeden önce alınır. Ayarlar · Yedek → "Otomatik yedek" ile geri dönülür.
+- **Bulut** (giriş yapılmış tahtalar): bütün puanlar Supabase'te de durur. Tahtanın tarayıcı verisi silinse bile yeniden giriş yapınca hepsi geri iner.
+- **Elle yedek:** Ayarlar · Yedek → "Yedeği indir" (haftada bir önerilir).
+- Tanınmayan ya da bozuk kayıt silinmeden önce `okul.v1.bak` olarak saklanır.

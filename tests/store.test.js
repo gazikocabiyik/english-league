@@ -314,3 +314,40 @@ test('store: Ön Kamp (başlangıç ölçümü) denemeleri seviye hesabına girm
   const r = s.ensureLessonLevel('11-A', '1:2');
   eq([r.level, r.rate], ['A2', 90]);
 });
+
+// Güncellemeler eski veriyi bozmamalı: pilot sınıfların bugünkü biçimindeki kayıt aynen açılır
+test('store: eski biçimdeki veri (levelDay, meta/tombs yok) yeni sürümde kaybolmadan açılır', () => {
+  const t = new Date(2026, 8, 30, 9).getTime();
+  const old = {
+    version: 1,
+    classes: { '11-D': { teams: [{ id: 't1', name: 'Lions', color: 'team-1' }], students: [{ id: 's1', name: 'Berra', teamId: 't1' }] } },
+    events: [{ id: 'e1', classId: '11-D', targetType: 'team', targetId: 't1', points: 3, reason: 'Coach Says', ts: t - 1000 }],
+    attempts: [{ id: 'a1', classId: '11-D', level: 'A1', ok: true, activity: 'speak', ts: t - 900 }],
+    settings: { classList: ['11-D'], 'level:11-D': 'A1', 'levelDay:11-D': '2026-09-28', 'lesson:11-D:1': { lesson: 2, step: 3 }, 'words:11-D:1:2026-09-28': ['pilot'] },
+  };
+  const storage = memoryStorage();
+  storage.setItem('okul.v1', JSON.stringify(old));
+  const s = createStore(storage, () => t);
+  eq(s.getClass('11-D').students.map(x => x.name), ['Berra']);
+  eq(s.standings('11-D')[0].points, 3);
+  eq(s.attemptsOf('11-D').length, 1);
+  eq(s.getSetting('lesson:11-D:1'), { lesson: 2, step: 3 });
+  eq(s.classLevel('11-D'), 'A1');
+  eq(storage.getItem('okul.v1.bak'), null, 'geçerli veri yedeğe atılmaz, olduğu gibi kullanılır');
+});
+
+test('store: günün ilk açılışında otomatik yedek alınır, aynı gün tekrar alınmaz, geri yüklenebilir', () => {
+  let t = new Date(2026, 9, 3, 8).getTime();
+  const storage = memoryStorage();
+  const s = createStore(storage, () => t);
+  s.saveClass('11-A', { teams: [{ id: 't1', name: 'Lions', color: 'team-1' }], students: [] });
+  s.addEvent({ classId: '11-A', targetType: 'team', targetId: 't1', points: 5 });
+  eq(s.dailySnapshot(), true);
+  s.addEvent({ classId: '11-A', targetType: 'team', targetId: 't1', points: 2 });
+  eq(s.dailySnapshot(), false, 'aynı gün ikinci yedek yok');
+  eq(s.snapshotInfo().day, '2026-10-03');
+  s.restoreSnapshot();
+  eq(s.standings('11-A')[0].points, 5, 'yedek anındaki hâl');
+  t = new Date(2026, 9, 4, 8).getTime();
+  eq(s.dailySnapshot(), true, 'ertesi gün yeni yedek');
+});

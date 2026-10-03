@@ -65,6 +65,14 @@ export default {
     } });
 
     renderTeams();
+    // Otomatik günlük yedek: bugünün ilk açılışındaki hâle dön
+    const snap = ctx.store.snapshotInfo();
+    const snapBtn = snap ? h('button', { class: 'ghost', onclick: () => {
+      const when = new Date(snap.ts).toLocaleString('tr-TR', { day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' });
+      if (!confirm(`Bu tahtadaki veri ${when} anındaki otomatik yedeğe dönecek. O andan sonra verilen puanlar bu tahtadan silinir. Devam edilsin mi?`)) return;
+      try { ctx.store.restoreSnapshot(); document.dispatchEvent(new CustomEvent('scores-changed')); toast('Otomatik yedek geri yüklendi'); ctx.go('#/panel'); }
+      catch (err) { toast(err.message); }
+    } }, icon('arrow-counter-clockwise'), ` Otomatik yedek (${snap.day})`) : null;
     const teamCol = h('div', { class: 'setup-col' }, h('p', {}, 'Grup sayısı'), countSeg, teamInputs);
     const nameCol = h('div', { class: 'setup-col' }, h('p', {}, 'Öğrenciler (her satıra bir ad)'), names);
     if (step === 'students') {
@@ -98,6 +106,7 @@ export default {
         h('button', { onclick: () => ctx.go('#/cloud') }, icon('cloud-check'), ' Bulut (5 tahta tek lig)'),
         h('button', { onclick: download }, icon('download-simple'), ' Yedeği indir'),
         h('button', { onclick: () => fileInput.click() }, icon('upload-simple'), ' Yedeği yükle'),
+        snapBtn,
         fileInput)));
   },
 };

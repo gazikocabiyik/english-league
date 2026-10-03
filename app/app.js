@@ -22,6 +22,7 @@ import { dayKey } from './core/levels.js';
 let finishing = false; // aynı adım için ikinci "bitti" sinyali yok sayılır; ekran değişince sıfırlanır
 
 const store = createStore();
+store.dailySnapshot(); // günün ilk açılışında otomatik yedek (güncelleme veriyi bozarsa geri dönüş)
 const view = document.getElementById('view');
 const banner = document.getElementById('banner');
 

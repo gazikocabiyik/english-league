@@ -1,6 +1,7 @@
 import { levelAfterLesson, lessonRate, dayKey, LEVELS } from './levels.js';
 
 const KEY = 'okul.v1';
+const SNAP = 'okul.v1.gunluk'; // günlük otomatik yedek
 
 export function memoryStorage() {
   const m = new Map();
@@ -330,6 +331,25 @@ export function createStore(storage, now = () => Date.now()) {
       return changed;
     },
     export() { return JSON.stringify(state, null, 2); },
+    // Günlük otomatik yedek: günün ilk açılışında, hiçbir şey değişmeden önce (bozuk bir güncellemeye karşı geri dönüş)
+    dailySnapshot(day = dayKey(now())) {
+      try {
+        const old = JSON.parse(backend.getItem(SNAP) || 'null');
+        if (old?.day === day) return false;
+        const data = JSON.stringify(state);
+        if (data.length > 1_500_000) return false; // tahta hafızasını doldurmasın
+        backend.setItem(SNAP, JSON.stringify({ day, ts: now(), data }));
+        return true;
+      } catch { return false; }
+    },
+    snapshotInfo() {
+      try { const x = JSON.parse(backend.getItem(SNAP) || 'null'); return x ? { day: x.day, ts: x.ts } : null; } catch { return null; }
+    },
+    restoreSnapshot() {
+      const x = JSON.parse(backend.getItem(SNAP) || 'null');
+      if (!x?.data) throw new Error('Otomatik yedek yok.');
+      this.import(x.data);
+    },
     import(json) {
       let parsed;
       try { parsed = JSON.parse(json); } catch { throw new Error('Dosya okunamadı (JSON değil).'); }

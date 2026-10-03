@@ -46,3 +46,20 @@ test('çevrimdışı: dosyalar indikten sonra internet yokken uygulama açılır
   await expect(page.getByRole('heading', { name: /hangi sınıf/i })).toBeVisible();
   await context.setOffline(false);
 });
+
+test('güncelleme: eski biçimdeki sınıf verisi kaybolmadan açılır ve günlük yedek alınır', async ({ browser }) => {
+  const page = await browser.newPage(); // deneme verisi olmadan: pilot sınıfın eski kaydı
+  const t = Date.now() - 86_400_000;
+  await page.addInitScript(old => { if (!sessionStorage.getItem('x')) { localStorage.setItem('okul.v1', JSON.stringify(old)); sessionStorage.setItem('x', '1'); } }, {
+    version: 1,
+    classes: { '11-D': { teams: [{ id: 't1', name: 'Lions', color: 'team-1' }, { id: 't2', name: 'Eagles', color: 'team-2' }], students: [{ id: 's1', name: 'Berra', teamId: 't1' }] } },
+    events: [{ id: 'e1', classId: '11-D', targetType: 'team', targetId: 't1', points: 7, reason: 'Coach Says', ts: t }],
+    attempts: [{ id: 'a1', classId: '11-D', level: 'A1', ok: true, activity: 'speak', ts: t }],
+    settings: { classList: ['11-D'], lastClass: '11-D', 'unit:11-D': 1, 'level:11-D': 'A1', 'levelDay:11-D': '2026-09-28', 'lesson:11-D:1': { lesson: 2, step: 3 } },
+  });
+  await page.goto('/app/#/league');
+  await expect(page.locator('.row', { hasText: 'Lions' })).toContainText('7');
+  const snap = await page.evaluate(() => JSON.parse(localStorage.getItem('okul.v1.gunluk')));
+  expect(JSON.parse(snap.data).events[0].points).toBe(7);
+  await page.close();
+});
