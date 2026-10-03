@@ -30,3 +30,15 @@ Tahtalar önce kendi hafızasıyla çalışır; giriş yapılmış tahta her de�
 MEB filtresi github-pages'i engelleyebilir. Kök dizindeki `sw.js` (Service Worker), tahta siteyi internetle bir kez açınca bütün dosyaları (~22 MB) tahtanın hafızasına indirir. Sonra okul ağı engellese de uygulama tahtanın hafızasından açılır.
 - Kod ya da içerik değiştiğinde yayından önce `node scripts/precache.mjs` çalıştır. Liste eskiyse `npm test` bunu yakalar.
 - Tahta yeni sürümü, tarayıcı kapanıp internetle yeniden açıldığında alır.
+
+## Tahta testleri (Playwright)
+Her ekran gerçek Chrome'da iki tahta boyutunda (1280×600 ve 1920×1080) açılır. Kontrol edilenler:
+- içerik dikey ya da yatay taşıyor mu;
+- asıl düğmeler görünür ve ekranın içinde mi;
+- konsolda hata var mı.
+
+Ayrıca takım oylaması puanları ve internet yokken açılış da test edilir.
+- Kurulum (bir kez): `npm install`. Tarayıcı indirilmez, bilgisayardaki Chrome kullanılır.
+- Çalıştırma: `npm run test:e2e`. Yayından önce hepsi için: `npm run check` (birim testleri + tahta testleri).
+- Başarısız testin ekran görüntüsü ve izi: `npx playwright show-report`.
+- Yeni ekran eklenince `e2e/screens.spec.js`'e bir test eklenir; deneme verisi `e2e/fixtures.js` içinde.
